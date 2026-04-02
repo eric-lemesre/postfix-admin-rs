@@ -38,16 +38,16 @@
 ## Phase 1 — Foundation
 
 ### M0: Project bootstrap `v0.1.0` [S]
-- [ ] Create workspace `Cargo.toml` with 7 crates
-- [ ] Create crate skeletons (`lib.rs` / `main.rs`) for all 7 crates
-- [ ] Configure `rustfmt.toml` (max_width = 100)
-- [ ] Configure `clippy.toml` (pedantic, deny unwrap/expect/panic)
-- [ ] Set up CI pipeline (GitHub Actions): fmt, clippy, test, audit, build
-- [ ] Add `.githooks/pre-commit` (fmt + clippy)
-- [ ] Create `config.example.toml` from SPEC-13.1
-- [ ] Add `deny.toml` (cargo-deny) for license and vulnerability checks
-- [ ] Set up test infrastructure (testcontainers, fixtures)
-- [ ] Create Newman test directory structure (`tests/newman/`)
+- [x] Create workspace `Cargo.toml` with 7 crates
+- [x] Create crate skeletons (`lib.rs` / `main.rs`) for all 7 crates
+- [x] Configure `rustfmt.toml` (max_width = 100)
+- [x] Configure `clippy.toml` (pedantic, deny unwrap/expect/panic)
+- [x] Set up CI pipeline (GitHub Actions): fmt, clippy, test, audit, build
+- [x] Add `.githooks/pre-commit` (fmt + clippy)
+- [x] Create `config.example.toml` from SPEC-13.1
+- [x] Add `deny.toml` (cargo-deny) for license and vulnerability checks
+- [x] Set up test infrastructure (testcontainers, fixtures)
+- [x] Create Newman test directory structure (`tests/newman/`)
 
 ### M1: postfix-admin-core `v0.2.0` [L]
 - [ ] Domain models: `Domain`, `Mailbox`, `Alias`, `Admin`
