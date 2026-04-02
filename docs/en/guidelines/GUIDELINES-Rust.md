@@ -29,23 +29,23 @@ Each crate in the workspace has a unique responsibility:
 
 ```
 crates/
-├── par-core/      # Domain models, traits, shared types
-├── par-db/        # Data access layer
-├── par-auth/      # Authentication and authorization
-├── par-api/       # REST and gRPC handlers
-├── par-web/       # Web interface (templates, routes)
-├── par-cli/       # CLI (binary)
-└── par-server/    # Main server (binary)
+├── postfix-admin-core/      # Domain models, traits, shared types
+├── postfix-admin-db/        # Data access layer
+├── postfix-admin-auth/      # Authentication and authorization
+├── postfix-admin-api/       # REST and gRPC handlers
+├── postfix-admin-web/       # Web interface (templates, routes)
+├── postfix-admin-cli/       # CLI (binary)
+└── postfix-admin-server/    # Main server (binary)
 ```
 
 ### Crate dependency rules
 
 ```
-par-server → par-web, par-api, par-cli, par-db, par-auth, par-core
-par-web    → par-core, par-db, par-auth
-par-api    → par-core, par-db, par-auth
-par-cli    → par-core, par-db, par-auth
-par-auth   → par-core, par-db
+postfix-admin-server → postfix-admin-web, postfix-admin-api, postfix-admin-cli, postfix-admin-db, postfix-admin-auth, postfix-admin-core
+postfix-admin-web    → postfix-admin-core, postfix-admin-db, postfix-admin-auth
+postfix-admin-api    → postfix-admin-core, postfix-admin-db, postfix-admin-auth
+postfix-admin-cli    → postfix-admin-core, postfix-admin-db, postfix-admin-auth
+postfix-admin-auth   → postfix-admin-core, par-db
 par-db     → par-core
 par-core   → (no internal dependencies)
 ```

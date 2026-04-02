@@ -11,12 +11,12 @@
                     └─────┬─────┴───┬───┴──────┬──────────┘
                           │         │          │
                     ┌─────▼─────────▼──────────▼──────────┐
-                    │         par-server                    │
+                    │         postfix-admin-server                    │
                     │   (composition + startup)             │
                     └──┬──────────┬──────────┬─────────────┘
                        │          │          │
               ┌────────▼──┐  ┌───▼────┐  ┌──▼──────┐
-              │  par-web   │  │par-api │  │ par-cli │
+              │  postfix-admin-web   │  │postfix-admin-api │  │ postfix-admin-cli │
               │  (HTMX +   │  │(REST + │  │ (clap)  │
               │  Askama)   │  │ gRPC)  │  │         │
               └──────┬─────┘  └───┬────┘  └────┬────┘
@@ -24,17 +24,17 @@
                      └────────┬───┘             │
                               │                 │
                     ┌─────────▼─────────────────▼─────────┐
-                    │            par-auth                   │
+                    │            postfix-admin-auth                   │
                     │  (sessions, JWT, TOTP, passwords)     │
                     └──────────────┬───────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────┐
-                    │             par-db                    │
+                    │             postfix-admin-db                    │
                     │   (repositories, pool, migrations)    │
                     └──────────────┬───────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────┐
-                    │            par-core                   │
+                    │            postfix-admin-core                   │
                     │  (models, traits, types, validation) │
                     └─────────────────────────────────────┘
                                    │
@@ -45,7 +45,7 @@
 
 ## Crates in the workspace
 
-### par-core (library)
+### postfix-admin-core (library)
 
 Core of the business domain. No dependency on a web framework or database.
 
@@ -59,7 +59,7 @@ Core of the business domain. No dependency on a web framework or database.
 
 **Dependencies:** serde, thiserror, validator, chrono
 
-### par-db (library)
+### postfix-admin-db (library)
 
 Data access layer. Concrete implementations of the Repository traits.
 
@@ -71,9 +71,9 @@ Data access layer. Concrete implementations of the Repository traits.
 - SQL row types (`DomainRow`, `MailboxRow`, etc.)
 - Row to domain model conversions
 
-**Dependencies:** sqlx, par-core
+**Dependencies:** sqlx, postfix-admin-core
 
-### par-auth (library)
+### postfix-admin-auth (library)
 
 Authentication, authorization and security.
 
@@ -87,9 +87,9 @@ Authentication, authorization and security.
 - CSRF tokens
 - Rate limiting
 
-**Dependencies:** argon2, bcrypt, sha-crypt, totp-rs, jsonwebtoken, par-core, par-db
+**Dependencies:** argon2, bcrypt, sha-crypt, totp-rs, jsonwebtoken, postfix-admin-core, postfix-admin-db
 
-### par-api (library)
+### postfix-admin-api (library)
 
 REST and gRPC API.
 
@@ -102,9 +102,9 @@ REST and gRPC API.
 - API rate limiting
 - API error handling (RFC 7807)
 
-**Dependencies:** axum, tonic, prost, utoipa, par-core, par-db, par-auth
+**Dependencies:** axum, tonic, prost, utoipa, postfix-admin-core, postfix-admin-db, postfix-admin-auth
 
-### par-web (library)
+### postfix-admin-web (library)
 
 Web interface.
 
@@ -115,7 +115,7 @@ Web interface.
 - Web middleware (sessions, CSRF, flash messages)
 - Internationalization (i18n)
 
-**Dependencies:** axum, askama, par-core, par-db, par-auth
+**Dependencies:** axum, askama, postfix-admin-core, postfix-admin-db, par-auth
 
 ### par-cli (binary)
 
