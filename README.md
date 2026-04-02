@@ -207,23 +207,34 @@ See [docs/features/13-configuration/configuration.md](docs/en/features/13-config
 
 ## Development
 
+### Setup
+
 ```bash
-# Clone
 git clone https://github.com/eric-lemesre/postfix-admin-rs.git
 cd postfix-admin-rs
-
-# Configure Git hooks
 git config core.hooksPath .githooks
+
+# Install just (task runner)
+cargo install just
 
 # Dev database via Docker
 docker run -d --name postfix-admin-dev-pg \
     -e POSTGRES_DB=postfix -e POSTGRES_USER=postfix -e POSTGRES_PASSWORD=postfix \
     -p 5432:5432 postgres:16-alpine
+```
 
-# Build and test
-cargo build
-cargo test
-cargo clippy -- -D warnings
+### Common commands
+
+All commands are available via [just](https://github.com/casey/just). Run `just` to list them.
+
+```bash
+just check           # Format check + clippy
+just test            # Run all unit tests
+just ci              # Full CI pipeline (fmt, clippy, test, audit, deny, build)
+just build-release   # Optimized release build
+just run             # Start server in dev mode (RUST_LOG=debug)
+just cli <args>      # Run the CLI with arguments
+just doc             # Generate and open documentation
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for complete contribution guide.
