@@ -18,3 +18,5 @@ Cargo.lock
 
 # Logs
 *.log
+/.claude/
+CLAUDE.md
