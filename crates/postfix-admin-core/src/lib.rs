@@ -3,10 +3,14 @@
 //! This crate contains the core domain logic with no framework dependencies.
 //! All other crates depend on this one.
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn crate_loads() {
-        // Smoke test: the crate compiles and links correctly.
-    }
-}
+pub mod dto;
+pub mod error;
+pub mod models;
+pub mod pagination;
+pub mod repository;
+pub mod types;
+pub mod validation;
+
+pub use error::{CoreError, DomainError, ValidationError};
+pub use pagination::{PageRequest, PageResponse, SortDirection};
+pub use types::{DomainName, EmailAddress, IpAddress, Password};

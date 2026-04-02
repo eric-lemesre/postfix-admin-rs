@@ -13,7 +13,7 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.75"
+rust-version = "1.83"
 authors = ["Eric Lemesre"]
 license = "GPL-3.0-only"
 repository = "https://github.com/eric-lemesre/postfix-admin-rs"
@@ -34,6 +34,21 @@ serde = { version = "1", features = ["derive"] }
 # Error handling
 thiserror = "2"
 anyhow = "1"
+
+# Date/time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Validation
+validator = { version = "0.19", features = ["derive"] }
+
+# Security
+zeroize = { version = "1", features = ["derive"] }
+
+# Regex
+regex = "1"
+
+# Async
+async-trait = "0.1"
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }
