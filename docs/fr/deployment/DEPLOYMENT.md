@@ -8,7 +8,7 @@
 
 ```bash
 # Telecharger la derniere release
-wget https://github.com/eric-lemesre/PostfixAdminRust/releases/latest/download/postfix-admin-rs-linux-amd64
+wget https://github.com/eric-lemesre/postfix-admin-rs/releases/latest/download/postfix-admin-rs-linux-amd64
 
 # Installer
 sudo install -m 755 postfix-admin-rs-linux-amd64 /usr/local/bin/postfix-admin-rs

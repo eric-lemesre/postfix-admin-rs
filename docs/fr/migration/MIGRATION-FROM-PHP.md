@@ -37,7 +37,7 @@ cp /path/to/postfixadmin.db /path/to/postfixadmin.db.backup
 
 ```bash
 # Depuis le binaire
-wget https://github.com/eric-lemesre/PostfixAdminRust/releases/latest/download/postfix-admin-rs-linux-amd64
+wget https://github.com/eric-lemesre/postfix-admin-rs/releases/latest/download/postfix-admin-rs-linux-amd64
 chmod +x postfix-admin-rs-linux-amd64
 sudo mv postfix-admin-rs-linux-amd64 /usr/local/bin/postfix-admin-rs
 
