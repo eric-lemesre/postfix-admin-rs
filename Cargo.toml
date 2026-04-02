@@ -42,6 +42,10 @@ tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
+# Testing
+testcontainers = "0.23"
+testcontainers-modules = { version = "0.11", features = ["postgres", "mysql"] }
+
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }
 unwrap_used = "deny"
