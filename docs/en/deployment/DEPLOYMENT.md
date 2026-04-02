@@ -3,6 +3,8 @@
 ---
 # Deployment guide — postfix-admin-rs
 
+> **See also:** [Security hardening guide](SECURITY-HARDENING.md) for internet-facing deployments.
+
 ## Deployment options
 
 ### 1. Static binary

@@ -2,6 +2,8 @@
 
 # Guide de deploiement — postfix-admin-rs
 
+> **Voir aussi :** [Guide de durcissement securite](SECURITY-HARDENING.md) pour les deploiements exposes sur internet.
+
 ## Options de deploiement
 
 ### 1. Binaire statique
