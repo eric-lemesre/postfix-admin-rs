@@ -1,32 +1,34 @@
+> **Language:** English | [Francais](README.fr.md)
+
 # postfix-admin-rs
 
-Administration web des serveurs de messagerie Postfix/Dovecot, reecrite en Rust.
+Web administration for Postfix/Dovecot mail servers, rewritten in Rust.
 
-Clone fonctionnel de [PostfixAdmin](https://github.com/postfixadmin/postfixadmin) (PHP) avec une architecture moderne, une API REST + gRPC, et une interface HTMX/Tailwind.
+Functional clone of [PostfixAdmin](https://github.com/postfixadmin/postfixadmin) (PHP) with a modern architecture, REST + gRPC API, and HTMX/Tailwind interface.
 
-## Fonctionnalites
+## Features
 
-- **Domaines virtuels** — CRUD complet, quotas, transport, backup MX, alias de domaines
-- **Boites mail** — Creation, quotas individuels et par domaine, maildir auto-genere
-- **Alias** — Alias standard, catch-all, listes de distribution
-- **Vacation** — Repondeur automatique avec deduplication et programmation
-- **DKIM** — Generation de cles, table de signature, verification DNS
-- **Fetchmail** — Recuperation POP3/IMAP depuis des serveurs distants
-- **Authentification** — Multi-schema (argon2id, bcrypt, sha512-crypt...), TOTP 2FA, mots de passe applicatifs
-- **RBAC** — Superadmin, admin de domaine, utilisateur
-- **Journal d'audit** — Tracabilite complete des actions d'administration
-- **Migration transparente** — Compatible avec les bases PostfixAdmin PHP existantes
+- **Virtual domains** — Full CRUD, quotas, transport, backup MX, domain aliases
+- **Mailboxes** — Creation, individual and per-domain quotas, auto-generated maildir
+- **Aliases** — Standard aliases, catch-all, mailing lists
+- **Vacation** — Auto-responder with deduplication and scheduling
+- **DKIM** — Key generation, signature table, DNS verification
+- **Fetchmail** — POP3/IMAP retrieval from remote servers
+- **Authentication** — Multi-scheme (argon2id, bcrypt, sha512-crypt...), TOTP 2FA, application passwords
+- **RBAC** — Superadmin, domain admin, user roles
+- **Audit log** — Full traceability of administrative actions
+- **Transparent migration** — Compatible with existing PostfixAdmin PHP databases
 
-## Stack technique
+## Technical stack
 
-| Couche | Technologie |
+| Layer | Technology |
 |--------|------------|
-| Langage | Rust (edition 2021) |
+| Language | Rust (edition 2021) |
 | Web | [axum](https://github.com/tokio-rs/axum) |
-| Base de donnees | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite |
+| Database | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite |
 | Templates | [Askama](https://github.com/djc/askama) |
 | Frontend | [HTMX](https://htmx.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Alpine.js](https://alpinejs.dev/) |
-| API REST | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI) |
+| REST API | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI) |
 | gRPC | [tonic](https://github.com/hyperium/tonic) + [prost](https://github.com/tokio-rs/prost) |
 | CLI | [clap](https://github.com/clap-rs/clap) |
 | Auth | argon2, bcrypt, sha-crypt, [totp-rs](https://github.com/constantoine/totp-rs) |
@@ -36,33 +38,33 @@ Clone fonctionnel de [PostfixAdmin](https://github.com/postfixadmin/postfixadmin
 
 ## Architecture
 
-Workspace Cargo multi-crates suivant les principes de la Clean Architecture :
+Multi-crate Cargo workspace following Clean Architecture principles:
 
 ```
 crates/
-├── par-core/      Modeles de domaine, traits, validation
+├── par-core/      Domain models, traits, validation
 ├── par-db/        Repositories (PostgreSQL, MySQL, SQLite)
-├── par-auth/      Authentification, TOTP, sessions, RBAC
-├── par-api/       API REST + gRPC
-├── par-web/       Interface web (Askama + HTMX)
-├── par-cli/       CLI d'administration
-└── par-server/    Binaire principal
+├── par-auth/      Authentication, TOTP, sessions, RBAC
+├── par-api/       REST + gRPC API
+├── par-web/       Web interface (Askama + HTMX)
+├── par-cli/       Administration CLI
+└── par-server/    Main binary
 ```
 
-Les dependances vont de l'exterieur vers l'interieur : `par-server` → `par-web`/`par-api` → `par-auth` → `par-db` → `par-core`.
+Dependencies flow from the outside in: `par-server` → `par-web`/`par-api` → `par-auth` → `par-db` → `par-core`.
 
-Voir [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) pour le detail.
+See [docs/architecture/ARCHITECTURE.md](docs/en/architecture/ARCHITECTURE.md) for details.
 
-## Prerequis
+## Prerequisites
 
 - Rust 1.75+ (edition 2021)
-- PostgreSQL 14+, MySQL 8+ ou SQLite 3.35+
-- Node.js 18+ (compilation Tailwind CSS uniquement)
-- Docker (optionnel, pour testcontainers)
+- PostgreSQL 14+, MySQL 8+, or SQLite 3.35+
+- Node.js 18+ (for Tailwind CSS compilation only)
+- Docker (optional, for testcontainers)
 
 ## Installation
 
-### Depuis les sources
+### From source
 
 ```bash
 git clone https://github.com/eric-lemesre/PostfixAdminRust.git
@@ -70,9 +72,9 @@ cd PostfixAdminRust
 cargo build --release
 ```
 
-Le binaire est genere dans `target/release/postfix-admin-rs`.
+The binary is generated in `target/release/postfix-admin-rs`.
 
-### Package Debian
+### Debian package
 
 ```bash
 sudo dpkg -i postfix-admin-rs_1.0.0_amd64.deb
@@ -87,9 +89,9 @@ docker run -d \
     ghcr.io/eric-lemesre/postfix-admin-rs:latest
 ```
 
-## Demarrage rapide
+## Quick start
 
-### 1. Creer la base de donnees
+### 1. Create the database
 
 ```sql
 -- PostgreSQL
@@ -97,14 +99,14 @@ CREATE USER postfix WITH PASSWORD 'choose_a_password';
 CREATE DATABASE postfix OWNER postfix ENCODING 'UTF8';
 ```
 
-### 2. Configurer
+### 2. Configure
 
 ```bash
 sudo mkdir -p /etc/postfix-admin-rs
 sudo cp config/default.toml /etc/postfix-admin-rs/config.toml
 ```
 
-Editer `/etc/postfix-admin-rs/config.toml` :
+Edit `/etc/postfix-admin-rs/config.toml`:
 
 ```toml
 [database]
@@ -115,72 +117,72 @@ bind_address = "0.0.0.0"
 port = 8080
 ```
 
-### 3. Initialiser
+### 3. Initialize
 
 ```bash
-# Appliquer les migrations
+# Apply migrations
 postfix-admin-rs migrate
 
-# Creer le premier administrateur
+# Create first admin user
 postfix-admin-rs setup
 ```
 
-### 4. Demarrer
+### 4. Start
 
 ```bash
 postfix-admin-rs serve
 ```
 
-L'interface est accessible sur `http://localhost:8080`.
+The interface is available at `http://localhost:8080`.
 
-## Migration depuis PostfixAdmin PHP
+## Migration from PostfixAdmin PHP
 
-postfix-admin-rs peut se connecter directement a une base PostfixAdmin PHP existante.
-Les migrations ajoutent les colonnes necessaires sans casser la compatibilite.
-Les mots de passe sont rehashes automatiquement lors des connexions.
+postfix-admin-rs can connect directly to an existing PostfixAdmin PHP database.
+Migrations add necessary columns without breaking compatibility.
+Passwords are automatically rehashed on login.
 
 ```bash
-# Pointer vers la base existante
+# Point to the existing database
 postfix-admin-rs --database-url "postgresql://postfix:pass@localhost/postfix" migrate
 postfix-admin-rs serve
 ```
 
-Voir [docs/migration/MIGRATION-FROM-PHP.md](docs/migration/MIGRATION-FROM-PHP.md) pour le guide complet.
+See [docs/migration/MIGRATION-FROM-PHP.md](docs/en/migration/MIGRATION-FROM-PHP.md) for complete guide.
 
 ## CLI
 
 ```bash
 postfix-admin-rs domain list
-postfix-admin-rs domain add example.com --description "Mon domaine"
-postfix-admin-rs mailbox add user@example.com --password "secret" --name "Utilisateur"
+postfix-admin-rs domain add example.com --description "My domain"
+postfix-admin-rs mailbox add user@example.com --password "secret" --name "User"
 postfix-admin-rs alias add info@example.com --goto "user@example.com,other@example.com"
 postfix-admin-rs log list --last 20
 ```
 
-Voir [docs/features/11-cli/cli-administration.md](docs/features/11-cli/cli-administration.md) pour toutes les commandes.
+See [docs/features/11-cli/cli-administration.md](docs/en/features/11-cli/cli-administration.md) for all commands.
 
 ## API
 
 ### REST
 
-Toutes les ressources sont accessibles via l'API REST prefixee `/api/v1/`.
+All resources are available via the `/api/v1/` prefixed REST API.
 
 ```bash
-# Authentification
+# Authentication
 curl -X POST http://localhost:8080/api/v1/auth/login \
     -H "Content-Type: application/json" \
     -d '{"username": "admin@example.com", "password": "..."}'
 
-# Lister les domaines
+# List domains
 curl http://localhost:8080/api/v1/domains \
     -H "Authorization: Bearer <token>"
 ```
 
-Documentation OpenAPI interactive : `http://localhost:8080/api/docs`
+Interactive OpenAPI documentation: `http://localhost:8080/api/docs`
 
 ### gRPC
 
-Port par defaut : `50051`. Activer dans la configuration :
+Default port: `50051`. Enable in configuration:
 
 ```toml
 [grpc]
@@ -190,55 +192,55 @@ port = 50051
 
 ## Configuration
 
-Fichier principal : `/etc/postfix-admin-rs/config.toml`
+Main file: `/etc/postfix-admin-rs/config.toml`
 
-Les valeurs peuvent etre surchargees par des variables d'environnement prefixees `PAR_` :
+Values can be overridden by environment variables prefixed with `PAR_`:
 
 | Variable | Description |
 |----------|-------------|
-| `PAR_DATABASE__URL` | URL de connexion a la base |
-| `PAR_SERVER__PORT` | Port d'ecoute HTTP |
-| `PAR_LOGGING__LEVEL` | Niveau de log (trace, debug, info, warn, error) |
-| `PAR_AUTH__PASSWORD_SCHEME` | Schema de hashing (argon2id, bcrypt) |
+| `PAR_DATABASE__URL` | Database connection URL |
+| `PAR_SERVER__PORT` | HTTP listening port |
+| `PAR_LOGGING__LEVEL` | Log level (trace, debug, info, warn, error) |
+| `PAR_AUTH__PASSWORD_SCHEME` | Hashing scheme (argon2id, bcrypt) |
 
-Voir [docs/features/13-configuration/configuration.md](docs/features/13-configuration/configuration.md) pour la reference complete.
+See [docs/features/13-configuration/configuration.md](docs/en/features/13-configuration/configuration.md) for complete reference.
 
-## Developpement
+## Development
 
 ```bash
-# Cloner
+# Clone
 git clone https://github.com/eric-lemesre/PostfixAdminRust.git
 cd PostfixAdminRust
 
-# Configurer les hooks Git
+# Configure Git hooks
 git config core.hooksPath .githooks
 
-# Base de dev via Docker
+# Dev database via Docker
 docker run -d --name par-dev-pg \
     -e POSTGRES_DB=postfix -e POSTGRES_USER=postfix -e POSTGRES_PASSWORD=postfix \
     -p 5432:5432 postgres:16-alpine
 
-# Compiler et tester
+# Build and test
 cargo build
 cargo test
 cargo clippy -- -D warnings
 ```
 
-Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le guide de contribution complet.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for complete contribution guide.
 
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [docs/features/](docs/features/00-overview.md) | Specifications fonctionnelles par module |
-| [docs/architecture/](docs/architecture/ARCHITECTURE.md) | Architecture technique et diagrammes |
-| [docs/database/](docs/database/SCHEMA.md) | Schema de base de donnees |
-| [docs/guidelines/](docs/guidelines/) | Guidelines Rust, JS, CSS, SQL, Git, Code Review |
-| [docs/migration/](docs/migration/MIGRATION-FROM-PHP.md) | Guide de migration depuis PHP |
-| [docs/deployment/](docs/deployment/DEPLOYMENT.md) | Guide de deploiement |
+| [docs/features/](docs/en/features/00-overview.md) | Functional specifications by module |
+| [docs/architecture/](docs/en/architecture/ARCHITECTURE.md) | Technical architecture and diagrams |
+| [docs/database/](docs/en/database/SCHEMA.md) | Database schema |
+| [docs/guidelines/](docs/en/guidelines/) | Rust, JS, CSS, SQL, Git, Code Review guidelines |
+| [docs/migration/](docs/en/migration/MIGRATION-FROM-PHP.md) | Migration guide from PHP |
+| [docs/deployment/](docs/en/deployment/DEPLOYMENT.md) | Deployment guide |
 
-## Licence
+## License
 
-Ce projet est distribue sous la licence [GNU General Public License v3.0](LICENSE).
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
-Basé sur le travail de [PostfixAdmin](https://github.com/postfixadmin/postfixadmin) (GPL v2+).
+Based on work by [PostfixAdmin](https://github.com/postfixadmin/postfixadmin) (GPL v2+).

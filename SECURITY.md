@@ -1,61 +1,66 @@
-# Politique de securite — postfix-admin-rs
+> **Language:** English | [Francais](SECURITY.fr.md)
 
-## Versions supportees
+---
+# Security policy — postfix-admin-rs
 
-| Version | Support securite |
-|---------|-----------------|
-| 1.x.x   | Oui (actif)     |
-| < 1.0   | Non             |
+## Supported versions
 
-## Signaler une vulnerabilite
+| Version | Security support |
+|---------|------------------|
+| 1.x.x   | Yes (active)     |
+| < 1.0   | No               |
 
-**Ne signalez PAS les vulnerabilites de securite via les issues GitHub publiques.**
+## Reporting a vulnerability
 
-Pour signaler une vulnerabilite :
+**DO NOT report security vulnerabilities via public GitHub issues.**
 
-1. Envoyez un email a **security@example.com** (a mettre a jour avec l'adresse reelle)
-2. Incluez :
-   - Description de la vulnerabilite
-   - Etapes pour reproduire
-   - Impact potentiel
-   - Suggestion de correction (si possible)
+To report a vulnerability:
 
-### Delai de reponse
+1. Send an email to **security@example.com** (to be updated with the actual address)
+2. Include:
+   - Description of the vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Suggested fix (if possible)
 
-- Accuse de reception : 48 heures
-- Evaluation initiale : 7 jours
-- Correction : selon la severite (critique < 7 jours, haute < 30 jours)
+### Response time
 
-### Processus
+- Acknowledgment: 48 hours
+- Initial assessment: 7 days
+- Fix: depending on severity (critical < 7 days, high < 30 days)
 
-1. Reception et accuse de reception
-2. Evaluation et confirmation de la vulnerabilite
-3. Developpement du correctif
-4. Publication d'une version corrigee
-5. Divulgation responsable (apres le correctif)
+### Process
 
-## Bonnes pratiques de securite
+1. Receive and acknowledge the report
+2. Assess and confirm the vulnerability
+3. Develop a fix
+4. Release a fixed version
+5. Responsible disclosure (after the fix)
 
-### Pour les administrateurs
+## Security best practices
 
-- Toujours utiliser HTTPS (TLS) avec un reverse proxy
-- Garder postfix-admin-rs a jour
-- Utiliser des mots de passe forts pour les comptes admin
-- Activer le TOTP 2FA pour tous les comptes admin
-- Restreindre l'acces reseau a l'interface d'administration
-- Sauvegarder regulierement la base de donnees
-- Surveiller les logs d'audit
+### For administrators
 
-### Pour les developpeurs
+- Always use HTTPS (TLS) with a reverse proxy
+- Keep postfix-admin-rs up to date
+- Use strong passwords for admin accounts
+- Enable TOTP 2FA for all admin accounts
+- Restrict network access to the administration interface
+- Regularly back up the database
+- Monitor audit logs
 
-- Suivre les [guidelines de securite](docs/guidelines/GUIDELINES-Rust.md#10-securite)
-- Utiliser exclusivement les requetes parametrees
-- Ne jamais logger les mots de passe ou secrets
-- Utiliser `cargo audit` regulierement
-- Les mots de passe sont hashes avec argon2id
-- Les secrets au repos sont chiffres (AES-256-GCM)
+### For developers
 
-## Dependances
+- Follow the [security guidelines](docs/en/guidelines/GUIDELINES-Rust.md#10-security)
+- Use parameterized queries exclusively
+- Never log passwords or secrets
+- Run `cargo audit` regularly
+- Passwords are hashed with argon2id
+- Secrets at rest are encrypted (AES-256-GCM)
 
-Les dependances sont auditees regulierement avec `cargo audit`.
-Les mises a jour de securite des dependances sont traitees en priorite.
+## Dependencies
+
+Dependencies are regularly audited using `cargo audit`.
+Security updates for dependencies are handled as a priority.
+
+---
