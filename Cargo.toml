@@ -1,0 +1,52 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/postfix-admin-core",
+    "crates/postfix-admin-db",
+    "crates/postfix-admin-auth",
+    "crates/postfix-admin-api",
+    "crates/postfix-admin-web",
+    "crates/postfix-admin-cli",
+    "crates/postfix-admin-server",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["Eric Lemesre"]
+license = "GPL-3.0-only"
+repository = "https://github.com/eric-lemesre/postfix-admin-rs"
+
+[workspace.dependencies]
+# Internal crates
+postfix-admin-core = { path = "crates/postfix-admin-core" }
+postfix-admin-db = { path = "crates/postfix-admin-db" }
+postfix-admin-auth = { path = "crates/postfix-admin-auth" }
+postfix-admin-api = { path = "crates/postfix-admin-api" }
+postfix-admin-web = { path = "crates/postfix-admin-web" }
+postfix-admin-cli = { path = "crates/postfix-admin-cli" }
+postfix-admin-server = { path = "crates/postfix-admin-server" }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+
+[workspace.lints.rust]
+unsafe_code = "deny"

@@ -1,0 +1,151 @@
+# postfix-admin-rs configuration
+# Copy this file to config.toml and adjust values.
+# Resolution priority: CLI args > env vars (PAR_*) > config.local.toml > config.toml > defaults
+
+# --------------------------------------------------------------------------
+# Server
+# --------------------------------------------------------------------------
+[server]
+bind_address = "0.0.0.0"
+port = 8080
+workers = 0                         # 0 = auto-detect (number of CPUs)
+base_url = "https://mail.example.com"
+secret_key = ""                     # Auto-generated on first launch if empty
+
+[server.tls]
+enabled = false
+cert_path = "/etc/ssl/certs/mail.pem"
+key_path = "/etc/ssl/private/mail.key"
+
+# --------------------------------------------------------------------------
+# Database
+# --------------------------------------------------------------------------
+[database]
+# Supported: postgresql://, mysql://
+url = "postgresql://postfix:password@localhost:5432/postfix"
+max_connections = 10
+min_connections = 2
+connect_timeout_seconds = 5
+idle_timeout_seconds = 300
+table_prefix = ""
+
+# --------------------------------------------------------------------------
+# gRPC
+# --------------------------------------------------------------------------
+[grpc]
+enabled = false
+bind_address = "0.0.0.0"
+port = 50051
+tls_enabled = false
+tls_cert_path = ""
+tls_key_path = ""
+
+# --------------------------------------------------------------------------
+# Authentication
+# --------------------------------------------------------------------------
+[auth]
+session_lifetime = 3600             # seconds
+max_login_attempts = 5
+lockout_duration = 900              # seconds
+password_scheme = "argon2id"
+allow_cleartext = false             # Only for development
+
+[auth.argon2]
+memory_cost = 19456                 # KiB (OWASP 2024)
+time_cost = 2
+parallelism = 1
+
+[auth.jwt]
+access_token_lifetime = 900         # 15 minutes
+refresh_token_lifetime = 604800     # 7 days
+
+# --------------------------------------------------------------------------
+# Password policy
+# --------------------------------------------------------------------------
+[password_policy]
+min_length = 8
+max_length = 256
+require_uppercase = true
+require_lowercase = true
+require_digit = true
+require_special = false
+
+# --------------------------------------------------------------------------
+# Mail (SMTP for notifications)
+# --------------------------------------------------------------------------
+[mail]
+smtp_host = "localhost"
+smtp_port = 25
+smtp_tls = false
+smtp_username = ""
+smtp_password = ""
+from_address = "postmaster@example.com"
+from_name = "PostfixAdmin"
+
+# --------------------------------------------------------------------------
+# Vacation auto-responder
+# --------------------------------------------------------------------------
+[vacation]
+enabled = true
+domain = "autoreply.example.com"
+
+# --------------------------------------------------------------------------
+# Fetchmail
+# --------------------------------------------------------------------------
+[fetchmail]
+enabled = true
+min_poll_interval = 5               # minutes
+
+# --------------------------------------------------------------------------
+# DKIM
+# --------------------------------------------------------------------------
+[dkim]
+enabled = true
+default_key_size = 2048             # 1024, 2048, or 4096
+
+# --------------------------------------------------------------------------
+# Logging
+# --------------------------------------------------------------------------
+[logging]
+level = "info"                      # trace, debug, info, warn, error
+format = "pretty"                   # json, pretty, compact
+audit_retention_days = 365
+syslog_enabled = false
+syslog_facility = "mail"
+
+# --------------------------------------------------------------------------
+# Web UI
+# --------------------------------------------------------------------------
+[ui]
+page_size = 20
+default_language = "en"
+available_languages = ["en", "fr"]
+default_theme = "auto"              # auto, light, dark
+site_name = "PostfixAdmin"
+
+# --------------------------------------------------------------------------
+# Domain defaults (applied when creating new domains)
+# --------------------------------------------------------------------------
+[domain_defaults]
+aliases = 0                         # 0 = unlimited
+mailboxes = 0                       # 0 = unlimited
+maxquota = 0                        # 0 = unlimited (MiB)
+quota = 0                           # 0 = unlimited (MiB)
+transport = "virtual:"
+backupmx = false
+
+# --------------------------------------------------------------------------
+# Security
+# --------------------------------------------------------------------------
+[security]
+dns_check_enabled = true
+local_alias_only = false
+csp_enabled = true
+hsts_enabled = true
+hsts_max_age = 31536000             # 1 year
+
+# --------------------------------------------------------------------------
+# Encryption (for DKIM keys and fetchmail passwords at rest)
+# --------------------------------------------------------------------------
+[encryption]
+master_key = ""                     # 32 bytes base64, auto-generated if empty

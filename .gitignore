@@ -10,7 +10,6 @@ Thumbs.db
 # Rust build artifacts
 /target/
 **/*.rs.bk
-Cargo.lock
 
 # Environment
 .env

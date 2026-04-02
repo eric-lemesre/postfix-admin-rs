@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Pre-commit hook: runs cargo fmt and clippy checks.
+# Install: git config core.hooksPath .githooks
+
+set -euo pipefail
+
+echo "==> Running cargo fmt --check..."
+if ! cargo fmt --all --check; then
+    echo "ERROR: cargo fmt check failed. Run 'cargo fmt --all' to fix."
+    exit 1
+fi
+
+echo "==> Running cargo clippy..."
+if ! cargo clippy --all-targets --all-features -- -D warnings; then
+    echo "ERROR: cargo clippy found issues."
+    exit 1
+fi
+
+echo "==> Pre-commit checks passed."

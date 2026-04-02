@@ -1,0 +1,15 @@
+[package]
+name = "postfix-admin-api"
+description = "REST and gRPC API for postfix-admin-rs"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+postfix-admin-core = { workspace = true }
+thiserror = { workspace = true }
+
+[lints]
+workspace = true
