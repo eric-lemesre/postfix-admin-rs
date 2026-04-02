@@ -21,20 +21,20 @@ Functional clone of [PostfixAdmin](https://github.com/postfixadmin/postfixadmin)
 
 ## Technical stack
 
-| Layer | Technology |
-|--------|------------|
-| Language | Rust (edition 2021) |
-| Web | [axum](https://github.com/tokio-rs/axum) |
-| Database | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite |
-| Templates | [Askama](https://github.com/djc/askama) |
-| Frontend | [HTMX](https://htmx.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Alpine.js](https://alpinejs.dev/) |
-| REST API | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI) |
-| gRPC | [tonic](https://github.com/hyperium/tonic) + [prost](https://github.com/tokio-rs/prost) |
-| CLI | [clap](https://github.com/clap-rs/clap) |
-| Auth | argon2, bcrypt, sha-crypt, [totp-rs](https://github.com/constantoine/totp-rs) |
-| Config | [config-rs](https://github.com/mehcode/config-rs) (TOML) |
-| Logging | [tracing](https://github.com/tokio-rs/tracing) |
-| Tests | cargo test, [testcontainers-rs](https://github.com/testcontainers/testcontainers-rs) |
+| Layer     | Technology                                                                                                |
+|-----------|-----------------------------------------------------------------------------------------------------------|
+| Language  | Rust (edition 2021)                                                                                       |
+| Web       | [axum](https://github.com/tokio-rs/axum)                                                                  |
+| Database  | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite                                   |
+| Templates | [Askama](https://github.com/djc/askama)                                                                   |
+| Frontend  | [HTMX](https://htmx.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Alpine.js](https://alpinejs.dev/) |
+| REST API  | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI)                                               |
+| gRPC      | [tonic](https://github.com/hyperium/tonic) + [prost](https://github.com/tokio-rs/prost)                   |
+| CLI       | [clap](https://github.com/clap-rs/clap)                                                                   |
+| Auth      | argon2, bcrypt, sha-crypt, [totp-rs](https://github.com/constantoine/totp-rs)                             |
+| Config    | [config-rs](https://github.com/mehcode/config-rs) (TOML)                                                  |
+| Logging   | [tracing](https://github.com/tokio-rs/tracing)                                                            |
+| Tests     | cargo test, [testcontainers-rs](https://github.com/testcontainers/testcontainers-rs)                      |
 
 ## Architecture
 
@@ -42,16 +42,16 @@ Multi-crate Cargo workspace following Clean Architecture principles:
 
 ```
 crates/
-├── par-core/      Domain models, traits, validation
-├── par-db/        Repositories (PostgreSQL, MySQL, SQLite)
-├── par-auth/      Authentication, TOTP, sessions, RBAC
-├── par-api/       REST + gRPC API
-├── par-web/       Web interface (Askama + HTMX)
-├── par-cli/       Administration CLI
-└── par-server/    Main binary
+├── postfix-admin-core/      Domain models, traits, validation
+├── postfix-admin-db/        Repositories (PostgreSQL, MySQL, SQLite)
+├── postfix-admin-auth/      Authentication, TOTP, sessions, RBAC
+├── postfix-admin-api/       REST + gRPC API
+├── postfix-admin-web/       Web interface (Askama + HTMX)
+├── postfix-admin-cli/       Administration CLI
+└── postfix-admin-server/    Main binary
 ```
 
-Dependencies flow from the outside in: `par-server` → `par-web`/`par-api` → `par-auth` → `par-db` → `par-core`.
+Dependencies flow from the outside in: `postfix-admin-server` → `postfix-admin-web`/`postfix-admin-api` → `postfix-admin-auth` → `postfix-admin-db` → `postfix-admin-core`.
 
 See [docs/architecture/ARCHITECTURE.md](docs/en/architecture/ARCHITECTURE.md) for details.
 
@@ -67,8 +67,8 @@ See [docs/architecture/ARCHITECTURE.md](docs/en/architecture/ARCHITECTURE.md) fo
 ### From source
 
 ```bash
-git clone https://github.com/eric-lemesre/PostfixAdminRust.git
-cd PostfixAdminRust
+git clone https://github.com/eric-lemesre/postfix-admin-rs.git
+cd postfix-admin-rs
 cargo build --release
 ```
 
@@ -196,12 +196,12 @@ Main file: `/etc/postfix-admin-rs/config.toml`
 
 Values can be overridden by environment variables prefixed with `PAR_`:
 
-| Variable | Description |
-|----------|-------------|
-| `PAR_DATABASE__URL` | Database connection URL |
-| `PAR_SERVER__PORT` | HTTP listening port |
-| `PAR_LOGGING__LEVEL` | Log level (trace, debug, info, warn, error) |
-| `PAR_AUTH__PASSWORD_SCHEME` | Hashing scheme (argon2id, bcrypt) |
+| Variable                    | Description                                 |
+|-----------------------------|---------------------------------------------|
+| `PAR_DATABASE__URL`         | Database connection URL                     |
+| `PAR_SERVER__PORT`          | HTTP listening port                         |
+| `PAR_LOGGING__LEVEL`        | Log level (trace, debug, info, warn, error) |
+| `PAR_AUTH__PASSWORD_SCHEME` | Hashing scheme (argon2id, bcrypt)           |
 
 See [docs/features/13-configuration/configuration.md](docs/en/features/13-configuration/configuration.md) for complete reference.
 
@@ -209,14 +209,14 @@ See [docs/features/13-configuration/configuration.md](docs/en/features/13-config
 
 ```bash
 # Clone
-git clone https://github.com/eric-lemesre/PostfixAdminRust.git
-cd PostfixAdminRust
+git clone https://github.com/eric-lemesre/postfix-admin-rs.git
+cd postfix-admin-rs
 
 # Configure Git hooks
 git config core.hooksPath .githooks
 
 # Dev database via Docker
-docker run -d --name par-dev-pg \
+docker run -d --name postfix-admin-dev-pg \
     -e POSTGRES_DB=postfix -e POSTGRES_USER=postfix -e POSTGRES_PASSWORD=postfix \
     -p 5432:5432 postgres:16-alpine
 
@@ -230,14 +230,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for complete contribution guide.
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [docs/features/](docs/en/features/00-overview.md) | Functional specifications by module |
-| [docs/architecture/](docs/en/architecture/ARCHITECTURE.md) | Technical architecture and diagrams |
-| [docs/database/](docs/en/database/SCHEMA.md) | Database schema |
-| [docs/guidelines/](docs/en/guidelines/) | Rust, JS, CSS, SQL, Git, Code Review guidelines |
-| [docs/migration/](docs/en/migration/MIGRATION-FROM-PHP.md) | Migration guide from PHP |
-| [docs/deployment/](docs/en/deployment/DEPLOYMENT.md) | Deployment guide |
+| Document                                                   | Description                                     |
+|------------------------------------------------------------|-------------------------------------------------|
+| [docs/features/](docs/en/features/00-overview.md)          | Functional specifications by module             |
+| [docs/architecture/](docs/en/architecture/ARCHITECTURE.md) | Technical architecture and diagrams             |
+| [docs/database/](docs/en/database/SCHEMA.md)               | Database schema                                 |
+| [docs/guidelines/](docs/en/guidelines/)                    | Rust, JS, CSS, SQL, Git, Code Review guidelines |
+| [docs/migration/](docs/en/migration/MIGRATION-FROM-PHP.md) | Migration guide from PHP                        |
+| [docs/deployment/](docs/en/deployment/DEPLOYMENT.md)       | Deployment guide                                |
 
 ## License
 

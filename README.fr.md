@@ -21,20 +21,20 @@ Clone fonctionnel de [PostfixAdmin](https://github.com/postfixadmin/postfixadmin
 
 ## Stack technique
 
-| Couche | Technologie |
-|--------|------------|
-| Langage | Rust (edition 2021) |
-| Web | [axum](https://github.com/tokio-rs/axum) |
-| Base de donnees | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite |
-| Templates | [Askama](https://github.com/djc/askama) |
-| Frontend | [HTMX](https://htmx.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Alpine.js](https://alpinejs.dev/) |
-| API REST | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI) |
-| gRPC | [tonic](https://github.com/hyperium/tonic) + [prost](https://github.com/tokio-rs/prost) |
-| CLI | [clap](https://github.com/clap-rs/clap) |
-| Auth | argon2, bcrypt, sha-crypt, [totp-rs](https://github.com/constantoine/totp-rs) |
-| Config | [config-rs](https://github.com/mehcode/config-rs) (TOML) |
-| Logging | [tracing](https://github.com/tokio-rs/tracing) |
-| Tests | cargo test, [testcontainers-rs](https://github.com/testcontainers/testcontainers-rs) |
+| Couche          | Technologie                                                                                               |
+|-----------------|-----------------------------------------------------------------------------------------------------------|
+| Langage         | Rust (edition 2021)                                                                                       |
+| Web             | [axum](https://github.com/tokio-rs/axum)                                                                  |
+| Base de donnees | [sqlx](https://github.com/launchbadge/sqlx) — PostgreSQL, MySQL, SQLite                                   |
+| Templates       | [Askama](https://github.com/djc/askama)                                                                   |
+| Frontend        | [HTMX](https://htmx.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Alpine.js](https://alpinejs.dev/) |
+| API REST        | axum + [utoipa](https://github.com/juhaku/utoipa) (OpenAPI)                                               |
+| gRPC            | [tonic](https://github.com/hyperium/tonic) + [prost](https://github.com/tokio-rs/prost)                   |
+| CLI             | [clap](https://github.com/clap-rs/clap)                                                                   |
+| Auth            | argon2, bcrypt, sha-crypt, [totp-rs](https://github.com/constantoine/totp-rs)                             |
+| Config          | [config-rs](https://github.com/mehcode/config-rs) (TOML)                                                  |
+| Logging         | [tracing](https://github.com/tokio-rs/tracing)                                                            |
+| Tests           | cargo test, [testcontainers-rs](https://github.com/testcontainers/testcontainers-rs)                      |
 
 ## Architecture
 
@@ -42,16 +42,16 @@ Workspace Cargo multi-crates suivant les principes de la Clean Architecture :
 
 ```
 crates/
-├── par-core/      Modeles de domaine, traits, validation
-├── par-db/        Repositories (PostgreSQL, MySQL, SQLite)
-├── par-auth/      Authentification, TOTP, sessions, RBAC
-├── par-api/       API REST + gRPC
-├── par-web/       Interface web (Askama + HTMX)
-├── par-cli/       CLI d'administration
-└── par-server/    Binaire principal
+├── postfix-admin-core/      Modeles de domaine, traits, validation
+├── postfix-admin-db/        Repositories (PostgreSQL, MySQL, SQLite)
+├── postfix-admin-auth/      Authentification, TOTP, sessions, RBAC
+├── postfix-admin-api/       API REST + gRPC
+├── postfix-admin-web/       Interface web (Askama + HTMX)
+├── postfix-admin-cli/       CLI d'administration
+└── postfix-admin-server/    Binaire principal
 ```
 
-Les dependances vont de l'exterieur vers l'interieur : `par-server` → `par-web`/`par-api` → `par-auth` → `par-db` → `par-core`.
+Les dependances vont de l'exterieur vers l'interieur : `postfix-admin-server` → `postfix-admin-web`/`postfix-admin-api` → `postfix-admin-auth` → `postfix-admin-db` → `postfix-admin-core`.
 
 Voir [docs/architecture/ARCHITECTURE.md](docs/fr/architecture/ARCHITECTURE.md) pour le detail.
 
@@ -67,8 +67,8 @@ Voir [docs/architecture/ARCHITECTURE.md](docs/fr/architecture/ARCHITECTURE.md) p
 ### Depuis les sources
 
 ```bash
-git clone https://github.com/eric-lemesre/PostfixAdminRust.git
-cd PostfixAdminRust
+git clone https://github.com/eric-lemesre/postfix-admin-rs.git
+cd postfix-admin-rs
 cargo build --release
 ```
 
@@ -196,12 +196,12 @@ Fichier principal : `/etc/postfix-admin-rs/config.toml`
 
 Les valeurs peuvent etre surchargees par des variables d'environnement prefixees `PAR_` :
 
-| Variable | Description |
-|----------|-------------|
-| `PAR_DATABASE__URL` | URL de connexion a la base |
-| `PAR_SERVER__PORT` | Port d'ecoute HTTP |
-| `PAR_LOGGING__LEVEL` | Niveau de log (trace, debug, info, warn, error) |
-| `PAR_AUTH__PASSWORD_SCHEME` | Schema de hashing (argon2id, bcrypt) |
+| Variable                    | Description                                     |
+|-----------------------------|-------------------------------------------------|
+| `PAR_DATABASE__URL`         | URL de connexion a la base                      |
+| `PAR_SERVER__PORT`          | Port d'ecoute HTTP                              |
+| `PAR_LOGGING__LEVEL`        | Niveau de log (trace, debug, info, warn, error) |
+| `PAR_AUTH__PASSWORD_SCHEME` | Schema de hashing (argon2id, bcrypt)            |
 
 Voir [docs/features/13-configuration/configuration.md](docs/fr/features/13-configuration/configuration.md) pour la reference complete.
 
@@ -209,14 +209,14 @@ Voir [docs/features/13-configuration/configuration.md](docs/fr/features/13-confi
 
 ```bash
 # Cloner
-git clone https://github.com/eric-lemesre/PostfixAdminRust.git
-cd PostfixAdminRust
+git clone https://github.com/eric-lemesre/postfix-admin-rs.git
+cd postfix-admin-rs
 
 # Configurer les hooks Git
 git config core.hooksPath .githooks
 
 # Base de dev via Docker
-docker run -d --name par-dev-pg \
+docker run -d --name postfix-admin-dev-pg \
     -e POSTGRES_DB=postfix -e POSTGRES_USER=postfix -e POSTGRES_PASSWORD=postfix \
     -p 5432:5432 postgres:16-alpine
 
@@ -230,14 +230,14 @@ Voir [CONTRIBUTING.md](CONTRIBUTING.fr.md) pour le guide de contribution complet
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [docs/features/](docs/fr/features/00-overview.md) | Specifications fonctionnelles par module |
-| [docs/architecture/](docs/fr/architecture/ARCHITECTURE.md) | Architecture technique et diagrammes |
-| [docs/database/](docs/fr/database/SCHEMA.md) | Schema de base de donnees |
-| [docs/guidelines/](docs/fr/guidelines/) | Guidelines Rust, JS, CSS, SQL, Git, Code Review |
-| [docs/migration/](docs/fr/migration/MIGRATION-FROM-PHP.md) | Guide de migration depuis PHP |
-| [docs/deployment/](docs/fr/deployment/DEPLOYMENT.md) | Guide de deploiement |
+| Document                                                   | Description                                     |
+|------------------------------------------------------------|-------------------------------------------------|
+| [docs/features/](docs/fr/features/00-overview.md)          | Specifications fonctionnelles par module        |
+| [docs/architecture/](docs/fr/architecture/ARCHITECTURE.md) | Architecture technique et diagrammes            |
+| [docs/database/](docs/fr/database/SCHEMA.md)               | Schema de base de donnees                       |
+| [docs/guidelines/](docs/fr/guidelines/)                    | Guidelines Rust, JS, CSS, SQL, Git, Code Review |
+| [docs/migration/](docs/fr/migration/MIGRATION-FROM-PHP.md) | Guide de migration depuis PHP                   |
+| [docs/deployment/](docs/fr/deployment/DEPLOYMENT.md)       | Guide de deploiement                            |
 
 ## Licence
 

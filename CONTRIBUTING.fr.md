@@ -14,7 +14,7 @@ En participant, vous vous engagez a respecter ce code de conduite.
 
 ### Signaler un bug
 
-1. Verifiez que le bug n'a pas deja ete signale dans les [issues](https://github.com/eric-lemesre/PostfixAdminRust/issues)
+1. Verifiez que le bug n'a pas deja ete signale dans les [issues](https://github.com/eric-lemesre/postfix-admin-rs/issues)
 2. Creez une issue avec :
    - Description claire du probleme
    - Etapes pour reproduire
@@ -59,8 +59,8 @@ En participant, vous vous engagez a respecter ce code de conduite.
 
 ```bash
 # Cloner
-git clone https://github.com/eric-lemesre/PostfixAdminRust.git
-cd PostfixAdminRust
+git clone https://github.com/eric-lemesre/postfix-admin-rs.git
+cd postfix-admin-rs
 
 # Configurer les git hooks
 git config core.hooksPath .githooks
@@ -76,14 +76,14 @@ cargo build
 cargo test
 
 # Lancer le serveur de dev
-cargo run --bin par-server
+cargo run --bin postfix-admin-server
 ```
 
 ### Base de donnees de developpement
 
 ```bash
 # PostgreSQL via Docker
-docker run -d --name par-dev-pg \
+docker run -d --name postfix-admin-dev-pg \
     -e POSTGRES_DB=postfix \
     -e POSTGRES_USER=postfix \
     -e POSTGRES_PASSWORD=postfix \
@@ -91,7 +91,7 @@ docker run -d --name par-dev-pg \
     postgres:16-alpine
 
 # Appliquer les migrations
-cargo run --bin par-cli -- migrate
+cargo run --bin postfix-admin-cli -- migrate
 ```
 
 ## Standards de qualite
