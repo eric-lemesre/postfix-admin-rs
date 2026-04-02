@@ -43,8 +43,8 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 # Testing
-testcontainers = "0.23"
-testcontainers-modules = { version = "0.11", features = ["postgres", "mysql"] }
+testcontainers = "0.27"
+testcontainers-modules = { version = "0.15", features = ["postgres", "mysql"] }
 
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }
