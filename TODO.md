@@ -50,6 +50,8 @@
 - [x] Create Newman test directory structure (`tests/newman/`)
 
 ### M1: postfix-admin-core `v0.2.0` [L]
+> Specs: [SPEC-01.1](docs/en/features/01-domains/domain-management.md) · [SPEC-01.2](docs/en/features/01-domains/alias-domains.md) · [SPEC-02.1](docs/en/features/02-mailboxes/mailbox-management.md) · [SPEC-02.2](docs/en/features/02-mailboxes/quota-management.md) · [SPEC-03.1](docs/en/features/03-aliases/alias-management.md) · [SPEC-04.1](docs/en/features/04-authentication/admin-authentication.md) · [SPEC-04.3](docs/en/features/04-authentication/totp-2fa.md) · [SPEC-04.4](docs/en/features/04-authentication/app-passwords.md) · [SPEC-06.1](docs/en/features/06-vacation/vacation-autoresponder.md) · [SPEC-07.1](docs/en/features/07-fetchmail/fetchmail-integration.md) · [SPEC-08.1](docs/en/features/08-dkim/dkim-management.md) · [SPEC-09.1](docs/en/features/09-logging/audit-logging.md)
+
 - [x] Domain models: `Domain`, `Mailbox`, `Alias`, `Admin`
 - [x] Domain models: `Vacation`, `VacationNotification`
 - [x] Domain models: `DkimKey`, `DkimSigning`
@@ -68,6 +70,8 @@
 - [x] Unit tests for all models, newtypes, and validation
 
 ### M2: postfix-admin-db `v0.3.0` [XL]
+> Specs: same as M1
+
 - [x] Connection pool management (sqlx, multi-backend)
 - [x] SQL migrations: create all tables (PostgreSQL)
 - [x] SQL migrations: create all tables (MySQL)
@@ -98,6 +102,8 @@
 - [x] Integration tests with testcontainers (MySQL)
 
 ### M3: Configuration system `v0.4.0` [M]
+> Specs: [SPEC-13.1](docs/en/features/13-configuration/configuration.md)
+
 - [ ] Config struct definitions matching `config.toml` structure
 - [ ] config-rs integration (TOML file + env vars + CLI overrides)
 - [ ] Resolution priority: CLI > env > config.local.toml > config.toml > defaults
@@ -110,6 +116,8 @@
 ## Phase 2 — Authentication & Security
 
 ### M4: postfix-admin-auth `v0.5.0` [XL]
+> Specs: [SPEC-04.1](docs/en/features/04-authentication/admin-authentication.md) · [SPEC-04.2](docs/en/features/04-authentication/user-authentication.md) · [SPEC-04.3](docs/en/features/04-authentication/totp-2fa.md) · [SPEC-04.4](docs/en/features/04-authentication/app-passwords.md) · [SPEC-04.5](docs/en/features/04-authentication/password-schemes.md) · [SPEC-05.1](docs/en/features/05-authorization/rbac.md)
+
 - [ ] Password scheme detection (prefix matching per SPEC-04.5)
 - [ ] Argon2id hashing and verification (OWASP 2024 parameters)
 - [ ] Bcrypt hashing and verification
@@ -144,6 +152,8 @@
 ## Phase 3 — Interfaces
 
 ### M5: postfix-admin-web `v0.6.0` [XL]
+> Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
+
 - [ ] Askama template base layout (header, sidebar, main, footer)
 - [ ] Tailwind CSS build pipeline (standalone CLI or npm)
 - [ ] Dark mode support (class="dark", localStorage, prefers-color-scheme)
@@ -174,6 +184,8 @@
 - [ ] Template unit tests (render without errors)
 
 ### M6: REST API `v0.7.0` [XL]
+> Specs: [SPEC-10.1](docs/en/features/10-api/rest-api.md)
+
 - [ ] API router setup (`/api/v1/`)
 - [ ] Authentication middleware (JWT Bearer + API Key)
 - [ ] Error handling: RFC 7807 (Problem Details for HTTP APIs)
@@ -206,6 +218,8 @@
 - [ ] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
 
 ### M7: gRPC API `v0.7.1` [M]
+> Specs: [SPEC-10.2](docs/en/features/10-api/grpc-api.md)
+
 - [ ] Protobuf definitions (proto3): DomainService, MailboxService, AliasService, AdminService
 - [ ] tonic service implementations
 - [ ] Authentication interceptor (Bearer JWT/API Key in metadata)
@@ -215,6 +229,8 @@
 - [ ] Integration tests for all gRPC services
 
 ### M8: CLI `v0.7.2` [L]
+> Specs: [SPEC-11.1](docs/en/features/11-cli/cli-administration.md)
+
 - [ ] clap command structure: `postfix-admin-rs <subcommand> <action>`
 - [ ] `domain` subcommand: list, show, add, edit, delete, toggle
 - [ ] `mailbox` subcommand: list, show, add, edit, delete, toggle, password, quota
@@ -253,6 +269,8 @@
 - [ ] Smoke tests (server starts and responds)
 
 ### M10: Vacation auto-responder `v0.8.1` [M]
+> Specs: [SPEC-06.1](docs/en/features/06-vacation/vacation-autoresponder.md)
+
 - [ ] Vacation CRUD (web + API)
 - [ ] Alias modification on activation/deactivation
 - [ ] Scheduled activation (active_from / active_until)
@@ -262,6 +280,8 @@
 - [ ] Tests
 
 ### M11: DKIM management `v0.8.2` [M]
+> Specs: [SPEC-08.1](docs/en/features/08-dkim/dkim-management.md)
+
 - [ ] RSA key generation (2048 default, configurable 1024/2048/4096)
 - [ ] Private key encryption at rest (AES-256-GCM)
 - [ ] Selector management (unique per domain)
@@ -273,6 +293,8 @@
 - [ ] Tests
 
 ### M12: Fetchmail integration `v0.8.3` [M]
+> Specs: [SPEC-07.1](docs/en/features/07-fetchmail/fetchmail-integration.md)
+
 - [ ] Fetchmail config CRUD (web + API)
 - [ ] Remote password encryption (AES-256-GCM)
 - [ ] Connectivity test endpoint
@@ -283,6 +305,8 @@
 - [ ] Tests
 
 ### M13: Alias domains `v0.8.4` [S]
+> Specs: [SPEC-01.2](docs/en/features/01-domains/alias-domains.md)
+
 - [ ] Alias domain CRUD (web + API + CLI)
 - [ ] Transparent routing (mail to alias domain → target domain)
 - [ ] Active/inactive toggle
