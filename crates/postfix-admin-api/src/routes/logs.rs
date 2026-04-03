@@ -1,0 +1,51 @@
+//! Audit log endpoints.
+
+use axum::extract::{Query, State};
+use axum::Json;
+
+use crate::error::ApiError;
+use crate::extractors::RequireSuperAdmin;
+use crate::state::AppState;
+use postfix_admin_core::dto::{LogFilter, LogResponse};
+use postfix_admin_core::pagination::PageRequest;
+use postfix_admin_core::PageResponse;
+
+/// Query parameters combining log filter and pagination.
+#[derive(Debug, serde::Deserialize)]
+pub struct LogQuery {
+    #[serde(default)]
+    pub domain: Option<String>,
+    #[serde(default)]
+    pub username: Option<String>,
+    #[serde(default)]
+    pub action: Option<String>,
+    #[serde(default = "default_page")]
+    pub page: u32,
+    #[serde(default = "default_per_page")]
+    pub per_page: u32,
+}
+
+fn default_page() -> u32 {
+    1
+}
+fn default_per_page() -> u32 {
+    25
+}
+
+/// GET /api/v1/logs
+pub async fn list(
+    _admin: RequireSuperAdmin,
+    State(state): State<AppState>,
+    Query(query): Query<LogQuery>,
+) -> Result<Json<PageResponse<LogResponse>>, ApiError> {
+    let filter = LogFilter {
+        domain: query.domain,
+        username: query.username,
+        action: query.action,
+        from: None,
+        until: None,
+    };
+    let page = PageRequest::new(query.page, query.per_page);
+    let result = state.logs.find_all(&filter, &page).await?;
+    Ok(Json(result))
+}
