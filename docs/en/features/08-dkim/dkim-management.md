@@ -10,8 +10,8 @@
 | Models (`DkimKey`, `DkimSigning`)               | `postfix-admin-core`   | Done    | M1        |
 | DTOs (`CreateDkimKey`, `DkimKeyResponse`, etc.) | `postfix-admin-core`   | Done    | M1        |
 | Repository trait (`DkimRepository`)             | `postfix-admin-core`   | Done    | M1        |
-| PostgreSQL repository                           | `postfix-admin-db`     | Pending | M2        |
-| MySQL repository                                | `postfix-admin-db`     | Pending | M2        |
+| PostgreSQL repository                           | `postfix-admin-db`     | Done    | M2        |
+| MySQL repository                                | `postfix-admin-db`     | Done    | M2        |
 | RSA key generation                              | `postfix-admin-server` | Pending | M11       |
 | Private key encryption at rest                  | `postfix-admin-auth`   | Pending | M11       |
 | REST API endpoints                              | `postfix-admin-api`    | Pending | M6        |
@@ -27,7 +27,7 @@ cryptographic key pairs used to sign outgoing mail.
 
 | Field         | Type           | Constraint                             | Description                          |
 |---------------|----------------|----------------------------------------|--------------------------------------|
-| `id`          | `SERIAL`       | PK                                     | Auto-incremented identifier          |
+| `id`          | `UUID`         | PK                                     | UUID v7 identifier                   |
 | `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domain                               |
 | `description` | `VARCHAR(255)` | default `''`                           | Key description                      |
 | `selector`    | `VARCHAR(63)`  | NOT NULL, default `'default'`          | DKIM selector                        |
@@ -42,9 +42,9 @@ Index: `(domain_name, description)`
 
 | Field        | Type           | Constraint                           | Description                            |
 |--------------|----------------|--------------------------------------|----------------------------------------|
-| `id`         | `SERIAL`       | PK                                   | Auto-incremented identifier            |
+| `id`         | `UUID`         | PK                                   | UUID v7 identifier                     |
 | `author`     | `VARCHAR(255)` | NOT NULL                             | Author pattern (e.g., `*@example.com`) |
-| `dkim_id`    | `INTEGER`      | FK → `dkim_key.id` ON DELETE CASCADE | DKIM key to use                        |
+| `dkim_id`    | `UUID`         | FK → `dkim_key.id` ON DELETE CASCADE | DKIM key to use                        |
 | `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Creation date                          |
 | `updated_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Last update                            |
 

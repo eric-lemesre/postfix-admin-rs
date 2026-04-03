@@ -10,8 +10,8 @@
 | Model (`Log`)                                  | `postfix-admin-core` | Done    | M1        |
 | DTOs (`CreateLog`, `LogResponse`, `LogFilter`) | `postfix-admin-core` | Done    | M1        |
 | Repository trait (`LogRepository`)             | `postfix-admin-core` | Done    | M1        |
-| PostgreSQL repository                          | `postfix-admin-db`   | Pending | M2        |
-| MySQL repository                               | `postfix-admin-db`   | Pending | M2        |
+| PostgreSQL repository                          | `postfix-admin-db`   | Done    | M2        |
+| MySQL repository                               | `postfix-admin-db`   | Done    | M2        |
 | REST API endpoints                             | `postfix-admin-api`  | Pending | M6        |
 | Web UI log viewer                              | `postfix-admin-web`  | Pending | M5        |
 
@@ -25,7 +25,7 @@ configuration.
 
 | Field        | Type           | Constraint                | Description                              |
 |--------------|----------------|---------------------------|------------------------------------------|
-| `id`         | `BIGSERIAL`    | PK                        | Auto-incremented identifier              |
+| `id`         | `UUID`         | PK                        | UUID v7 identifier                       |
 | `timestamp`  | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date and time of the action              |
 | `username`   | `VARCHAR(255)` | NOT NULL                  | Author of the action                     |
 | `domain`     | `VARCHAR(255)` | NOT NULL                  | Domain concerned                         |

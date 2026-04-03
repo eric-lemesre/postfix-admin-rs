@@ -13,7 +13,7 @@ mail ne supportent pas le 2FA interactif.
 
 | Champ           | Type           | Contrainte                | Description                               |
 |-----------------|----------------|---------------------------|-------------------------------------------|
-| `id`            | `SERIAL`       | PK                        | Identifiant auto-incrémenté               |
+| `id`            | `UUID`         | PK                        | Identifiant UUID v7                       |
 | `username`      | `VARCHAR(255)` | FK → `mailbox.username`   | Propriétaire                              |
 | `description`   | `VARCHAR(255)` | NOT NULL                  | Description (ex: "iPhone", "Thunderbird") |
 | `password_hash` | `VARCHAR(255)` | NOT NULL                  | Hash du mot de passe applicatif           |

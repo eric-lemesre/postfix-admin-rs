@@ -21,7 +21,7 @@ d'authentification standards (Google Authenticator, Authy, FreeOTP, etc.).
 
 | Champ         | Type           | Contrainte | Description                 |
 |---------------|----------------|------------|-----------------------------|
-| `id`          | `SERIAL`       | PK         | Identifiant auto-incrémenté |
+| `id`          | `UUID`         | PK         | Identifiant UUID v7         |
 | `ip`          | `VARCHAR(46)`  | NOT NULL   | Adresse IP (v4 ou v6)       |
 | `username`    | `VARCHAR(255)` | NULLABLE   | Admin/user (NULL = global)  |
 | `description` | `VARCHAR(255)` | NULLABLE   | Description de l'exception  |

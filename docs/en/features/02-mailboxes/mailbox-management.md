@@ -11,8 +11,8 @@
 | DTOs (`CreateMailbox`, `UpdateMailbox`, `MailboxResponse`) | `postfix-admin-core` | Done    | M1        |
 | Repository trait (`MailboxRepository`)                     | `postfix-admin-core` | Done    | M1        |
 | Validation (maildir, domain limits)                        | `postfix-admin-core` | Done    | M1        |
-| PostgreSQL repository                                      | `postfix-admin-db`   | Pending | M2        |
-| MySQL repository                                           | `postfix-admin-db`   | Pending | M2        |
+| PostgreSQL repository                                      | `postfix-admin-db`   | Done    | M2        |
+| MySQL repository                                           | `postfix-admin-db`   | Done    | M2        |
 | REST API endpoints                                         | `postfix-admin-api`  | Pending | M6        |
 | Web UI pages                                               | `postfix-admin-web`  | Pending | M5        |
 | CLI commands                                               | `postfix-admin-cli`  | Pending | M8        |

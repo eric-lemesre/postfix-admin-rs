@@ -10,8 +10,8 @@
 | DTOs (`CreateAdmin`, `UpdateAdmin`, `AdminResponse`) | `postfix-admin-core` | Done    | M1        |
 | DTOs (`CreateDomainAdmin`, `DomainAdminResponse`)    | `postfix-admin-core` | Done    | M1        |
 | Repository trait (`AdminRepository`)                 | `postfix-admin-core` | Done    | M1        |
-| PostgreSQL repository                                | `postfix-admin-db`   | Pending | M2        |
-| MySQL repository                                     | `postfix-admin-db`   | Pending | M2        |
+| PostgreSQL repository                                | `postfix-admin-db`   | Done    | M2        |
+| MySQL repository                                     | `postfix-admin-db`   | Done    | M2        |
 | Password hashing and verification                    | `postfix-admin-auth` | Pending | M4        |
 | Session management                                   | `postfix-admin-auth` | Pending | M4        |
 | TOTP verification                                    | `postfix-admin-auth` | Pending | M4        |

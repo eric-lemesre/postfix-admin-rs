@@ -12,7 +12,7 @@ paires de clés cryptographiques utilisées pour signer le courrier sortant.
 
 | Champ         | Type           | Contrainte                             | Description                         |
 |---------------|----------------|----------------------------------------|-------------------------------------|
-| `id`          | `SERIAL`       | PK                                     | Identifiant auto-incrémenté         |
+| `id`          | `UUID`         | PK                                     | Identifiant UUID v7                 |
 | `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domaine                             |
 | `description` | `VARCHAR(255)` | default `''`                           | Description de la clé               |
 | `selector`    | `VARCHAR(63)`  | NOT NULL, default `'default'`          | Sélecteur DKIM                      |
@@ -27,9 +27,9 @@ Index : `(domain_name, description)`
 
 | Champ        | Type           | Contrainte                           | Description                            |
 |--------------|----------------|--------------------------------------|----------------------------------------|
-| `id`         | `SERIAL`       | PK                                   | Identifiant auto-incrémenté            |
+| `id`         | `UUID`         | PK                                   | Identifiant UUID v7                    |
 | `author`     | `VARCHAR(255)` | NOT NULL                             | Pattern d'auteur (ex: `*@example.com`) |
-| `dkim_id`    | `INTEGER`      | FK → `dkim_key.id` ON DELETE CASCADE | Clé DKIM à utiliser                    |
+| `dkim_id`    | `UUID`         | FK → `dkim_key.id` ON DELETE CASCADE | Clé DKIM à utiliser                    |
 | `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Date de création                       |
 | `updated_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Dernière modification                  |
 

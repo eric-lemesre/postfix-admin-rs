@@ -10,8 +10,8 @@
 | Model (`MailboxAppPassword`)                      | `postfix-admin-core` | Done    | M1        |
 | DTOs (`CreateAppPassword`, `AppPasswordResponse`) | `postfix-admin-core` | Done    | M1        |
 | Repository trait (`AppPasswordRepository`)        | `postfix-admin-core` | Done    | M1        |
-| PostgreSQL repository                             | `postfix-admin-db`   | Pending | M2        |
-| MySQL repository                                  | `postfix-admin-db`   | Pending | M2        |
+| PostgreSQL repository                             | `postfix-admin-db`   | Done    | M2        |
+| MySQL repository                                  | `postfix-admin-db`   | Done    | M2        |
 | Password generation and hashing                   | `postfix-admin-auth` | Pending | M4        |
 | Web UI management page                            | `postfix-admin-web`  | Pending | M5        |
 
@@ -23,7 +23,7 @@ Application passwords allow users to generate dedicated passwords for mail clien
 
 | Field           | Type           | Constraint                | Description                                 |
 |-----------------|----------------|---------------------------|---------------------------------------------|
-| `id`            | `SERIAL`       | PK                        | Auto-incremented identifier                 |
+| `id`            | `UUID`         | PK                        | UUID v7 identifier                          |
 | `username`      | `VARCHAR(255)` | FK → `mailbox.username`   | Owner                                       |
 | `description`   | `VARCHAR(255)` | NOT NULL                  | Description (e.g., "iPhone", "Thunderbird") |
 | `password_hash` | `VARCHAR(255)` | NOT NULL                  | Hash of the application password            |

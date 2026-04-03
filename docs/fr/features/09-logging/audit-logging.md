@@ -12,7 +12,7 @@ apportées à la configuration du serveur mail.
 
 | Champ        | Type           | Contrainte                | Description                               |
 |--------------|----------------|---------------------------|-------------------------------------------|
-| `id`         | `BIGSERIAL`    | PK                        | Identifiant auto-incrémenté               |
+| `id`         | `UUID`         | PK                        | Identifiant UUID v7                       |
 | `timestamp`  | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date et heure de l'action                 |
 | `username`   | `VARCHAR(255)` | NOT NULL                  | Auteur de l'action                        |
 | `domain`     | `VARCHAR(255)` | NOT NULL                  | Domaine concerné                          |

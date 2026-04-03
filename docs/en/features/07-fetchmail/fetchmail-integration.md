@@ -10,8 +10,8 @@
 | Model (`Fetchmail`)                                              | `postfix-admin-core`   | Done    | M1        |
 | DTOs (`CreateFetchmail`, `UpdateFetchmail`, `FetchmailResponse`) | `postfix-admin-core`   | Done    | M1        |
 | Repository trait (`FetchmailRepository`)                         | `postfix-admin-core`   | Done    | M1        |
-| PostgreSQL repository                                            | `postfix-admin-db`     | Pending | M2        |
-| MySQL repository                                                 | `postfix-admin-db`     | Pending | M2        |
+| PostgreSQL repository                                            | `postfix-admin-db`     | Done    | M2        |
+| MySQL repository                                                 | `postfix-admin-db`     | Done    | M2        |
 | Fetchmail CRUD + polling daemon                                  | `postfix-admin-server` | Pending | M12       |
 | REST API endpoints                                               | `postfix-admin-api`    | Pending | M6        |
 | Web UI pages                                                     | `postfix-admin-web`    | Pending | M5        |
@@ -24,7 +24,7 @@ Allows users to retrieve mail from remote servers (POP3/IMAP) and deliver it to 
 
 | Field           | Type           | Constraint                 | Description                                  |
 |-----------------|----------------|----------------------------|----------------------------------------------|
-| `id`            | `SERIAL`       | PK                         | Auto-incremented identifier                  |
+| `id`            | `UUID`         | PK                         | UUID v7 identifier                           |
 | `domain`        | `VARCHAR(255)` | FK → `domain.domain`       | Local domain                                 |
 | `mailbox`       | `VARCHAR(255)` | FK → `mailbox.username`    | Destination mailbox                          |
 | `src_server`    | `VARCHAR(255)` | NOT NULL                   | Remote server (hostname/IP)                  |

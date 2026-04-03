@@ -68,34 +68,34 @@
 - [x] Unit tests for all models, newtypes, and validation
 
 ### M2: postfix-admin-db `v0.3.0` [XL]
-- [ ] Connection pool management (sqlx, multi-backend)
-- [ ] SQL migrations: create all tables (PostgreSQL)
-- [ ] SQL migrations: create all tables (MySQL)
-- [ ] SQL migrations: create indexes per SCHEMA.md
-- [ ] `PgDomainRepository` implementation
-- [ ] `PgMailboxRepository` implementation
-- [ ] `PgAliasRepository` implementation
-- [ ] `PgAdminRepository` implementation
-- [ ] `PgVacationRepository` implementation
-- [ ] `PgDkimRepository` implementation
-- [ ] `PgFetchmailRepository` implementation
-- [ ] `PgLogRepository` implementation
-- [ ] `PgAppPasswordRepository` implementation
-- [ ] `PgAliasDomainRepository` implementation
-- [ ] `MysqlDomainRepository` implementation
-- [ ] `MysqlMailboxRepository` implementation
-- [ ] `MysqlAliasRepository` implementation
-- [ ] `MysqlAdminRepository` implementation
-- [ ] `MysqlVacationRepository` implementation
-- [ ] `MysqlDkimRepository` implementation
-- [ ] `MysqlFetchmailRepository` implementation
-- [ ] `MysqlLogRepository` implementation
-- [ ] `MysqlAppPasswordRepository` implementation
-- [ ] `MysqlAliasDomainRepository` implementation
-- [ ] Row types and `From<Row>` conversions
-- [ ] Transaction support helpers
-- [ ] Integration tests with testcontainers (PostgreSQL)
-- [ ] Integration tests with testcontainers (MySQL)
+- [x] Connection pool management (sqlx, multi-backend)
+- [x] SQL migrations: create all tables (PostgreSQL)
+- [x] SQL migrations: create all tables (MySQL)
+- [x] SQL migrations: create indexes per SCHEMA.md
+- [x] `PgDomainRepository` implementation
+- [x] `PgMailboxRepository` implementation
+- [x] `PgAliasRepository` implementation
+- [x] `PgAdminRepository` implementation
+- [x] `PgVacationRepository` implementation
+- [x] `PgDkimRepository` implementation
+- [x] `PgFetchmailRepository` implementation
+- [x] `PgLogRepository` implementation
+- [x] `PgAppPasswordRepository` implementation
+- [x] `PgAliasDomainRepository` implementation
+- [x] `MysqlDomainRepository` implementation
+- [x] `MysqlMailboxRepository` implementation
+- [x] `MysqlAliasRepository` implementation
+- [x] `MysqlAdminRepository` implementation
+- [x] `MysqlVacationRepository` implementation
+- [x] `MysqlDkimRepository` implementation
+- [x] `MysqlFetchmailRepository` implementation
+- [x] `MysqlLogRepository` implementation
+- [x] `MysqlAppPasswordRepository` implementation
+- [x] `MysqlAliasDomainRepository` implementation
+- [x] Row types and `From<Row>` conversions
+- [x] Transaction support helpers
+- [x] Integration tests with testcontainers (PostgreSQL)
+- [x] Integration tests with testcontainers (MySQL)
 
 ### M3: Configuration system `v0.4.0` [M]
 - [ ] Config struct definitions matching `config.toml` structure

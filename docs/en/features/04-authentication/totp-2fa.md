@@ -35,7 +35,7 @@ applications (Google Authenticator, Authy, FreeOTP, etc.).
 
 | Field         | Type           | Constraint | Description                 |
 |---------------|----------------|------------|-----------------------------|
-| `id`          | `SERIAL`       | PK         | Auto-incremented identifier |
+| `id`          | `UUID`         | PK         | UUID v7 identifier          |
 | `ip`          | `VARCHAR(46)`  | NOT NULL   | IP address (v4 or v6)       |
 | `username`    | `VARCHAR(255)` | NULLABLE   | Admin/user (NULL = global)  |
 | `description` | `VARCHAR(255)` | NULLABLE   | Exception description       |

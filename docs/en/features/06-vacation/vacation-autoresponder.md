@@ -10,8 +10,8 @@
 | Models (`Vacation`, `VacationNotification`) | `postfix-admin-core`   | Done    | M1        |
 | DTOs (`UpdateVacation`, `VacationResponse`) | `postfix-admin-core`   | Done    | M1        |
 | Repository trait (`VacationRepository`)     | `postfix-admin-core`   | Done    | M1        |
-| PostgreSQL repository                       | `postfix-admin-db`     | Pending | M2        |
-| MySQL repository                            | `postfix-admin-db`     | Pending | M2        |
+| PostgreSQL repository                       | `postfix-admin-db`     | Done    | M2        |
+| MySQL repository                            | `postfix-admin-db`     | Done    | M2        |
 | Vacation CRUD logic                         | `postfix-admin-server` | Pending | M10       |
 | REST API endpoints                          | `postfix-admin-api`    | Pending | M6        |
 | Web UI pages                                | `postfix-admin-web`    | Pending | M5        |

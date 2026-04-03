@@ -11,8 +11,8 @@
 | DTOs (`CreateAlias`, `UpdateAlias`, `AliasResponse`) | `postfix-admin-core` | Done    | M1        |
 | Repository trait (`AliasRepository`)                 | `postfix-admin-core` | Done    | M1        |
 | Validation (alias destinations)                      | `postfix-admin-core` | Done    | M1        |
-| PostgreSQL repository                                | `postfix-admin-db`   | Pending | M2        |
-| MySQL repository                                     | `postfix-admin-db`   | Pending | M2        |
+| PostgreSQL repository                                | `postfix-admin-db`   | Done    | M2        |
+| MySQL repository                                     | `postfix-admin-db`   | Done    | M2        |
 | REST API endpoints                                   | `postfix-admin-api`  | Pending | M6        |
 | Web UI pages                                         | `postfix-admin-web`  | Pending | M5        |
 | CLI commands                                         | `postfix-admin-cli`  | Pending | M8        |

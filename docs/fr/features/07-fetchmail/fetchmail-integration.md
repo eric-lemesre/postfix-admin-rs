@@ -12,7 +12,7 @@ en base et lue par un démon fetchmail.
 
 | Champ           | Type           | Contrainte                 | Description                                              |
 |-----------------|----------------|----------------------------|----------------------------------------------------------|
-| `id`            | `SERIAL`       | PK                         | Identifiant auto-incrémenté                              |
+| `id`            | `UUID`         | PK                         | Identifiant UUID v7                                      |
 | `domain`        | `VARCHAR(255)` | FK → `domain.domain`       | Domaine local                                            |
 | `mailbox`       | `VARCHAR(255)` | FK → `mailbox.username`    | Boîte de destination                                     |
 | `src_server`    | `VARCHAR(255)` | NOT NULL                   | Serveur distant (hostname/IP)                            |
