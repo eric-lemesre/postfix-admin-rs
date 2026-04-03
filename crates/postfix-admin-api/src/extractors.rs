@@ -79,6 +79,9 @@ impl FromRequestParts<AppState> for AuthAdmin {
 }
 
 /// Extractor that requires superadmin privileges.
+///
+/// When mTLS is configured as required for superadmins, also verifies the
+/// client certificate via reverse proxy headers.
 #[derive(Debug, Clone)]
 pub struct RequireSuperAdmin(pub AuthAdmin);
 
@@ -99,6 +102,123 @@ impl FromRequestParts<AppState> for RequireSuperAdmin {
                 field: None,
             }));
         }
+
+        // Check mTLS requirement for superadmin
+        if state.mtls_verifier.is_enabled() && state.mtls_verifier.required_for_superadmin() {
+            let headers = extract_header_map(parts);
+            let cert_info = state.mtls_verifier.extract(&headers).map_err(|e| {
+                AuthRejection(ProblemDetails {
+                    problem_type: "about:blank",
+                    title: "mTLS Required",
+                    status: 403,
+                    detail: e.to_string(),
+                    field: None,
+                })
+            })?;
+
+            // Verify the certificate identity matches the admin username
+            if cert_info.identity != admin.username {
+                return Err(AuthRejection(ProblemDetails {
+                    problem_type: "about:blank",
+                    title: "Certificate Mismatch",
+                    status: 403,
+                    detail: "client certificate identity does not match admin".to_string(),
+                    field: None,
+                }));
+            }
+        }
+
         Ok(Self(admin))
     }
+}
+
+/// Extractor that requires domain admin access to a specific domain.
+///
+/// Extracts the domain from the path parameter and verifies the admin
+/// has access to it (either as superadmin or via `domain_admins`).
+#[derive(Debug, Clone)]
+pub struct RequireDomainAdmin {
+    pub admin: AuthAdmin,
+    pub domain: String,
+}
+
+impl FromRequestParts<AppState> for RequireDomainAdmin {
+    type Rejection = AuthRejection;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &AppState,
+    ) -> Result<Self, Self::Rejection> {
+        let admin = AuthAdmin::from_request_parts(parts, state).await?;
+
+        // Extract domain from path parameters
+        let domain = parts
+            .uri
+            .path()
+            .split('/')
+            .find(|s| s.contains('.'))
+            .unwrap_or_default()
+            .to_string();
+
+        if domain.is_empty() {
+            return Err(AuthRejection(ProblemDetails {
+                problem_type: "about:blank",
+                title: "Missing Domain",
+                status: 400,
+                detail: "domain parameter required".to_string(),
+                field: None,
+            }));
+        }
+
+        // Superadmins have access to all domains
+        if !admin.superadmin {
+            let email = postfix_admin_core::EmailAddress::try_from(admin.username.clone())
+                .map_err(|_| {
+                    AuthRejection(ProblemDetails {
+                        problem_type: "about:blank",
+                        title: "Internal Error",
+                        status: 500,
+                        detail: "invalid admin username".to_string(),
+                        field: None,
+                    })
+                })?;
+
+            let admin_domains = state.admins.find_admin_domains(&email).await.map_err(|e| {
+                AuthRejection(ProblemDetails {
+                    problem_type: "about:blank",
+                    title: "Internal Error",
+                    status: 500,
+                    detail: e.to_string(),
+                    field: None,
+                })
+            })?;
+
+            let has_access = admin_domains.iter().any(|d| d.as_str() == domain);
+            if !has_access {
+                return Err(AuthRejection(ProblemDetails {
+                    problem_type: "about:blank",
+                    title: "Insufficient Permissions",
+                    status: 403,
+                    detail: format!("no access to domain '{domain}'"),
+                    field: None,
+                }));
+            }
+        }
+
+        Ok(Self { admin, domain })
+    }
+}
+
+/// Extract HTTP headers into a `HashMap` for mTLS verification.
+fn extract_header_map(parts: &Parts) -> std::collections::HashMap<String, String> {
+    parts
+        .headers
+        .iter()
+        .filter_map(|(name, value)| {
+            value
+                .to_str()
+                .ok()
+                .map(|v| (name.to_string(), v.to_string()))
+        })
+        .collect()
 }

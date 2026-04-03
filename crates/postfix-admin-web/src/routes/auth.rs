@@ -68,9 +68,39 @@ pub async fn login_post(
         });
     }
 
-    // TODO: Verify password hash from database (requires AdminRepository extension)
-    // For now, we accept the login if the admin exists and is active.
-    let _ = form.password;
+    // Check rate limiting
+    let client_ip = "unknown".to_string(); // TODO: extract from request extensions
+    if let Err(e) = state.rate_limiter.check_allowed(&client_ip) {
+        let csrf_token = session::get_csrf_token(&session).await;
+        return templates::render(&LoginTemplate {
+            error: Some(e.to_string()),
+            csrf_token,
+        });
+    }
+
+    // Verify password hash from database
+    let Ok(Some(password_hash)) = state.admins.find_password_hash(&username).await else {
+        let csrf_token = session::get_csrf_token(&session).await;
+        return templates::render(&LoginTemplate {
+            error: Some("Invalid credentials".to_string()),
+            csrf_token,
+        });
+    };
+
+    let verified = postfix_admin_auth::verify_password(&form.password, &password_hash);
+    if !matches!(verified, Ok(true)) {
+        state.rate_limiter.record_failure(&client_ip);
+        let csrf_token = session::get_csrf_token(&session).await;
+        return templates::render(&LoginTemplate {
+            error: Some("Invalid credentials".to_string()),
+            csrf_token,
+        });
+    }
+
+    // TODO: TOTP verification if admin.totp_enabled
+
+    // Record successful login and clear rate limit
+    state.rate_limiter.record_success(&client_ip);
 
     // Regenerate session ID to prevent session fixation attacks
     session::regenerate_session(&session).await;

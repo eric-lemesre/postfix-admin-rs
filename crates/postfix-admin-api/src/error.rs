@@ -127,6 +127,11 @@ impl IntoResponse for ApiError {
                     AuthError::InsufficientPermissions(_) => {
                         (StatusCode::FORBIDDEN, "Insufficient Permissions")
                     }
+                    AuthError::InvalidTotpCode | AuthError::TotpReplay => {
+                        (StatusCode::UNAUTHORIZED, "Invalid TOTP Code")
+                    }
+                    AuthError::CsrfError => (StatusCode::FORBIDDEN, "CSRF Validation Failed"),
+                    AuthError::RateLimited(_) => (StatusCode::TOO_MANY_REQUESTS, "Rate Limited"),
                     _ => (StatusCode::INTERNAL_SERVER_ERROR, "Authentication Error"),
                 };
                 (

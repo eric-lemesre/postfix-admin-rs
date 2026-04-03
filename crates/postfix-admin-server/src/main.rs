@@ -3,7 +3,7 @@
 use std::sync::Arc;
 
 use postfix_admin_api::{api_router, AppState};
-use postfix_admin_auth::JwtManager;
+use postfix_admin_auth::{JwtManager, LoginRateLimiter, MtlsVerifier};
 use postfix_admin_core::config::CliOverrides;
 use postfix_admin_core::AppConfig;
 use postfix_admin_web::{web_router, WebState};
@@ -34,6 +34,30 @@ async fn main() -> anyhow::Result<()> {
     }
 }
 
+fn create_shared_services(config: &AppConfig) -> anyhow::Result<SharedServices> {
+    let jwt = create_jwt_manager(config)?;
+    let rate_limiter = Arc::new(LoginRateLimiter::new(
+        config.auth.max_login_attempts,
+        config.auth.lockout_duration,
+        config.auth.lockout_duration,
+    ));
+    let mtls_verifier = Arc::new(MtlsVerifier::new(config.auth.mtls.clone()));
+
+    Ok(SharedServices {
+        jwt,
+        rate_limiter,
+        mtls_verifier,
+        password_scheme: config.auth.password_scheme.clone(),
+    })
+}
+
+struct SharedServices {
+    jwt: Arc<JwtManager>,
+    rate_limiter: Arc<LoginRateLimiter>,
+    mtls_verifier: Arc<MtlsVerifier>,
+    password_scheme: String,
+}
+
 async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
     let pool = postfix_admin_db::create_pg_pool(
         config.database.url.expose(),
@@ -42,6 +66,8 @@ async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
     .await?;
 
     postfix_admin_db::run_pg_migrations(&pool).await?;
+
+    let services = create_shared_services(config)?;
 
     let api_state = AppState {
         domains: Arc::new(postfix_admin_db::PgDomainRepository::new(pool.clone())),
@@ -54,8 +80,10 @@ async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
         fetchmail: Arc::new(postfix_admin_db::PgFetchmailRepository::new(pool.clone())),
         logs: Arc::new(postfix_admin_db::PgLogRepository::new(pool.clone())),
         app_passwords: Arc::new(postfix_admin_db::PgAppPasswordRepository::new(pool)),
-        jwt: create_jwt_manager(config)?,
-        password_scheme: config.auth.password_scheme.clone(),
+        jwt: Arc::clone(&services.jwt),
+        password_scheme: services.password_scheme.clone(),
+        rate_limiter: Arc::clone(&services.rate_limiter),
+        mtls_verifier: Arc::clone(&services.mtls_verifier),
     };
 
     let web_state = WebState {
@@ -68,7 +96,8 @@ async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
         dkim: Arc::clone(&api_state.dkim),
         fetchmail: Arc::clone(&api_state.fetchmail),
         logs: Arc::clone(&api_state.logs),
-        password_scheme: config.auth.password_scheme.clone(),
+        password_scheme: services.password_scheme.clone(),
+        rate_limiter: Arc::clone(&services.rate_limiter),
     };
 
     serve(config, api_state, web_state).await
@@ -82,6 +111,8 @@ async fn run_with_mysql(config: &AppConfig) -> anyhow::Result<()> {
     .await?;
 
     postfix_admin_db::run_mysql_migrations(&pool).await?;
+
+    let services = create_shared_services(config)?;
 
     let api_state = AppState {
         domains: Arc::new(postfix_admin_db::MysqlDomainRepository::new(pool.clone())),
@@ -98,8 +129,10 @@ async fn run_with_mysql(config: &AppConfig) -> anyhow::Result<()> {
         )),
         logs: Arc::new(postfix_admin_db::MysqlLogRepository::new(pool.clone())),
         app_passwords: Arc::new(postfix_admin_db::MysqlAppPasswordRepository::new(pool)),
-        jwt: create_jwt_manager(config)?,
-        password_scheme: config.auth.password_scheme.clone(),
+        jwt: Arc::clone(&services.jwt),
+        password_scheme: services.password_scheme.clone(),
+        rate_limiter: Arc::clone(&services.rate_limiter),
+        mtls_verifier: Arc::clone(&services.mtls_verifier),
     };
 
     let web_state = WebState {
@@ -112,7 +145,8 @@ async fn run_with_mysql(config: &AppConfig) -> anyhow::Result<()> {
         dkim: Arc::clone(&api_state.dkim),
         fetchmail: Arc::clone(&api_state.fetchmail),
         logs: Arc::clone(&api_state.logs),
-        password_scheme: config.auth.password_scheme.clone(),
+        password_scheme: services.password_scheme,
+        rate_limiter: services.rate_limiter,
     };
 
     serve(config, api_state, web_state).await
