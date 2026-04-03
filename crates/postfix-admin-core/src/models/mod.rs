@@ -27,6 +27,7 @@ pub use vacation::{Vacation, VacationNotification};
 #[cfg(test)]
 mod tests {
     use chrono::Utc;
+    use uuid::Uuid;
 
     use crate::types::{DomainName, EmailAddress};
 
@@ -100,7 +101,7 @@ mod tests {
     #[test]
     fn log_uses_plain_strings() {
         let log = Log {
-            id: 1,
+            id: Uuid::nil(),
             timestamp: Utc::now(),
             username: String::from("admin@example.com"),
             domain: String::from("example.com"),

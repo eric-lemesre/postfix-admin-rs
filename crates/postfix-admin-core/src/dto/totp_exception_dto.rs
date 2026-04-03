@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 use validator::Validate;
 
 use crate::types::IpAddress;
@@ -13,7 +14,7 @@ pub struct CreateTotpException {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct TotpExceptionResponse {
-    pub id: i32,
+    pub id: Uuid,
     pub ip: IpAddress,
     pub username: Option<String>,
     pub description: Option<String>,

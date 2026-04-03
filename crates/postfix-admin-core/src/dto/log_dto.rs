@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 use validator::Validate;
 
 #[derive(Debug, Clone, Deserialize, Validate)]
@@ -17,7 +18,7 @@ pub struct CreateLog {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct LogResponse {
-    pub id: i64,
+    pub id: Uuid,
     pub timestamp: DateTime<Utc>,
     pub username: String,
     pub domain: String,

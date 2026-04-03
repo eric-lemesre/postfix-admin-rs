@@ -31,6 +31,7 @@ mod tests {
     use super::*;
     use crate::types::{DomainName, EmailAddress};
     use chrono::Utc;
+    use uuid::Uuid;
 
     #[test]
     fn domain_response_serialization_excludes_nothing_sensitive() {
@@ -89,7 +90,7 @@ mod tests {
     #[test]
     fn fetchmail_response_excludes_src_password() {
         let resp = FetchmailResponse {
-            id: 1,
+            id: Uuid::nil(),
             domain: DomainName::from_trusted("example.com"),
             mailbox: EmailAddress::from_trusted("user@example.com"),
             src_server: String::from("imap.remote.com"),
@@ -117,7 +118,7 @@ mod tests {
     #[test]
     fn dkim_key_response_excludes_private_key() {
         let resp = DkimKeyResponse {
-            id: 1,
+            id: Uuid::nil(),
             domain_name: DomainName::from_trusted("example.com"),
             description: String::new(),
             selector: String::from("default"),

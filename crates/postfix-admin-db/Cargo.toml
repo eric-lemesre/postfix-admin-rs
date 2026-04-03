@@ -10,11 +10,17 @@ repository.workspace = true
 [dependencies]
 postfix-admin-core = { workspace = true }
 thiserror = { workspace = true }
+sqlx = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
 
 [dev-dependencies]
 testcontainers = { workspace = true }
 testcontainers-modules = { workspace = true }
 tokio = { workspace = true }
+sqlx = { workspace = true, features = ["runtime-tokio-rustls", "postgres", "mysql", "chrono", "migrate"] }
 
 [lints]
 workspace = true

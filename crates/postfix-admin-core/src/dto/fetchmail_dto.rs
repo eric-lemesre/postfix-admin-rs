@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 use validator::Validate;
 
 use crate::types::{DomainName, EmailAddress};
@@ -52,7 +53,7 @@ pub struct UpdateFetchmail {
 #[derive(Debug, Clone, Serialize)]
 #[allow(clippy::struct_excessive_bools)]
 pub struct FetchmailResponse {
-    pub id: i32,
+    pub id: Uuid,
     pub domain: DomainName,
     pub mailbox: EmailAddress,
     pub src_server: String,

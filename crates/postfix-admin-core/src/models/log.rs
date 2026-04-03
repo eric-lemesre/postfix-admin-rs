@@ -1,9 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Log {
-    pub id: i64,
+    pub id: Uuid,
     pub timestamp: DateTime<Utc>,
     pub username: String,
     pub domain: String,

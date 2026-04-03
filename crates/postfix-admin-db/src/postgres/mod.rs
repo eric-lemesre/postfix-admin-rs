@@ -1,0 +1,21 @@
+mod admin_repo;
+mod alias_domain_repo;
+mod alias_repo;
+mod app_password_repo;
+mod dkim_repo;
+mod domain_repo;
+mod fetchmail_repo;
+mod log_repo;
+mod mailbox_repo;
+mod vacation_repo;
+
+pub use admin_repo::PgAdminRepository;
+pub use alias_domain_repo::PgAliasDomainRepository;
+pub use alias_repo::PgAliasRepository;
+pub use app_password_repo::PgAppPasswordRepository;
+pub use dkim_repo::PgDkimRepository;
+pub use domain_repo::PgDomainRepository;
+pub use fetchmail_repo::PgFetchmailRepository;
+pub use log_repo::PgLogRepository;
+pub use mailbox_repo::PgMailboxRepository;
+pub use vacation_repo::PgVacationRepository;

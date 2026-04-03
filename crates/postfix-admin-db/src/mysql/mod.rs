@@ -1,0 +1,21 @@
+mod admin_repo;
+mod alias_domain_repo;
+mod alias_repo;
+mod app_password_repo;
+mod dkim_repo;
+mod domain_repo;
+mod fetchmail_repo;
+mod log_repo;
+mod mailbox_repo;
+mod vacation_repo;
+
+pub use admin_repo::MysqlAdminRepository;
+pub use alias_domain_repo::MysqlAliasDomainRepository;
+pub use alias_repo::MysqlAliasRepository;
+pub use app_password_repo::MysqlAppPasswordRepository;
+pub use dkim_repo::MysqlDkimRepository;
+pub use domain_repo::MysqlDomainRepository;
+pub use fetchmail_repo::MysqlFetchmailRepository;
+pub use log_repo::MysqlLogRepository;
+pub use mailbox_repo::MysqlMailboxRepository;
+pub use vacation_repo::MysqlVacationRepository;

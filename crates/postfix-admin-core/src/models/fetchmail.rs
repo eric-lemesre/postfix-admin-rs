@@ -1,12 +1,13 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::types::{DomainName, EmailAddress};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[allow(clippy::struct_excessive_bools)]
 pub struct Fetchmail {
-    pub id: i32,
+    pub id: Uuid,
     pub domain: DomainName,
     pub mailbox: EmailAddress,
     pub src_server: String,

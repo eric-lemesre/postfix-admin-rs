@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 use validator::Validate;
 
 use crate::types::EmailAddress;
@@ -14,7 +15,7 @@ pub struct CreateAppPassword {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct AppPasswordResponse {
-    pub id: i32,
+    pub id: Uuid,
     pub username: EmailAddress,
     pub description: String,
     pub last_used: Option<DateTime<Utc>>,

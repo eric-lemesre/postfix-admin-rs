@@ -11,7 +11,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.83"
 authors = ["Eric Lemesre"]
@@ -46,6 +46,12 @@ zeroize = { version = "1", features = ["derive"] }
 
 # Regex
 regex = "1"
+
+# Identifiers
+uuid = { version = "1", features = ["v7", "serde"] }
+
+# Database
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "mysql", "chrono", "migrate", "uuid"] }
 
 # Async
 async-trait = "0.1"

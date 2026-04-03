@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use uuid::Uuid;
 
 use crate::dto::{AppPasswordResponse, CreateAppPassword};
 use crate::error::CoreError;
@@ -11,6 +12,6 @@ pub trait AppPasswordRepository: Send + Sync {
         username: &EmailAddress,
     ) -> Result<Vec<AppPasswordResponse>, CoreError>;
     async fn create(&self, dto: &CreateAppPassword) -> Result<AppPasswordResponse, CoreError>;
-    async fn delete(&self, id: i32) -> Result<(), CoreError>;
-    async fn update_last_used(&self, id: i32) -> Result<(), CoreError>;
+    async fn delete(&self, id: Uuid) -> Result<(), CoreError>;
+    async fn update_last_used(&self, id: Uuid) -> Result<(), CoreError>;
 }
