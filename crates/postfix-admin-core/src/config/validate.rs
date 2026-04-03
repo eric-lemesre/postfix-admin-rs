@@ -25,8 +25,31 @@ pub fn validate(
     let mut errors = Vec::new();
     let mut warnings = Vec::new();
 
-    // --- Universal validations ---
+    validate_universal(config, &mut errors);
 
+    let log_level: Result<LogLevel, ConfigError> = config.logging.level.parse();
+
+    if mode.is_production_like() {
+        validate_production(config, &log_level, &mut errors, &mut warnings);
+    } else {
+        autogenerate_dev_secrets(config, &mut errors, &mut warnings);
+    }
+
+    if let Err(e) = log_level {
+        errors.push(e);
+    }
+
+    if errors.is_empty() {
+        Ok(warnings)
+    } else if errors.len() == 1 {
+        Err(errors.remove(0))
+    } else {
+        Err(ConfigError::Multiple(errors))
+    }
+}
+
+/// Universal validations that apply to all operating modes.
+fn validate_universal(config: &AppConfig, errors: &mut Vec<ConfigError>) {
     if config.database.url.is_empty() {
         errors.push(ConfigError::validation("database.url", "must not be empty"));
     }
@@ -49,92 +72,134 @@ pub fn validate(
         ));
     }
 
-    // Parse log level to validate it
-    let log_level: Result<LogLevel, ConfigError> = config.logging.level.parse();
-
-    if mode.is_production_like() {
-        // --- Production-like validations (Prep, Prod, Deployed) ---
-
-        if config.auth.allow_cleartext {
+    if config.auth.mtls.enabled {
+        if config.auth.mtls.trusted_proxy_header.is_empty() {
             errors.push(ConfigError::validation(
-                "auth.allow_cleartext",
-                "must be false in production-like environments",
+                "auth.mtls.trusted_proxy_header",
+                "must not be empty when mTLS is enabled",
             ));
         }
-
-        if config.server.secret_key.is_empty() {
+        if config.auth.mtls.subject_header.is_empty() {
             errors.push(ConfigError::validation(
-                "server.secret_key",
-                "must be set in production-like environments",
+                "auth.mtls.subject_header",
+                "must not be empty when mTLS is enabled",
             ));
         }
-
-        if config.encryption.master_key.is_empty() {
+        if config.auth.mtls.cn_field.is_empty() {
             errors.push(ConfigError::validation(
-                "encryption.master_key",
-                "must be set in production-like environments",
+                "auth.mtls.cn_field",
+                "must not be empty when mTLS is enabled",
             ));
         }
+    }
 
-        if !config.server.tls.enabled {
+    if config.grpc.require_client_cert {
+        if !config.grpc.tls_enabled {
+            errors.push(ConfigError::validation(
+                "grpc.require_client_cert",
+                "requires grpc.tls_enabled = true",
+            ));
+        }
+        if config.grpc.tls_ca_cert_path.is_empty() {
+            errors.push(ConfigError::validation(
+                "grpc.tls_ca_cert_path",
+                "must not be empty when grpc.require_client_cert is true",
+            ));
+        }
+    }
+}
+
+/// Production-like validations (Prep, Prod, Deployed).
+fn validate_production(
+    config: &AppConfig,
+    log_level: &Result<LogLevel, ConfigError>,
+    errors: &mut Vec<ConfigError>,
+    warnings: &mut Vec<ConfigWarning>,
+) {
+    if config.auth.allow_cleartext {
+        errors.push(ConfigError::validation(
+            "auth.allow_cleartext",
+            "must be false in production-like environments",
+        ));
+    }
+
+    if config.server.secret_key.is_empty() {
+        errors.push(ConfigError::validation(
+            "server.secret_key",
+            "must be set in production-like environments",
+        ));
+    }
+
+    if config.encryption.master_key.is_empty() {
+        errors.push(ConfigError::validation(
+            "encryption.master_key",
+            "must be set in production-like environments",
+        ));
+    }
+
+    if !config.server.tls.enabled {
+        warnings.push(ConfigWarning::new(
+            "server.tls.enabled",
+            "TLS is disabled in a production-like environment",
+        ));
+    }
+
+    if !config.auth.mtls.enabled {
+        warnings.push(ConfigWarning::new(
+            "auth.mtls.enabled",
+            "mTLS client certificates are recommended for admin accounts \
+             in production environments",
+        ));
+    } else if !config.auth.mtls.require_for_superadmin {
+        warnings.push(ConfigWarning::new(
+            "auth.mtls.require_for_superadmin",
+            "mTLS is enabled but not required for superadmin accounts",
+        ));
+    }
+
+    if let Ok(level) = log_level {
+        if level.is_verbose() {
             warnings.push(ConfigWarning::new(
-                "server.tls.enabled",
-                "TLS is disabled in a production-like environment",
+                "logging.level",
+                format!(
+                    "verbose logging level '{}' in production-like environment",
+                    config.logging.level
+                ),
             ));
         }
+    }
+}
 
-        if let Ok(level) = &log_level {
-            if level.is_verbose() {
-                warnings.push(ConfigWarning::new(
-                    "logging.level",
-                    format!(
-                        "verbose logging level '{}' in production-like environment",
-                        config.logging.level
-                    ),
+/// Auto-generate missing secrets in dev/test mode.
+fn autogenerate_dev_secrets(
+    config: &mut AppConfig,
+    errors: &mut Vec<ConfigError>,
+    warnings: &mut Vec<ConfigWarning>,
+) {
+    if config.server.secret_key.is_empty() {
+        match generate_secret_base64() {
+            Ok(key) => {
+                config.server.secret_key = SecretString::new(key);
+                warnings.push(ConfigWarning::info(
+                    "server.secret_key",
+                    "auto-generated (dev/test mode)",
                 ));
             }
-        }
-    } else {
-        // --- Dev/Test: auto-generate missing secrets ---
-
-        if config.server.secret_key.is_empty() {
-            match generate_secret_base64() {
-                Ok(key) => {
-                    config.server.secret_key = SecretString::new(key);
-                    warnings.push(ConfigWarning::info(
-                        "server.secret_key",
-                        "auto-generated (dev/test mode)",
-                    ));
-                }
-                Err(e) => errors.push(e),
-            }
-        }
-
-        if config.encryption.master_key.is_empty() {
-            match generate_secret_base64() {
-                Ok(key) => {
-                    config.encryption.master_key = SecretString::new(key);
-                    warnings.push(ConfigWarning::info(
-                        "encryption.master_key",
-                        "auto-generated (dev/test mode)",
-                    ));
-                }
-                Err(e) => errors.push(e),
-            }
+            Err(e) => errors.push(e),
         }
     }
 
-    // Validate log level (both modes)
-    if let Err(e) = log_level {
-        errors.push(e);
-    }
-
-    if errors.is_empty() {
-        Ok(warnings)
-    } else if errors.len() == 1 {
-        Err(errors.remove(0))
-    } else {
-        Err(ConfigError::Multiple(errors))
+    if config.encryption.master_key.is_empty() {
+        match generate_secret_base64() {
+            Ok(key) => {
+                config.encryption.master_key = SecretString::new(key);
+                warnings.push(ConfigWarning::info(
+                    "encryption.master_key",
+                    "auto-generated (dev/test mode)",
+                ));
+            }
+            Err(e) => errors.push(e),
+        }
     }
 }
 
@@ -259,6 +324,90 @@ mod tests {
     fn validate_invalid_log_level_fails() {
         let mut config = AppConfig::default();
         config.logging.level = "verbose".to_string();
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_err());
+    }
+
+    // --- mTLS validation tests ---
+
+    #[test]
+    fn validate_mtls_enabled_empty_headers_fails() {
+        let mut config = AppConfig::default();
+        config.auth.mtls.enabled = true;
+        config.auth.mtls.trusted_proxy_header = String::new();
+        config.auth.mtls.subject_header = String::new();
+        config.auth.mtls.cn_field = String::new();
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn validate_mtls_enabled_empty_subject_header_fails() {
+        let mut config = AppConfig::default();
+        config.auth.mtls.enabled = true;
+        config.auth.mtls.subject_header = String::new();
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn validate_mtls_enabled_empty_cn_field_fails() {
+        let mut config = AppConfig::default();
+        config.auth.mtls.enabled = true;
+        config.auth.mtls.cn_field = String::new();
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn validate_mtls_enabled_with_defaults_succeeds() {
+        let mut config = AppConfig::default();
+        config.auth.mtls.enabled = true;
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn validate_prod_mtls_disabled_warns() {
+        let mut config = AppConfig::default();
+        config.server.secret_key = SecretString::new("key1");
+        config.encryption.master_key = SecretString::new("key2");
+        config.auth.mtls.enabled = false;
+
+        let warnings = validate(&mut config, prod_mode()).unwrap_or_default();
+        assert!(warnings.iter().any(|w| w.field == "auth.mtls.enabled"));
+    }
+
+    #[test]
+    fn validate_prod_mtls_enabled_superadmin_not_required_warns() {
+        let mut config = AppConfig::default();
+        config.server.secret_key = SecretString::new("key1");
+        config.encryption.master_key = SecretString::new("key2");
+        config.auth.mtls.enabled = true;
+        config.auth.mtls.require_for_superadmin = false;
+
+        let warnings = validate(&mut config, prod_mode()).unwrap_or_default();
+        assert!(warnings
+            .iter()
+            .any(|w| w.field == "auth.mtls.require_for_superadmin"));
+    }
+
+    #[test]
+    fn validate_grpc_client_cert_without_tls_fails() {
+        let mut config = AppConfig::default();
+        config.grpc.require_client_cert = true;
+        config.grpc.tls_enabled = false;
+        config.grpc.tls_ca_cert_path = "/path/to/ca.pem".to_string();
+        let result = validate(&mut config, dev_mode());
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn validate_grpc_client_cert_without_ca_path_fails() {
+        let mut config = AppConfig::default();
+        config.grpc.require_client_cert = true;
+        config.grpc.tls_enabled = true;
+        config.grpc.tls_ca_cert_path = String::new();
         let result = validate(&mut config, dev_mode());
         assert!(result.is_err());
     }

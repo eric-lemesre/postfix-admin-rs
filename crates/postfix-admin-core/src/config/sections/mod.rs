@@ -13,7 +13,7 @@ mod server;
 mod ui;
 mod vacation;
 
-pub use auth::{Argon2Config, AuthConfig, JwtConfig};
+pub use auth::{Argon2Config, AuthConfig, JwtConfig, MtlsConfig};
 pub use database::DatabaseConfig;
 pub use dkim::DkimConfig;
 pub use domain_defaults::DomainDefaultsConfig;

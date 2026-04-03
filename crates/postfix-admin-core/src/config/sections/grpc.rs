@@ -10,6 +10,8 @@ pub struct GrpcConfig {
     pub tls_enabled: bool,
     pub tls_cert_path: String,
     pub tls_key_path: String,
+    pub tls_ca_cert_path: String,
+    pub require_client_cert: bool,
 }
 
 impl Default for GrpcConfig {
@@ -21,6 +23,8 @@ impl Default for GrpcConfig {
             tls_enabled: false,
             tls_cert_path: String::new(),
             tls_key_path: String::new(),
+            tls_ca_cert_path: String::new(),
+            require_client_cert: false,
         }
     }
 }
@@ -34,5 +38,12 @@ mod tests {
         let cfg = GrpcConfig::default();
         assert!(!cfg.enabled);
         assert_eq!(cfg.port, 50051);
+    }
+
+    #[test]
+    fn grpc_config_default_no_client_cert_required() {
+        let cfg = GrpcConfig::default();
+        assert!(!cfg.require_client_cert);
+        assert!(cfg.tls_ca_cert_path.is_empty());
     }
 }
