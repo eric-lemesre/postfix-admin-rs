@@ -7,7 +7,7 @@ use postfix_admin_auth::JwtManager;
 use postfix_admin_core::config::CliOverrides;
 use postfix_admin_core::AppConfig;
 use postfix_admin_web::{web_router, WebState};
-use tower_sessions::{MemoryStore, SessionManagerLayer};
+use tower_sessions::{Expiry, MemoryStore, SessionManagerLayer};
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -135,7 +135,14 @@ fn create_jwt_manager(config: &AppConfig) -> anyhow::Result<Arc<JwtManager>> {
 
 async fn serve(config: &AppConfig, api_state: AppState, web_state: WebState) -> anyhow::Result<()> {
     let session_store = MemoryStore::default();
-    let session_layer = SessionManagerLayer::new(session_store);
+    let session_lifetime = i64::try_from(config.auth.session_lifetime).unwrap_or(3600);
+    let session_layer = SessionManagerLayer::new(session_store)
+        .with_secure(true)
+        .with_http_only(true)
+        .with_same_site(tower_sessions::cookie::SameSite::Strict)
+        .with_expiry(Expiry::OnInactivity(time::Duration::seconds(
+            session_lifetime,
+        )));
 
     let app = axum::Router::new()
         .nest("/api/v1", api_router().with_state(api_state))

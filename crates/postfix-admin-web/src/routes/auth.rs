@@ -15,13 +15,18 @@ pub async fn login_form(session: Session) -> Response {
     if session::get_admin_username(&session).await.is_some() {
         return Redirect::to("/dashboard").into_response();
     }
-    templates::render(&LoginTemplate { error: None })
+    let csrf_token = session::get_csrf_token(&session).await;
+    templates::render(&LoginTemplate {
+        error: None,
+        csrf_token,
+    })
 }
 
 #[derive(serde::Deserialize)]
 pub struct LoginForm {
     pub username: String,
     pub password: String,
+    pub csrf_token: String,
 }
 
 /// POST /login — process login.
@@ -30,21 +35,36 @@ pub async fn login_post(
     session: Session,
     Form(form): Form<LoginForm>,
 ) -> Response {
+    // Verify CSRF token
+    if !session::verify_csrf(&session, &form.csrf_token).await {
+        let csrf_token = session::get_csrf_token(&session).await;
+        return templates::render(&LoginTemplate {
+            error: Some("Invalid CSRF token. Please try again.".to_string()),
+            csrf_token,
+        });
+    }
+
     let Ok(username) = postfix_admin_core::EmailAddress::try_from(form.username) else {
+        let csrf_token = session::get_csrf_token(&session).await;
         return templates::render(&LoginTemplate {
             error: Some("Invalid email address".to_string()),
+            csrf_token,
         });
     };
 
     let Ok(Some(admin)) = state.admins.find_by_username(&username).await else {
+        let csrf_token = session::get_csrf_token(&session).await;
         return templates::render(&LoginTemplate {
             error: Some("Invalid credentials".to_string()),
+            csrf_token,
         });
     };
 
     if !admin.active {
+        let csrf_token = session::get_csrf_token(&session).await;
         return templates::render(&LoginTemplate {
             error: Some("Account is inactive".to_string()),
+            csrf_token,
         });
     }
 
@@ -52,6 +72,8 @@ pub async fn login_post(
     // For now, we accept the login if the admin exists and is active.
     let _ = form.password;
 
+    // Regenerate session ID to prevent session fixation attacks
+    session::regenerate_session(&session).await;
     session::set_admin(&session, username.as_ref(), admin.superadmin).await;
     Redirect::to("/dashboard").into_response()
 }
