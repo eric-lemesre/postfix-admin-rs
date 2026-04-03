@@ -10,29 +10,29 @@ en base et lue par un démon fetchmail.
 
 ## Entité : `Fetchmail`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Identifiant auto-incrémenté |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Domaine local |
-| `mailbox` | `VARCHAR(255)` | FK → `mailbox.username` | Boîte de destination |
-| `src_server` | `VARCHAR(255)` | NOT NULL | Serveur distant (hostname/IP) |
-| `src_auth` | `VARCHAR(50)` | default `'password'` | Méthode d'auth (password, kerberos, ntlm, etc.) |
-| `src_user` | `VARCHAR(255)` | NOT NULL | Nom d'utilisateur distant |
-| `src_password` | `VARCHAR(255)` | NOT NULL | Mot de passe distant (chiffré) |
-| `src_folder` | `VARCHAR(255)` | default `''` | Dossier source (IMAP) |
-| `poll_time` | `INTEGER` | NOT NULL, default `10` | Intervalle de polling en minutes |
-| `fetchall` | `BOOLEAN` | NOT NULL, default `false` | Récupérer tous les messages (pas seulement les nouveaux) |
-| `keep` | `BOOLEAN` | NOT NULL, default `false` | Garder les messages sur le serveur distant |
-| `protocol` | `VARCHAR(10)` | NOT NULL, default `'IMAP'` | Protocole (POP3, IMAP) |
-| `usessl` | `BOOLEAN` | NOT NULL, default `true` | Utiliser SSL/TLS |
-| `sslcertck` | `BOOLEAN` | NOT NULL, default `true` | Vérifier le certificat SSL |
-| `extra_options` | `TEXT` | NULLABLE | Options fetchmail supplémentaires |
-| `mda` | `VARCHAR(255)` | default `''` | MDA personnalisé |
-| `returned_text` | `TEXT` | NULLABLE | Dernière sortie fetchmail |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Actif/inactif |
-| `date` | `TIMESTAMPTZ` | default `now()` | Dernier polling |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ           | Type           | Contrainte                 | Description                                              |
+|-----------------|----------------|----------------------------|----------------------------------------------------------|
+| `id`            | `SERIAL`       | PK                         | Identifiant auto-incrémenté                              |
+| `domain`        | `VARCHAR(255)` | FK → `domain.domain`       | Domaine local                                            |
+| `mailbox`       | `VARCHAR(255)` | FK → `mailbox.username`    | Boîte de destination                                     |
+| `src_server`    | `VARCHAR(255)` | NOT NULL                   | Serveur distant (hostname/IP)                            |
+| `src_auth`      | `VARCHAR(50)`  | default `'password'`       | Méthode d'auth (password, kerberos, ntlm, etc.)          |
+| `src_user`      | `VARCHAR(255)` | NOT NULL                   | Nom d'utilisateur distant                                |
+| `src_password`  | `VARCHAR(255)` | NOT NULL                   | Mot de passe distant (chiffré)                           |
+| `src_folder`    | `VARCHAR(255)` | default `''`               | Dossier source (IMAP)                                    |
+| `poll_time`     | `INTEGER`      | NOT NULL, default `10`     | Intervalle de polling en minutes                         |
+| `fetchall`      | `BOOLEAN`      | NOT NULL, default `false`  | Récupérer tous les messages (pas seulement les nouveaux) |
+| `keep`          | `BOOLEAN`      | NOT NULL, default `false`  | Garder les messages sur le serveur distant               |
+| `protocol`      | `VARCHAR(10)`  | NOT NULL, default `'IMAP'` | Protocole (POP3, IMAP)                                   |
+| `usessl`        | `BOOLEAN`      | NOT NULL, default `true`   | Utiliser SSL/TLS                                         |
+| `sslcertck`     | `BOOLEAN`      | NOT NULL, default `true`   | Vérifier le certificat SSL                               |
+| `extra_options` | `TEXT`         | NULLABLE                   | Options fetchmail supplémentaires                        |
+| `mda`           | `VARCHAR(255)` | default `''`               | MDA personnalisé                                         |
+| `returned_text` | `TEXT`         | NULLABLE                   | Dernière sortie fetchmail                                |
+| `active`        | `BOOLEAN`      | NOT NULL, default `true`   | Actif/inactif                                            |
+| `date`          | `TIMESTAMPTZ`  | default `now()`            | Dernier polling                                          |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()`  | Date de création                                         |
+| `updated_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()`  | Dernière modification                                    |
 
 ## Règles métier
 
@@ -73,10 +73,10 @@ en base et lue par un démon fetchmail.
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/mailboxes/{username}/fetchmail` | Lister les configs fetchmail |
-| `POST` | `/api/v1/mailboxes/{username}/fetchmail` | Créer une config |
-| `PUT` | `/api/v1/fetchmail/{id}` | Modifier une config |
-| `DELETE` | `/api/v1/fetchmail/{id}` | Supprimer une config |
-| `POST` | `/api/v1/fetchmail/{id}/test` | Tester la connexion |
+| Méthode  | Route                                    | Description                  |
+|----------|------------------------------------------|------------------------------|
+| `GET`    | `/api/v1/mailboxes/{username}/fetchmail` | Lister les configs fetchmail |
+| `POST`   | `/api/v1/mailboxes/{username}/fetchmail` | Créer une config             |
+| `PUT`    | `/api/v1/fetchmail/{id}`                 | Modifier une config          |
+| `DELETE` | `/api/v1/fetchmail/{id}`                 | Supprimer une config         |
+| `POST`   | `/api/v1/fetchmail/{id}/test`            | Tester la connexion          |

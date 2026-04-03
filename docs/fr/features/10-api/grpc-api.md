@@ -64,13 +64,13 @@ service AdminService {
 
 ## Avantages du gRPC
 
-| Aspect | REST | gRPC |
-|--------|------|------|
-| Sérialisation | JSON (texte) | Protobuf (binaire) |
-| Transport | HTTP/1.1 ou 2 | HTTP/2 obligatoire |
-| Streaming | Non natif | Bidirectionnel |
-| Typage | Schéma OpenAPI | Proto strict |
-| Performance | Bon | Excellent |
+| Aspect         | REST             | gRPC                 |
+|----------------|------------------|----------------------|
+| Sérialisation  | JSON (texte)     | Protobuf (binaire)   |
+| Transport      | HTTP/1.1 ou 2    | HTTP/2 obligatoire   |
+| Streaming      | Non natif        | Bidirectionnel       |
+| Typage         | Schéma OpenAPI   | Proto strict         |
+| Performance    | Bon              | Excellent            |
 | Tooling client | curl, navigateur | grpcurl, code généré |
 
 ## Cas d'usage prioritaires

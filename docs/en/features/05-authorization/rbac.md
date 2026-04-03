@@ -5,11 +5,11 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| RBAC extractors | `postfix-admin-auth` | Pending | M4 |
-| Scope verification | `postfix-admin-auth` | Pending | M4 |
-| Middleware integration | `postfix-admin-api` | Pending | M6 |
+| Component              | Crate                | Status  | Milestone |
+|------------------------|----------------------|---------|-----------|
+| RBAC extractors        | `postfix-admin-auth` | Pending | M4        |
+| Scope verification     | `postfix-admin-auth` | Pending | M4        |
+| Middleware integration | `postfix-admin-api`  | Pending | M6        |
 
 ## Summary
 
@@ -43,34 +43,34 @@ Three-level role system with hierarchical permission model. Each application act
 
 ## Permission matrix
 
-| Resource | Action | Superadmin | Domain Admin | User |
-|-----------|--------|:----------:|:-------------:|:-----------:|
-| **Domains** | List | All | Their domains | — |
-| | Create | Yes | — | — |
-| | Edit | Yes | Their domains (limited) | — |
-| | Delete | Yes | — | — |
-| **Domain aliases** | CRUD | Yes | — | — |
-| **Admins** | List | Yes | — | — |
-| | Create | Yes | — | — |
-| | Edit | Yes | Themselves (password) | — |
-| | Delete | Yes | — | — |
-| **Mailboxes** | List | All | Their domains | — |
-| | Create | Yes | Their domains | — |
-| | Edit | Yes | Their domains | Themselves (limited) |
-| | Delete | Yes | Their domains | — |
-| **Aliases** | List | All | Their domains | — |
-| | Create | Yes | Their domains | — |
-| | Edit | Yes | Their domains | — |
-| | Delete | Yes | Their domains | — |
-| **Vacation** | Manage | Yes | Their domains | Themselves |
-| **Fetchmail** | Manage | Yes | Their domains | Themselves |
-| **DKIM** | Manage | Yes | Their domains | — |
-| **Logs** | View | All | Their domains | — |
-| **Configuration** | Edit | Yes | — | — |
-| **App passwords** | Manage | — | — | Themselves |
-| **TOTP** | Manage | Themselves | Themselves | Themselves |
-| **TOTP exceptions** | Manage | Yes | — | — |
-| **Broadcast** | Send | Yes | — | — |
+| Resource            | Action | Superadmin |      Domain Admin       |         User         |
+|---------------------|--------|:----------:|:-----------------------:|:--------------------:|
+| **Domains**         | List   |    All     |      Their domains      |          —           |
+|                     | Create |    Yes     |            —            |          —           |
+|                     | Edit   |    Yes     | Their domains (limited) |          —           |
+|                     | Delete |    Yes     |            —            |          —           |
+| **Domain aliases**  | CRUD   |    Yes     |            —            |          —           |
+| **Admins**          | List   |    Yes     |            —            |          —           |
+|                     | Create |    Yes     |            —            |          —           |
+|                     | Edit   |    Yes     |  Themselves (password)  |          —           |
+|                     | Delete |    Yes     |            —            |          —           |
+| **Mailboxes**       | List   |    All     |      Their domains      |          —           |
+|                     | Create |    Yes     |      Their domains      |          —           |
+|                     | Edit   |    Yes     |      Their domains      | Themselves (limited) |
+|                     | Delete |    Yes     |      Their domains      |          —           |
+| **Aliases**         | List   |    All     |      Their domains      |          —           |
+|                     | Create |    Yes     |      Their domains      |          —           |
+|                     | Edit   |    Yes     |      Their domains      |          —           |
+|                     | Delete |    Yes     |      Their domains      |          —           |
+| **Vacation**        | Manage |    Yes     |      Their domains      |      Themselves      |
+| **Fetchmail**       | Manage |    Yes     |      Their domains      |      Themselves      |
+| **DKIM**            | Manage |    Yes     |      Their domains      |          —           |
+| **Logs**            | View   |    All     |      Their domains      |          —           |
+| **Configuration**   | Edit   |    Yes     |            —            |          —           |
+| **App passwords**   | Manage |     —      |            —            |      Themselves      |
+| **TOTP**            | Manage | Themselves |       Themselves        |      Themselves      |
+| **TOTP exceptions** | Manage |    Yes     |            —            |          —           |
+| **Broadcast**       | Send   |    Yes     |            —            |          —           |
 
 ## Implementation
 

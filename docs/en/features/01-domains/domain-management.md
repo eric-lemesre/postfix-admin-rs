@@ -4,17 +4,17 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`Domain`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateDomain`, `UpdateDomain`, `DomainResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`DomainRepository`) | `postfix-admin-core` | Done | M1 |
-| Validation (quotas, limits, active check) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
-| CLI commands | `postfix-admin-cli` | Pending | M8 |
+| Component                                               | Crate                | Status  | Milestone |
+|---------------------------------------------------------|----------------------|---------|-----------|
+| Model (`Domain`)                                        | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateDomain`, `UpdateDomain`, `DomainResponse`) | `postfix-admin-core` | Done    | M1        |
+| Repository trait (`DomainRepository`)                   | `postfix-admin-core` | Done    | M1        |
+| Validation (quotas, limits, active check)               | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                                   | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                                        | `postfix-admin-db`   | Pending | M2        |
+| REST API endpoints                                      | `postfix-admin-api`  | Pending | M6        |
+| Web UI pages                                            | `postfix-admin-web`  | Pending | M5        |
+| CLI commands                                            | `postfix-admin-cli`  | Pending | M8        |
 
 ## Summary
 
@@ -24,20 +24,20 @@ parameters.
 
 ## Entity: `Domain`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `domain` | `VARCHAR(255)` | PK | Domain name (e.g., `example.com`) |
-| `description` | `VARCHAR(255)` | NOT NULL, default `''` | Free description |
-| `aliases` | `INTEGER` | NOT NULL, default `0` | Alias limit (0 = unlimited) |
-| `mailboxes` | `INTEGER` | NOT NULL, default `0` | Mailbox limit (0 = unlimited) |
-| `maxquota` | `BIGINT` | NOT NULL, default `0` | Max quota per mailbox in MB (0 = unlimited) |
-| `quota` | `BIGINT` | NOT NULL, default `0` | Total domain quota in MB (0 = unlimited) |
-| `transport` | `VARCHAR(255)` | NULLABLE | Postfix transport (e.g., `virtual:`, `lmtp:unix:...`) |
-| `backupmx` | `BOOLEAN` | NOT NULL, default `false` | Server is backup MX for this domain |
-| `password_expiry` | `INTEGER` | NOT NULL, default `0` | Password expiry in days (0 = disabled) |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Domain active/inactive |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last modification |
+| Field             | Type           | Constraint                | Description                                           |
+|-------------------|----------------|---------------------------|-------------------------------------------------------|
+| `domain`          | `VARCHAR(255)` | PK                        | Domain name (e.g., `example.com`)                     |
+| `description`     | `VARCHAR(255)` | NOT NULL, default `''`    | Free description                                      |
+| `aliases`         | `INTEGER`      | NOT NULL, default `0`     | Alias limit (0 = unlimited)                           |
+| `mailboxes`       | `INTEGER`      | NOT NULL, default `0`     | Mailbox limit (0 = unlimited)                         |
+| `maxquota`        | `BIGINT`       | NOT NULL, default `0`     | Max quota per mailbox in MB (0 = unlimited)           |
+| `quota`           | `BIGINT`       | NOT NULL, default `0`     | Total domain quota in MB (0 = unlimited)              |
+| `transport`       | `VARCHAR(255)` | NULLABLE                  | Postfix transport (e.g., `virtual:`, `lmtp:unix:...`) |
+| `backupmx`        | `BOOLEAN`      | NOT NULL, default `false` | Server is backup MX for this domain                   |
+| `password_expiry` | `INTEGER`      | NOT NULL, default `0`     | Password expiry in days (0 = disabled)                |
+| `active`          | `BOOLEAN`      | NOT NULL, default `true`  | Domain active/inactive                                |
+| `created_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date                                         |
+| `updated_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Last modification                                     |
 
 ### Index
 
@@ -108,23 +108,23 @@ parameters.
 
 ## API Endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains` | List domains (paginated, filterable) |
-| `GET` | `/api/v1/domains/{domain}` | Domain details |
-| `POST` | `/api/v1/domains` | Create a domain |
-| `PUT` | `/api/v1/domains/{domain}` | Modify a domain |
-| `DELETE` | `/api/v1/domains/{domain}` | Delete a domain |
-| `PATCH` | `/api/v1/domains/{domain}/active` | Activate/deactivate |
+| Method   | Route                             | Description                          |
+|----------|-----------------------------------|--------------------------------------|
+| `GET`    | `/api/v1/domains`                 | List domains (paginated, filterable) |
+| `GET`    | `/api/v1/domains/{domain}`        | Domain details                       |
+| `POST`   | `/api/v1/domains`                 | Create a domain                      |
+| `PUT`    | `/api/v1/domains/{domain}`        | Modify a domain                      |
+| `DELETE` | `/api/v1/domains/{domain}`        | Delete a domain                      |
+| `PATCH`  | `/api/v1/domains/{domain}/active` | Activate/deactivate                  |
 
 ## Web Routes
 
-| Route | View | Description |
-|-------|-----|-------------|
-| `GET /domains` | `domain-list.html` | Domain list |
-| `GET /domains/new` | `domain-form.html` | Creation form |
-| `GET /domains/{domain}/edit` | `domain-form.html` | Edit form |
-| `POST /domains` | — | Creation processing |
-| `POST /domains/{domain}` | — | Modification processing |
-| `POST /domains/{domain}/delete` | — | Deletion processing |
-| `POST /domains/{domain}/toggle` | — | HTMX active toggle
+| Route                           | View               | Description             |
+|---------------------------------|--------------------|-------------------------|
+| `GET /domains`                  | `domain-list.html` | Domain list             |
+| `GET /domains/new`              | `domain-form.html` | Creation form           |
+| `GET /domains/{domain}/edit`    | `domain-form.html` | Edit form               |
+| `POST /domains`                 | —                  | Creation processing     |
+| `POST /domains/{domain}`        | —                  | Modification processing |
+| `POST /domains/{domain}/delete` | —                  | Deletion processing     |
+| `POST /domains/{domain}/toggle` | —                  | HTMX active toggle      |

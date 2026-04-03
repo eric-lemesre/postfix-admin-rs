@@ -5,17 +5,17 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Models (`DkimKey`, `DkimSigning`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateDkimKey`, `DkimKeyResponse`, etc.) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`DkimRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| RSA key generation | `postfix-admin-server` | Pending | M11 |
-| Private key encryption at rest | `postfix-admin-auth` | Pending | M11 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| Component                                       | Crate                  | Status  | Milestone |
+|-------------------------------------------------|------------------------|---------|-----------|
+| Models (`DkimKey`, `DkimSigning`)               | `postfix-admin-core`   | Done    | M1        |
+| DTOs (`CreateDkimKey`, `DkimKeyResponse`, etc.) | `postfix-admin-core`   | Done    | M1        |
+| Repository trait (`DkimRepository`)             | `postfix-admin-core`   | Done    | M1        |
+| PostgreSQL repository                           | `postfix-admin-db`     | Pending | M2        |
+| MySQL repository                                | `postfix-admin-db`     | Pending | M2        |
+| RSA key generation                              | `postfix-admin-server` | Pending | M11       |
+| Private key encryption at rest                  | `postfix-admin-auth`   | Pending | M11       |
+| REST API endpoints                              | `postfix-admin-api`    | Pending | M6        |
+| Web UI pages                                    | `postfix-admin-web`    | Pending | M5        |
 
 ## Summary
 
@@ -25,28 +25,28 @@ cryptographic key pairs used to sign outgoing mail.
 
 ## Entity: `DkimKey`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Auto-incremented identifier |
-| `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domain |
-| `description` | `VARCHAR(255)` | default `''` | Key description |
-| `selector` | `VARCHAR(63)` | NOT NULL, default `'default'` | DKIM selector |
-| `private_key` | `TEXT` | NOT NULL | Private key (PEM, encrypted at rest) |
-| `public_key` | `TEXT` | NOT NULL | Public key (PEM) |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last update |
+| Field         | Type           | Constraint                             | Description                          |
+|---------------|----------------|----------------------------------------|--------------------------------------|
+| `id`          | `SERIAL`       | PK                                     | Auto-incremented identifier          |
+| `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domain                               |
+| `description` | `VARCHAR(255)` | default `''`                           | Key description                      |
+| `selector`    | `VARCHAR(63)`  | NOT NULL, default `'default'`          | DKIM selector                        |
+| `private_key` | `TEXT`         | NOT NULL                               | Private key (PEM, encrypted at rest) |
+| `public_key`  | `TEXT`         | NOT NULL                               | Public key (PEM)                     |
+| `created_at`  | `TIMESTAMPTZ`  | NOT NULL, default `now()`              | Creation date                        |
+| `updated_at`  | `TIMESTAMPTZ`  | NOT NULL, default `now()`              | Last update                          |
 
 Index: `(domain_name, description)`
 
 ## Entity: `DkimSigning`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Auto-incremented identifier |
-| `author` | `VARCHAR(255)` | NOT NULL | Author pattern (e.g., `*@example.com`) |
-| `dkim_id` | `INTEGER` | FK → `dkim_key.id` ON DELETE CASCADE | DKIM key to use |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last update |
+| Field        | Type           | Constraint                           | Description                            |
+|--------------|----------------|--------------------------------------|----------------------------------------|
+| `id`         | `SERIAL`       | PK                                   | Auto-incremented identifier            |
+| `author`     | `VARCHAR(255)` | NOT NULL                             | Author pattern (e.g., `*@example.com`) |
+| `dkim_id`    | `INTEGER`      | FK → `dkim_key.id` ON DELETE CASCADE | DKIM key to use                        |
+| `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Creation date                          |
+| `updated_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Last update                            |
 
 Index: `(author)`
 
@@ -104,14 +104,14 @@ Index: `(author)`
 
 ## API Endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/dkim/keys` | List keys |
-| `POST` | `/api/v1/domains/{domain}/dkim/keys` | Generate a key |
-| `DELETE` | `/api/v1/dkim/keys/{id}` | Delete a key |
-| `GET` | `/api/v1/domains/{domain}/dkim/signing` | List signing rules |
-| `POST` | `/api/v1/domains/{domain}/dkim/signing` | Create a rule |
-| `DELETE` | `/api/v1/dkim/signing/{id}` | Delete a rule |
-| `GET` | `/api/v1/domains/{domain}/dkim/dns-check` | Check DNS |
+| Method   | Route                                     | Description        |
+|----------|-------------------------------------------|--------------------|
+| `GET`    | `/api/v1/domains/{domain}/dkim/keys`      | List keys          |
+| `POST`   | `/api/v1/domains/{domain}/dkim/keys`      | Generate a key     |
+| `DELETE` | `/api/v1/dkim/keys/{id}`                  | Delete a key       |
+| `GET`    | `/api/v1/domains/{domain}/dkim/signing`   | List signing rules |
+| `POST`   | `/api/v1/domains/{domain}/dkim/signing`   | Create a rule      |
+| `DELETE` | `/api/v1/dkim/signing/{id}`               | Delete a rule      |
+| `GET`    | `/api/v1/domains/{domain}/dkim/dns-check` | Check DNS          |
 
 ---

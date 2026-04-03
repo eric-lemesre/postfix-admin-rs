@@ -10,13 +10,13 @@ est délivré à `user@example.com`.
 
 ## Entité : `AliasDomain`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `alias_domain` | `VARCHAR(255)` | PK | Domaine source (alias) |
-| `target_domain` | `VARCHAR(255)` | FK → `domain.domain` | Domaine cible |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Actif/inactif |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ           | Type           | Contrainte                | Description            |
+|-----------------|----------------|---------------------------|------------------------|
+| `alias_domain`  | `VARCHAR(255)` | PK                        | Domaine source (alias) |
+| `target_domain` | `VARCHAR(255)` | FK → `domain.domain`      | Domaine cible          |
+| `active`        | `BOOLEAN`      | NOT NULL, default `true`  | Actif/inactif          |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création       |
+| `updated_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Dernière modification  |
 
 ### Index
 
@@ -58,9 +58,9 @@ est délivré à `user@example.com`.
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/alias-domains` | Lister les domaines alias |
-| `POST` | `/api/v1/alias-domains` | Créer un domaine alias |
-| `DELETE` | `/api/v1/alias-domains/{alias_domain}` | Supprimer |
-| `PATCH` | `/api/v1/alias-domains/{alias_domain}/active` | Activer/désactiver |
+| Méthode  | Route                                         | Description               |
+|----------|-----------------------------------------------|---------------------------|
+| `GET`    | `/api/v1/alias-domains`                       | Lister les domaines alias |
+| `POST`   | `/api/v1/alias-domains`                       | Créer un domaine alias    |
+| `DELETE` | `/api/v1/alias-domains/{alias_domain}`        | Supprimer                 |
+| `PATCH`  | `/api/v1/alias-domains/{alias_domain}/active` | Activer/désactiver        |

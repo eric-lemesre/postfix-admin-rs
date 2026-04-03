@@ -10,16 +10,16 @@ apportées à la configuration du serveur mail.
 
 ## Entité : `Log`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `BIGSERIAL` | PK | Identifiant auto-incrémenté |
-| `timestamp` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date et heure de l'action |
-| `username` | `VARCHAR(255)` | NOT NULL | Auteur de l'action |
-| `domain` | `VARCHAR(255)` | NOT NULL | Domaine concerné |
-| `action` | `VARCHAR(255)` | NOT NULL | Type d'action |
-| `data` | `TEXT` | NOT NULL, default `''` | Détails de l'action |
-| `ip_address` | `VARCHAR(46)` | NULLABLE | Adresse IP source |
-| `user_agent` | `VARCHAR(512)` | NULLABLE | User-Agent (web) ou identifiant (API/CLI) |
+| Champ        | Type           | Contrainte                | Description                               |
+|--------------|----------------|---------------------------|-------------------------------------------|
+| `id`         | `BIGSERIAL`    | PK                        | Identifiant auto-incrémenté               |
+| `timestamp`  | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date et heure de l'action                 |
+| `username`   | `VARCHAR(255)` | NOT NULL                  | Auteur de l'action                        |
+| `domain`     | `VARCHAR(255)` | NOT NULL                  | Domaine concerné                          |
+| `action`     | `VARCHAR(255)` | NOT NULL                  | Type d'action                             |
+| `data`       | `TEXT`         | NOT NULL, default `''`    | Détails de l'action                       |
+| `ip_address` | `VARCHAR(46)`  | NULLABLE                  | Adresse IP source                         |
+| `user_agent` | `VARCHAR(512)` | NULLABLE                  | User-Agent (web) ou identifiant (API/CLI) |
 
 ### Index
 
@@ -29,28 +29,28 @@ apportées à la configuration du serveur mail.
 
 ## Actions loguées
 
-| Action | Description | Données typiques |
-|--------|-------------|-----------------|
-| `create_domain` | Création de domaine | Nom du domaine, paramètres |
-| `edit_domain` | Modification de domaine | Champs modifiés |
-| `delete_domain` | Suppression de domaine | Nom du domaine |
-| `create_mailbox` | Création de boîte mail | Username, quota |
-| `edit_mailbox` | Modification de boîte | Champs modifiés (jamais le password) |
-| `delete_mailbox` | Suppression de boîte | Username |
-| `create_alias` | Création d'alias | Adresse → destinations |
-| `edit_alias` | Modification d'alias | Nouvelles destinations |
-| `delete_alias` | Suppression d'alias | Adresse |
-| `edit_vacation` | Modification vacation | Activation/désactivation |
-| `create_admin` | Création admin | Username, domaines assignés |
-| `edit_admin` | Modification admin | Champs modifiés |
-| `delete_admin` | Suppression admin | Username |
-| `login_success` | Connexion réussie | IP, user-agent |
-| `login_failure` | Échec de connexion | IP, user-agent, raison |
-| `password_change` | Changement de mot de passe | Username (jamais le password) |
-| `totp_enable` | Activation 2FA | Username |
-| `totp_disable` | Désactivation 2FA | Username |
-| `create_dkim` | Création clé DKIM | Domaine, sélecteur |
-| `toggle_active` | Activation/désactivation | Entité, ancien état → nouvel état |
+| Action            | Description                | Données typiques                     |
+|-------------------|----------------------------|--------------------------------------|
+| `create_domain`   | Création de domaine        | Nom du domaine, paramètres           |
+| `edit_domain`     | Modification de domaine    | Champs modifiés                      |
+| `delete_domain`   | Suppression de domaine     | Nom du domaine                       |
+| `create_mailbox`  | Création de boîte mail     | Username, quota                      |
+| `edit_mailbox`    | Modification de boîte      | Champs modifiés (jamais le password) |
+| `delete_mailbox`  | Suppression de boîte       | Username                             |
+| `create_alias`    | Création d'alias           | Adresse → destinations               |
+| `edit_alias`      | Modification d'alias       | Nouvelles destinations               |
+| `delete_alias`    | Suppression d'alias        | Adresse                              |
+| `edit_vacation`   | Modification vacation      | Activation/désactivation             |
+| `create_admin`    | Création admin             | Username, domaines assignés          |
+| `edit_admin`      | Modification admin         | Champs modifiés                      |
+| `delete_admin`    | Suppression admin          | Username                             |
+| `login_success`   | Connexion réussie          | IP, user-agent                       |
+| `login_failure`   | Échec de connexion         | IP, user-agent, raison               |
+| `password_change` | Changement de mot de passe | Username (jamais le password)        |
+| `totp_enable`     | Activation 2FA             | Username                             |
+| `totp_disable`    | Désactivation 2FA          | Username                             |
+| `create_dkim`     | Création clé DKIM          | Domaine, sélecteur                   |
+| `toggle_active`   | Activation/désactivation   | Entité, ancien état → nouvel état    |
 
 ## Règles métier
 
@@ -91,14 +91,14 @@ apportées à la configuration du serveur mail.
 
 ## Routes Web
 
-| Route | Méthode | Description |
-|-------|---------|-------------|
-| `/admin/logs` | GET | Consultation du journal (paginé, filtrable) |
-| `/admin/logs/export` | GET | Export CSV/JSON |
+| Route                | Méthode | Description                                 |
+|----------------------|---------|---------------------------------------------|
+| `/admin/logs`        | GET     | Consultation du journal (paginé, filtrable) |
+| `/admin/logs/export` | GET     | Export CSV/JSON                             |
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/logs` | Lister les logs (paginé, filtrable) |
-| `GET` | `/api/v1/domains/{domain}/logs` | Logs d'un domaine |
+| Méthode | Route                           | Description                         |
+|---------|---------------------------------|-------------------------------------|
+| `GET`   | `/api/v1/logs`                  | Lister les logs (paginé, filtrable) |
+| `GET`   | `/api/v1/domains/{domain}/logs` | Logs d'un domaine                   |

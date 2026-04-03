@@ -5,16 +5,16 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Models (`Vacation`, `VacationNotification`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`UpdateVacation`, `VacationResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`VacationRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| Vacation CRUD logic | `postfix-admin-server` | Pending | M10 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| Component                                   | Crate                  | Status  | Milestone |
+|---------------------------------------------|------------------------|---------|-----------|
+| Models (`Vacation`, `VacationNotification`) | `postfix-admin-core`   | Done    | M1        |
+| DTOs (`UpdateVacation`, `VacationResponse`) | `postfix-admin-core`   | Done    | M1        |
+| Repository trait (`VacationRepository`)     | `postfix-admin-core`   | Done    | M1        |
+| PostgreSQL repository                       | `postfix-admin-db`     | Pending | M2        |
+| MySQL repository                            | `postfix-admin-db`     | Pending | M2        |
+| Vacation CRUD logic                         | `postfix-admin-server` | Pending | M10       |
+| REST API endpoints                          | `postfix-admin-api`    | Pending | M6        |
+| Web UI pages                                | `postfix-admin-web`    | Pending | M5        |
 
 ## Summary
 
@@ -22,26 +22,26 @@ The auto-responder sends a predefined response to emails received during the use
 
 ## Entity: `Vacation`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `email` | `VARCHAR(255)` | PK | Email address of the mailbox |
-| `subject` | `VARCHAR(255)` | NOT NULL | Subject of the auto-response |
-| `body` | `TEXT` | NOT NULL, default `''` | Message body |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Domain |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Active auto-responder |
-| `active_from` | `TIMESTAMPTZ` | NULLABLE | Start date (optional) |
-| `active_until` | `TIMESTAMPTZ` | NULLABLE | End date (optional) |
-| `interval_time` | `INTEGER` | NOT NULL, default `0` | Interval in seconds before re-notification |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last update |
+| Field           | Type           | Constraint                | Description                                |
+|-----------------|----------------|---------------------------|--------------------------------------------|
+| `email`         | `VARCHAR(255)` | PK                        | Email address of the mailbox               |
+| `subject`       | `VARCHAR(255)` | NOT NULL                  | Subject of the auto-response               |
+| `body`          | `TEXT`         | NOT NULL, default `''`    | Message body                               |
+| `domain`        | `VARCHAR(255)` | FK → `domain.domain`      | Domain                                     |
+| `active`        | `BOOLEAN`      | NOT NULL, default `true`  | Active auto-responder                      |
+| `active_from`   | `TIMESTAMPTZ`  | NULLABLE                  | Start date (optional)                      |
+| `active_until`  | `TIMESTAMPTZ`  | NULLABLE                  | End date (optional)                        |
+| `interval_time` | `INTEGER`      | NOT NULL, default `0`     | Interval in seconds before re-notification |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date                              |
+| `updated_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Last update                                |
 
 ## Entity: `VacationNotification`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `on_vacation` | `VARCHAR(255)` | PK (composite), FK → `vacation.email` ON DELETE CASCADE | User on vacation |
-| `notified` | `VARCHAR(255)` | PK (composite) | Address that has been notified |
-| `notified_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Notification timestamp |
+| Field         | Type           | Constraint                                              | Description                    |
+|---------------|----------------|---------------------------------------------------------|--------------------------------|
+| `on_vacation` | `VARCHAR(255)` | PK (composite), FK → `vacation.email` ON DELETE CASCADE | User on vacation               |
+| `notified`    | `VARCHAR(255)` | PK (composite)                                          | Address that has been notified |
+| `notified_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`                               | Notification timestamp         |
 
 ## Postfix Transport Mechanism
 
@@ -113,18 +113,18 @@ The domain `autoreply.example.com` is a vacation transport domain.
 
 ## Web Routes
 
-| Route | Method | Description |
-|-------|---------|-------------|
-| `/user/vacation` | GET | Vacation form (user) |
-| `/user/vacation` | POST | Save vacation |
-| `/domains/{domain}/mailboxes/{username}/vacation` | GET/POST | Admin management |
+| Route                                             | Method   | Description          |
+|---------------------------------------------------|----------|----------------------|
+| `/user/vacation`                                  | GET      | Vacation form (user) |
+| `/user/vacation`                                  | POST     | Save vacation        |
+| `/domains/{domain}/mailboxes/{username}/vacation` | GET/POST | Admin management     |
 
 ## API Endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/mailboxes/{username}/vacation` | View vacation |
-| `PUT` | `/api/v1/mailboxes/{username}/vacation` | Configure vacation |
-| `DELETE` | `/api/v1/mailboxes/{username}/vacation` | Deactivate |
+| Method   | Route                                   | Description        |
+|----------|-----------------------------------------|--------------------|
+| `GET`    | `/api/v1/mailboxes/{username}/vacation` | View vacation      |
+| `PUT`    | `/api/v1/mailboxes/{username}/vacation` | Configure vacation |
+| `DELETE` | `/api/v1/mailboxes/{username}/vacation` | Deactivate         |
 
 ---

@@ -98,18 +98,18 @@ Exception: well-known crate preludes (`use sqlx::prelude::*`).
 
 ### General
 
-| Element             | Convention                                | Example                     |
-|---------------------|-------------------------------------------|-----------------------------|
-| Crate               | kebab-case                                | `par-core`                  |
-| Module              | snake_case                                | `domain_repository`         |
-| Type (struct, enum) | PascalCase                                | `DomainHandler`             |
-| Trait               | PascalCase (adjective/verb)               | `Validatable`, `Repository` |
-| Function / method   | snake_case                                | `find_by_domain`            |
-| Constant            | SCREAMING_SNAKE_CASE                      | `MAX_LOGIN_ATTEMPTS`        |
-| Variable            | snake_case                                | `domain_count`              |
+| Element             | Convention                                  | Example                     |
+|---------------------|---------------------------------------------|-----------------------------|
+| Crate               | kebab-case                                  | `par-core`                  |
+| Module              | snake_case                                  | `domain_repository`         |
+| Type (struct, enum) | PascalCase                                  | `DomainHandler`             |
+| Trait               | PascalCase (adjective/verb)                 | `Validatable`, `Repository` |
+| Function / method   | snake_case                                  | `find_by_domain`            |
+| Constant            | SCREAMING_SNAKE_CASE                        | `MAX_LOGIN_ATTEMPTS`        |
+| Variable            | snake_case                                  | `domain_count`              |
 | Lifetime            | `'a`, `'de`, `'ctx` (short and descriptive) | `'a`                        |
-| Type parameter      | `T`, `E`, or descriptive name             | `T: Repository`             |
-| Feature flag        | kebab-case                                | `grpc-support`              |
+| Type parameter      | `T`, `E`, or descriptive name               | `T: Repository`             |
+| Feature flag        | kebab-case                                  | `grpc-support`              |
 
 ### Project-specific Naming
 

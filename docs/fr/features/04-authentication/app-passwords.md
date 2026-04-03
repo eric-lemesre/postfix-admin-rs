@@ -11,14 +11,14 @@ mail ne supportent pas le 2FA interactif.
 
 ## Entité : `MailboxAppPassword`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Identifiant auto-incrémenté |
-| `username` | `VARCHAR(255)` | FK → `mailbox.username` | Propriétaire |
-| `description` | `VARCHAR(255)` | NOT NULL | Description (ex: "iPhone", "Thunderbird") |
-| `password_hash` | `VARCHAR(255)` | NOT NULL | Hash du mot de passe applicatif |
-| `last_used` | `TIMESTAMPTZ` | NULLABLE | Dernière utilisation |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
+| Champ           | Type           | Contrainte                | Description                               |
+|-----------------|----------------|---------------------------|-------------------------------------------|
+| `id`            | `SERIAL`       | PK                        | Identifiant auto-incrémenté               |
+| `username`      | `VARCHAR(255)` | FK → `mailbox.username`   | Propriétaire                              |
+| `description`   | `VARCHAR(255)` | NOT NULL                  | Description (ex: "iPhone", "Thunderbird") |
+| `password_hash` | `VARCHAR(255)` | NOT NULL                  | Hash du mot de passe applicatif           |
+| `last_used`     | `TIMESTAMPTZ`  | NULLABLE                  | Dernière utilisation                      |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création                          |
 
 ## Règles métier
 

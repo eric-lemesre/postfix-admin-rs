@@ -10,21 +10,21 @@ d'authentification standards (Google Authenticator, Authy, FreeOTP, etc.).
 
 ## Paramètres TOTP
 
-| Paramètre | Valeur |
-|-----------|--------|
-| Algorithme | SHA-1 (compatibilité maximale avec les apps) |
-| Période | 30 secondes |
-| Digits | 6 |
-| Fenêtre de tolérance | 1 période avant/après (±30s) |
+| Paramètre            | Valeur                                       |
+|----------------------|----------------------------------------------|
+| Algorithme           | SHA-1 (compatibilité maximale avec les apps) |
+| Période              | 30 secondes                                  |
+| Digits               | 6                                            |
+| Fenêtre de tolérance | 1 période avant/après (±30s)                 |
 
 ## Entité : `TotpExceptionAddress`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Identifiant auto-incrémenté |
-| `ip` | `VARCHAR(46)` | NOT NULL | Adresse IP (v4 ou v6) |
-| `username` | `VARCHAR(255)` | NULLABLE | Admin/user (NULL = global) |
-| `description` | `VARCHAR(255)` | NULLABLE | Description de l'exception |
+| Champ         | Type           | Contrainte | Description                 |
+|---------------|----------------|------------|-----------------------------|
+| `id`          | `SERIAL`       | PK         | Identifiant auto-incrémenté |
+| `ip`          | `VARCHAR(46)`  | NOT NULL   | Adresse IP (v4 ou v6)       |
+| `username`    | `VARCHAR(255)` | NULLABLE   | Admin/user (NULL = global)  |
+| `description` | `VARCHAR(255)` | NULLABLE   | Description de l'exception  |
 
 Contrainte unique : `(ip, username)`
 

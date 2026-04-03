@@ -6,22 +6,22 @@
 
 ### Main Branches
 
-| Branch | Role | Protection |
-|--------|------|-----------|
-| `main` | Stable production | Protected, merge via PR only |
-| `develop` | Feature integration | Protected, merge via PR |
+| Branch    | Role                | Protection                   |
+|-----------|---------------------|------------------------------|
+| `main`    | Stable production   | Protected, merge via PR only |
+| `develop` | Feature integration | Protected, merge via PR      |
 
 ### Working Branches
 
-| Prefix | Usage | Example |
-|--------|-------|---------|
-| `feature/` | New feature | `feature/domain-crud` |
-| `fix/` | Bug fix | `fix/login-session-timeout` |
+| Prefix      | Usage                                 | Example                      |
+|-------------|---------------------------------------|------------------------------|
+| `feature/`  | New feature                           | `feature/domain-crud`        |
+| `fix/`      | Bug fix                               | `fix/login-session-timeout`  |
 | `refactor/` | Refactoring without functional change | `refactor/repository-traits` |
-| `docs/` | Documentation only | `docs/api-endpoints` |
-| `chore/` | Maintenance, CI, dependencies | `chore/update-sqlx-0.8` |
-| `release/` | Release preparation | `release/v1.0.0` |
-| `hotfix/` | Urgent fix on main | `hotfix/sql-injection-fix` |
+| `docs/`     | Documentation only                    | `docs/api-endpoints`         |
+| `chore/`    | Maintenance, CI, dependencies         | `chore/update-sqlx-0.8`      |
+| `release/`  | Release preparation                   | `release/v1.0.0`             |
+| `hotfix/`   | Urgent fix on main                    | `hotfix/sql-injection-fix`   |
 
 ### Workflow
 
@@ -49,31 +49,31 @@ hotfix/critical-fix ──────────────────PR─�
 
 ### Types
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation |
-| `style` | Formatting (no code change) |
-| `refactor` | Refactoring (no functional change) |
-| `perf` | Performance improvement |
-| `test` | Test addition or modification |
-| `chore` | Maintenance (CI, dependencies, build) |
-| `security` | Security fix |
+| Type       | Description                           |
+|------------|---------------------------------------|
+| `feat`     | New feature                           |
+| `fix`      | Bug fix                               |
+| `docs`     | Documentation                         |
+| `style`    | Formatting (no code change)           |
+| `refactor` | Refactoring (no functional change)    |
+| `perf`     | Performance improvement               |
+| `test`     | Test addition or modification         |
+| `chore`    | Maintenance (CI, dependencies, build) |
+| `security` | Security fix                          |
 
 ### Scopes
 
-| Scope | Crate/Module |
-|-------|-------------|
-| `core` | postfix-admin-core |
-| `db` | postfix-admin-db |
-| `auth` | postfix-admin-auth |
-| `api` | postfix-admin-api |
-| `web` | postfix-admin-web |
-| `cli` | postfix-admin-cli |
+| Scope    | Crate/Module         |
+|----------|----------------------|
+| `core`   | postfix-admin-core   |
+| `db`     | postfix-admin-db     |
+| `auth`   | postfix-admin-auth   |
+| `api`    | postfix-admin-api    |
+| `web`    | postfix-admin-web    |
+| `cli`    | postfix-admin-cli    |
 | `server` | postfix-admin-server |
-| `ci` | CI/CD |
-| `deps` | Dependencies |
+| `ci`     | CI/CD                |
+| `deps`   | Dependencies         |
 
 ### Examples
 

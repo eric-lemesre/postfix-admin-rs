@@ -5,14 +5,14 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Password newtype (`Password`, zeroize) | `postfix-admin-core` | Done | M1 |
-| Argon2id hashing | `postfix-admin-auth` | Pending | M4 |
-| Bcrypt hashing | `postfix-admin-auth` | Pending | M4 |
-| SHA-512/256 crypt | `postfix-admin-auth` | Pending | M4 |
-| Legacy scheme detection | `postfix-admin-auth` | Pending | M4 |
-| Transparent rehashing | `postfix-admin-auth` | Pending | M4 |
+| Component                              | Crate                | Status  | Milestone |
+|----------------------------------------|----------------------|---------|-----------|
+| Password newtype (`Password`, zeroize) | `postfix-admin-core` | Done    | M1        |
+| Argon2id hashing                       | `postfix-admin-auth` | Pending | M4        |
+| Bcrypt hashing                         | `postfix-admin-auth` | Pending | M4        |
+| SHA-512/256 crypt                      | `postfix-admin-auth` | Pending | M4        |
+| Legacy scheme detection                | `postfix-admin-auth` | Pending | M4        |
+| Transparent rehashing                  | `postfix-admin-auth` | Pending | M4        |
 
 ## Summary
 
@@ -20,16 +20,16 @@ To allow for seamless migration from PostfixAdmin PHP and to ensure compatibilit
 
 ## Supported Schemes
 
-| Scheme | Prefix/Format | Usage | Support |
-|--------|---------------|-------|---------|
-| **argon2id** | `{ARGON2ID}$argon2id$...` | Default for new hashes | Read + Write |
-| **bcrypt** | `{BLF-CRYPT}$2y$...` or `$2y$...` | Migration from PHP | Read-only |
-| **SHA-512 crypt** | `{SHA512-CRYPT}$6$...` or `$6$...` | Legacy Dovecot | Read-only |
-| **SHA-256 crypt** | `{SHA256-CRYPT}$5$...` or `$5$...` | Legacy | Read-only |
-| **MD5 crypt** | `{MD5-CRYPT}$1$...` or `$1$...` | Legacy (weak) | Read-only |
-| **crypt** | `{CRYPT}...` | Very old (DES) | Read-only |
-| **PLAIN-MD5** | `{PLAIN-MD5}...` | Legacy PostfixAdmin | Read-only |
-| **cleartext** | `{CLEAR}...` or `{CLEARTEXT}...` | Dev only | Configurable |
+| Scheme            | Prefix/Format                      | Usage                  | Support      |
+|-------------------|------------------------------------|------------------------|--------------|
+| **argon2id**      | `{ARGON2ID}$argon2id$...`          | Default for new hashes | Read + Write |
+| **bcrypt**        | `{BLF-CRYPT}$2y$...` or `$2y$...`  | Migration from PHP     | Read-only    |
+| **SHA-512 crypt** | `{SHA512-CRYPT}$6$...` or `$6$...` | Legacy Dovecot         | Read-only    |
+| **SHA-256 crypt** | `{SHA256-CRYPT}$5$...` or `$5$...` | Legacy                 | Read-only    |
+| **MD5 crypt**     | `{MD5-CRYPT}$1$...` or `$1$...`    | Legacy (weak)          | Read-only    |
+| **crypt**         | `{CRYPT}...`                       | Very old (DES)         | Read-only    |
+| **PLAIN-MD5**     | `{PLAIN-MD5}...`                   | Legacy PostfixAdmin    | Read-only    |
+| **cleartext**     | `{CLEAR}...` or `{CLEARTEXT}...`   | Dev only               | Configurable |
 
 ## Automatic Scheme Detection
 
@@ -63,20 +63,20 @@ This mechanism allows for gradual migration without user action.
 
 ## Argon2id Parameters
 
-| Parameter | Default Value | Description |
-|-----------|--------------|-------------|
+| Parameter     | Default Value | Description |
+|---------------|---------------|-------------|
 | `memory_cost` | 19456 (19 MB) | Memory used |
-| `time_cost` | 2 | Iterations |
-| `parallelism` | 1 | Threads |
-| `output_len` | 32 | Hash length |
+| `time_cost`   | 2             | Iterations  |
+| `parallelism` | 1             | Threads     |
+| `output_len`  | 32            | Hash length |
 
 These parameters are configurable and follow OWASP 2024 recommendations.
 
 ## Bcrypt Parameters (Read-only)
 
-| Parameter | Value |
-|-----------|-------|
-| `cost` | Detected from existing hash |
+| Parameter | Value                       |
+|-----------|-----------------------------|
+| `cost`    | Detected from existing hash |
 
 ## Password Validation
 

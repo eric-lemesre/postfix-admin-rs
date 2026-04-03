@@ -10,16 +10,16 @@ mots de passe en lecture, tout en utilisant argon2id pour les nouveaux hash.
 
 ## Schémas supportés
 
-| Schéma | Préfixe/Format | Usage | Support |
-|--------|---------------|-------|---------|
-| **argon2id** | `{ARGON2ID}$argon2id$...` | Défaut pour les nouveaux hash | Lecture + Écriture |
-| **bcrypt** | `{BLF-CRYPT}$2y$...` ou `$2y$...` | Migration depuis PHP | Lecture seule |
-| **SHA-512 crypt** | `{SHA512-CRYPT}$6$...` ou `$6$...` | Legacy Dovecot | Lecture seule |
-| **SHA-256 crypt** | `{SHA256-CRYPT}$5$...` ou `$5$...` | Legacy | Lecture seule |
-| **MD5 crypt** | `{MD5-CRYPT}$1$...` ou `$1$...` | Legacy (faible) | Lecture seule |
-| **crypt** | `{CRYPT}...` | Très ancien (DES) | Lecture seule |
-| **PLAIN-MD5** | `{PLAIN-MD5}...` | Legacy PostfixAdmin | Lecture seule |
-| **cleartext** | `{CLEAR}...` ou `{CLEARTEXT}...` | Dev uniquement | Configurable |
+| Schéma            | Préfixe/Format                     | Usage                         | Support            |
+|-------------------|------------------------------------|-------------------------------|--------------------|
+| **argon2id**      | `{ARGON2ID}$argon2id$...`          | Défaut pour les nouveaux hash | Lecture + Écriture |
+| **bcrypt**        | `{BLF-CRYPT}$2y$...` ou `$2y$...`  | Migration depuis PHP          | Lecture seule      |
+| **SHA-512 crypt** | `{SHA512-CRYPT}$6$...` ou `$6$...` | Legacy Dovecot                | Lecture seule      |
+| **SHA-256 crypt** | `{SHA256-CRYPT}$5$...` ou `$5$...` | Legacy                        | Lecture seule      |
+| **MD5 crypt**     | `{MD5-CRYPT}$1$...` ou `$1$...`    | Legacy (faible)               | Lecture seule      |
+| **crypt**         | `{CRYPT}...`                       | Très ancien (DES)             | Lecture seule      |
+| **PLAIN-MD5**     | `{PLAIN-MD5}...`                   | Legacy PostfixAdmin           | Lecture seule      |
+| **cleartext**     | `{CLEAR}...` ou `{CLEARTEXT}...`   | Dev uniquement                | Configurable       |
 
 ## Détection automatique du schéma
 
@@ -53,20 +53,20 @@ Ce mécanisme permet une migration progressive sans action utilisateur.
 
 ## Paramètres argon2id
 
-| Paramètre | Valeur par défaut | Description |
-|-----------|------------------|-------------|
-| `memory_cost` | 19456 (19 Mo) | Mémoire utilisée |
-| `time_cost` | 2 | Itérations |
-| `parallelism` | 1 | Threads |
-| `output_len` | 32 | Longueur du hash |
+| Paramètre     | Valeur par défaut | Description      |
+|---------------|-------------------|------------------|
+| `memory_cost` | 19456 (19 Mo)     | Mémoire utilisée |
+| `time_cost`   | 2                 | Itérations       |
+| `parallelism` | 1                 | Threads          |
+| `output_len`  | 32                | Longueur du hash |
 
 Ces paramètres sont configurables et suivent les recommandations OWASP 2024.
 
 ## Paramètres bcrypt (lecture seule)
 
-| Paramètre | Valeur |
-|-----------|--------|
-| `cost` | Détecté depuis le hash existant |
+| Paramètre | Valeur                          |
+|-----------|---------------------------------|
+| `cost`    | Détecté depuis le hash existant |
 
 ## Validation du mot de passe
 

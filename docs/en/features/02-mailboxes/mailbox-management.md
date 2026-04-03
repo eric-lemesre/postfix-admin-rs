@@ -5,17 +5,17 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`Mailbox`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateMailbox`, `UpdateMailbox`, `MailboxResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`MailboxRepository`) | `postfix-admin-core` | Done | M1 |
-| Validation (maildir, domain limits) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
-| CLI commands | `postfix-admin-cli` | Pending | M8 |
+| Component                                                  | Crate                | Status  | Milestone |
+|------------------------------------------------------------|----------------------|---------|-----------|
+| Model (`Mailbox`)                                          | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateMailbox`, `UpdateMailbox`, `MailboxResponse`) | `postfix-admin-core` | Done    | M1        |
+| Repository trait (`MailboxRepository`)                     | `postfix-admin-core` | Done    | M1        |
+| Validation (maildir, domain limits)                        | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                                      | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                                           | `postfix-admin-db`   | Pending | M2        |
+| REST API endpoints                                         | `postfix-admin-api`  | Pending | M6        |
+| Web UI pages                                               | `postfix-admin-web`  | Pending | M5        |
+| CLI commands                                               | `postfix-admin-cli`  | Pending | M8        |
 
 ## Summary
 
@@ -24,20 +24,20 @@ capable of receiving, storing and sending emails via Postfix/Dovecot.
 
 ## Entity: `Mailbox`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK | Full email address (e.g., `user@example.com`) |
-| `password` | `VARCHAR(255)` | NOT NULL | Password hash (multi-scheme) |
-| `name` | `VARCHAR(255)` | NOT NULL, default `''` | User's displayed name |
-| `maildir` | `VARCHAR(255)` | NOT NULL | Relative maildir path (e.g., `example.com/user/`) |
-| `quota` | `BIGINT` | NOT NULL, default `0` | Quota in bytes (0 = unlimited) |
-| `local_part` | `VARCHAR(255)` | NOT NULL | Local part of the address (e.g., `user`) |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Mailbox domain |
-| `password_expiry` | `TIMESTAMPTZ` | NULLABLE | Password expiry date |
-| `totp_secret` | `VARCHAR(255)` | NULLABLE | TOTP secret for 2FA (encrypted) |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Active/inactive mailbox |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last modification |
+| Field             | Type           | Constraint                | Description                                       |
+|-------------------|----------------|---------------------------|---------------------------------------------------|
+| `username`        | `VARCHAR(255)` | PK                        | Full email address (e.g., `user@example.com`)     |
+| `password`        | `VARCHAR(255)` | NOT NULL                  | Password hash (multi-scheme)                      |
+| `name`            | `VARCHAR(255)` | NOT NULL, default `''`    | User's displayed name                             |
+| `maildir`         | `VARCHAR(255)` | NOT NULL                  | Relative maildir path (e.g., `example.com/user/`) |
+| `quota`           | `BIGINT`       | NOT NULL, default `0`     | Quota in bytes (0 = unlimited)                    |
+| `local_part`      | `VARCHAR(255)` | NOT NULL                  | Local part of the address (e.g., `user`)          |
+| `domain`          | `VARCHAR(255)` | FK → `domain.domain`      | Mailbox domain                                    |
+| `password_expiry` | `TIMESTAMPTZ`  | NULLABLE                  | Password expiry date                              |
+| `totp_secret`     | `VARCHAR(255)` | NULLABLE                  | TOTP secret for 2FA (encrypted)                   |
+| `active`          | `BOOLEAN`      | NOT NULL, default `true`  | Active/inactive mailbox                           |
+| `created_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date                                     |
+| `updated_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Last modification                                 |
 
 ### Index
 
@@ -115,14 +115,14 @@ capable of receiving, storing and sending emails via Postfix/Dovecot.
 
 ## API Endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/mailboxes` | List domain mailboxes |
-| `GET` | `/api/v1/mailboxes/{username}` | Mailbox details |
-| `POST` | `/api/v1/domains/{domain}/mailboxes` | Create a mailbox |
-| `PUT` | `/api/v1/mailboxes/{username}` | Modify a mailbox |
-| `DELETE` | `/api/v1/mailboxes/{username}` | Delete a mailbox |
-| `PATCH` | `/api/v1/mailboxes/{username}/active` | Activate/deactivate |
-| `POST` | `/api/v1/mailboxes/{username}/password` | Change password |
+| Method   | Route                                   | Description           |
+|----------|-----------------------------------------|-----------------------|
+| `GET`    | `/api/v1/domains/{domain}/mailboxes`    | List domain mailboxes |
+| `GET`    | `/api/v1/mailboxes/{username}`          | Mailbox details       |
+| `POST`   | `/api/v1/domains/{domain}/mailboxes`    | Create a mailbox      |
+| `PUT`    | `/api/v1/mailboxes/{username}`          | Modify a mailbox      |
+| `DELETE` | `/api/v1/mailboxes/{username}`          | Delete a mailbox      |
+| `PATCH`  | `/api/v1/mailboxes/{username}/active`   | Activate/deactivate   |
+| `POST`   | `/api/v1/mailboxes/{username}/password` | Change password       |
 
 ---

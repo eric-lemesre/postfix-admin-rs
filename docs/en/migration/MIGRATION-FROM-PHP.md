@@ -50,16 +50,16 @@ sudo dpkg -i postfix-admin-rs_1.0.0_amd64.deb
 
 Create `/etc/postfix-admin-rs/config.toml` from the existing PHP configuration:
 
-| PostfixAdmin PHP (`config.local.php`) | postfix-admin-rs (`config.toml`) |
-|---------------------------------------|----------------------------------|
-| `$CONF['database_type'] = 'pgsql'` | `database.url = "postgresql://..."` |
-| `$CONF['database_host']` | Included in `database.url` |
-| `$CONF['database_user']` | Included in `database.url` |
-| `$CONF['database_password']` | Included in `database.url` |
-| `$CONF['database_name']` | Included in `database.url` |
+| PostfixAdmin PHP (`config.local.php`)    | postfix-admin-rs (`config.toml`)    |
+|------------------------------------------|-------------------------------------|
+| `$CONF['database_type'] = 'pgsql'`       | `database.url = "postgresql://..."` |
+| `$CONF['database_host']`                 | Included in `database.url`          |
+| `$CONF['database_user']`                 | Included in `database.url`          |
+| `$CONF['database_password']`             | Included in `database.url`          |
+| `$CONF['database_name']`                 | Included in `database.url`          |
 | `$CONF['encrypt'] = 'dovecot:BLF-CRYPT'` | `auth.password_scheme = "argon2id"` |
-| `$CONF['page_size']` | `ui.page_size` |
-| `$CONF['vacation_domain']` | `vacation.domain` |
+| `$CONF['page_size']`                     | `ui.page_size`                      |
+| `$CONF['vacation_domain']`               | `vacation.domain`                   |
 
 ### 4. Configuration Verification
 
@@ -118,12 +118,12 @@ tables keep the same columns and indexes.
 
 | PostfixAdmin PHP Format | postfix-admin-rs Support |
 |-------------------------|--------------------------|
-| `{BLF-CRYPT}$2y$...` | Read + auto rehash |
-| `$2y$...` (raw bcrypt) | Read + auto rehash |
-| `{SHA512-CRYPT}$6$...` | Read + auto rehash |
-| `{MD5-CRYPT}$1$...` | Read + auto rehash |
-| `{PLAIN-MD5}...` | Read + auto rehash |
-| `{CRYPT}...` | Read + auto rehash |
+| `{BLF-CRYPT}$2y$...`    | Read + auto rehash       |
+| `$2y$...` (raw bcrypt)  | Read + auto rehash       |
+| `{SHA512-CRYPT}$6$...`  | Read + auto rehash       |
+| `{MD5-CRYPT}$1$...`     | Read + auto rehash       |
+| `{PLAIN-MD5}...`        | Read + auto rehash       |
+| `{CRYPT}...`            | Read + auto rehash       |
 
 Upon the first successful login of a user, their password is automatically
 rehashed to argon2id (default scheme).

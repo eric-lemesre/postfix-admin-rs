@@ -5,13 +5,13 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Config struct definitions | `postfix-admin-server` | Pending | M3 |
-| config-rs integration | `postfix-admin-server` | Pending | M3 |
-| Resolution priority (CLI > env > file) | `postfix-admin-server` | Pending | M3 |
-| Startup validation | `postfix-admin-server` | Pending | M3 |
-| Auto-generation of secrets | `postfix-admin-server` | Pending | M3 |
+| Component                              | Crate                  | Status  | Milestone |
+|----------------------------------------|------------------------|---------|-----------|
+| Config struct definitions              | `postfix-admin-server` | Pending | M3        |
+| config-rs integration                  | `postfix-admin-server` | Pending | M3        |
+| Resolution priority (CLI > env > file) | `postfix-admin-server` | Pending | M3        |
+| Startup validation                     | `postfix-admin-server` | Pending | M3        |
+| Auto-generation of secrets             | `postfix-admin-server` | Pending | M3        |
 
 ## Summary
 
@@ -180,12 +180,12 @@ master_key = ""
 
 All configuration values can be overridden by environment variables prefixed with `PAR_` using `__` as a level separator.
 
-| Variable | Corresponds to |
-|----------|---------------|
-| `PAR_SERVER__PORT` | `server.port` |
-| `PAR_DATABASE__URL` | `database.url` |
+| Variable                     | Corresponds to          |
+|------------------------------|-------------------------|
+| `PAR_SERVER__PORT`           | `server.port`           |
+| `PAR_DATABASE__URL`          | `database.url`          |
 | `PAR_AUTH__SESSION_LIFETIME` | `auth.session_lifetime` |
-| `PAR_LOGGING__LEVEL` | `logging.level` |
+| `PAR_LOGGING__LEVEL`         | `logging.level`         |
 
 ## Startup Validation
 

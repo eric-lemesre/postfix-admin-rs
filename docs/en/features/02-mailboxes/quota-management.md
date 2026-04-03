@@ -5,14 +5,14 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Models (`Quota`, `Quota2`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`QuotaResponse`, `Quota2Response`) | `postfix-admin-core` | Done | M1 |
-| Validation (quota within domain) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| Web UI (quota display, charts) | `postfix-admin-web` | Pending | M5 |
+| Component                                | Crate                | Status  | Milestone |
+|------------------------------------------|----------------------|---------|-----------|
+| Models (`Quota`, `Quota2`)               | `postfix-admin-core` | Done    | M1        |
+| DTOs (`QuotaResponse`, `Quota2Response`) | `postfix-admin-core` | Done    | M1        |
+| Validation (quota within domain)         | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                    | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                         | `postfix-admin-db`   | Pending | M2        |
+| Web UI (quota display, charts)           | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -23,19 +23,19 @@ Dovecot for real-time tracking of storage usage.
 
 ### `Quota` (Dovecot tracking - legacy table)
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK (composite) | Email address |
-| `path` | `VARCHAR(100)` | PK (composite) | Storage path |
-| `current` | `BIGINT` | default `0` | Current usage in bytes |
+| Field      | Type           | Constraint     | Description            |
+|------------|----------------|----------------|------------------------|
+| `username` | `VARCHAR(255)` | PK (composite) | Email address          |
+| `path`     | `VARCHAR(100)` | PK (composite) | Storage path           |
+| `current`  | `BIGINT`       | default `0`    | Current usage in bytes |
 
 ### `Quota2` (Dovecot tracking >= 1.2)
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(100)` | PK | Email address |
-| `bytes` | `BIGINT` | default `0` | Bytes used |
-| `messages` | `INTEGER` | NOT NULL, default `0` | Number of messages |
+| Field      | Type           | Constraint            | Description        |
+|------------|----------------|-----------------------|--------------------|
+| `username` | `VARCHAR(100)` | PK                    | Email address      |
+| `bytes`    | `BIGINT`       | default `0`           | Bytes used         |
+| `messages` | `INTEGER`      | NOT NULL, default `0` | Number of messages |
 
 ## Quota Levels
 
@@ -91,9 +91,9 @@ If domain.quota > 0:
 
 ## API Endpoints
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/quota` | Domain quota summary |
-| `GET` | `/api/v1/mailboxes/{username}/quota` | Detailed quota of a mailbox |
+| Method | Route                                | Description                 |
+|--------|--------------------------------------|-----------------------------|
+| `GET`  | `/api/v1/domains/{domain}/quota`     | Domain quota summary        |
+| `GET`  | `/api/v1/mailboxes/{username}/quota` | Detailed quota of a mailbox |
 
 ---

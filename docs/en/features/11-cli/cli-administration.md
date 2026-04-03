@@ -5,12 +5,12 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| clap command structure | `postfix-admin-cli` | Pending | M8 |
-| Domain/Mailbox/Alias/Admin commands | `postfix-admin-cli` | Pending | M8 |
-| Utility commands (setup, migrate, etc.) | `postfix-admin-cli` | Pending | M8 |
-| Output formatters (table, JSON, CSV) | `postfix-admin-cli` | Pending | M8 |
+| Component                               | Crate               | Status  | Milestone |
+|-----------------------------------------|---------------------|---------|-----------|
+| clap command structure                  | `postfix-admin-cli` | Pending | M8        |
+| Domain/Mailbox/Alias/Admin commands     | `postfix-admin-cli` | Pending | M8        |
+| Utility commands (setup, migrate, etc.) | `postfix-admin-cli` | Pending | M8        |
+| Output formatters (table, JSON, CSV)    | `postfix-admin-cli` | Pending | M8        |
 
 ## Summary
 
@@ -96,15 +96,15 @@ postfix-admin-rs completion <SHELL>              # Autocompletion generation
 
 ## Global options
 
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--config` | `-c` | Path to configuration file |
-| `--database-url` | | Database connection URL (overrides config) |
-| `--format` | `-f` | Output format: `table` (default), `json`, `csv` |
-| `--quiet` | `-q` | Minimal output |
-| `--verbose` | `-v` | Detailed output (-vv for debug) |
-| `--yes` | `-y` | Automatically confirm destructive actions |
-| `--color` | | Force/disable colors (`auto`, `always`, `never`) |
+| Option           | Short | Description                                      |
+|------------------|-------|--------------------------------------------------|
+| `--config`       | `-c`  | Path to configuration file                       |
+| `--database-url` |       | Database connection URL (overrides config)       |
+| `--format`       | `-f`  | Output format: `table` (default), `json`, `csv`  |
+| `--quiet`        | `-q`  | Minimal output                                   |
+| `--verbose`      | `-v`  | Detailed output (-vv for debug)                  |
+| `--yes`          | `-y`  | Automatically confirm destructive actions        |
+| `--color`        |       | Force/disable colors (`auto`, `always`, `never`) |
 
 ## Output format
 
@@ -149,14 +149,14 @@ the API (direct mode).
 
 ## Exit codes
 
-| Code | Meaning |
-|------|---------|
-| `0` | Success |
-| `1` | General error |
-| `2` | Configuration error |
-| `3` | Database connection error |
-| `4` | Validation error |
-| `5` | Resource not found |
-| `10` | Action cancelled by user |
+| Code | Meaning                   |
+|------|---------------------------|
+| `0`  | Success                   |
+| `1`  | General error             |
+| `2`  | Configuration error       |
+| `3`  | Database connection error |
+| `4`  | Validation error          |
+| `5`  | Resource not found        |
+| `10` | Action cancelled by user  |
 
 ---

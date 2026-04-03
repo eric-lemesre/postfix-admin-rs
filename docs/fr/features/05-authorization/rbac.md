@@ -36,34 +36,34 @@ de rôle et de périmètre.
 
 ## Matrice de permissions
 
-| Ressource | Action | Superadmin | Admin domaine | Utilisateur |
-|-----------|--------|:----------:|:-------------:|:-----------:|
-| **Domaines** | Lister | Tous | Ses domaines | — |
-| | Créer | Oui | — | — |
-| | Modifier | Oui | Ses domaines (limité) | — |
-| | Supprimer | Oui | — | — |
-| **Alias domaines** | CRUD | Oui | — | — |
-| **Admins** | Lister | Oui | — | — |
-| | Créer | Oui | — | — |
-| | Modifier | Oui | Soi-même (mot de passe) | — |
-| | Supprimer | Oui | — | — |
-| **Boîtes mail** | Lister | Toutes | Ses domaines | — |
-| | Créer | Oui | Ses domaines | — |
-| | Modifier | Oui | Ses domaines | Soi-même (limité) |
-| | Supprimer | Oui | Ses domaines | — |
-| **Alias** | Lister | Tous | Ses domaines | — |
-| | Créer | Oui | Ses domaines | — |
-| | Modifier | Oui | Ses domaines | — |
-| | Supprimer | Oui | Ses domaines | — |
-| **Vacation** | Gérer | Oui | Ses domaines | Soi-même |
-| **Fetchmail** | Gérer | Oui | Ses domaines | Soi-même |
-| **DKIM** | Gérer | Oui | Ses domaines | — |
-| **Logs** | Consulter | Tous | Ses domaines | — |
-| **Configuration** | Modifier | Oui | — | — |
-| **App passwords** | Gérer | — | — | Soi-même |
-| **TOTP** | Gérer | Soi-même | Soi-même | Soi-même |
-| **TOTP exceptions** | Gérer | Oui | — | — |
-| **Broadcast** | Envoyer | Oui | — | — |
+| Ressource           | Action    | Superadmin |      Admin domaine      |    Utilisateur    |
+|---------------------|-----------|:----------:|:-----------------------:|:-----------------:|
+| **Domaines**        | Lister    |    Tous    |      Ses domaines       |         —         |
+|                     | Créer     |    Oui     |            —            |         —         |
+|                     | Modifier  |    Oui     |  Ses domaines (limité)  |         —         |
+|                     | Supprimer |    Oui     |            —            |         —         |
+| **Alias domaines**  | CRUD      |    Oui     |            —            |         —         |
+| **Admins**          | Lister    |    Oui     |            —            |         —         |
+|                     | Créer     |    Oui     |            —            |         —         |
+|                     | Modifier  |    Oui     | Soi-même (mot de passe) |         —         |
+|                     | Supprimer |    Oui     |            —            |         —         |
+| **Boîtes mail**     | Lister    |   Toutes   |      Ses domaines       |         —         |
+|                     | Créer     |    Oui     |      Ses domaines       |         —         |
+|                     | Modifier  |    Oui     |      Ses domaines       | Soi-même (limité) |
+|                     | Supprimer |    Oui     |      Ses domaines       |         —         |
+| **Alias**           | Lister    |    Tous    |      Ses domaines       |         —         |
+|                     | Créer     |    Oui     |      Ses domaines       |         —         |
+|                     | Modifier  |    Oui     |      Ses domaines       |         —         |
+|                     | Supprimer |    Oui     |      Ses domaines       |         —         |
+| **Vacation**        | Gérer     |    Oui     |      Ses domaines       |     Soi-même      |
+| **Fetchmail**       | Gérer     |    Oui     |      Ses domaines       |     Soi-même      |
+| **DKIM**            | Gérer     |    Oui     |      Ses domaines       |         —         |
+| **Logs**            | Consulter |    Tous    |      Ses domaines       |         —         |
+| **Configuration**   | Modifier  |    Oui     |            —            |         —         |
+| **App passwords**   | Gérer     |     —      |            —            |     Soi-même      |
+| **TOTP**            | Gérer     |  Soi-même  |        Soi-même         |     Soi-même      |
+| **TOTP exceptions** | Gérer     |    Oui     |            —            |         —         |
+| **Broadcast**       | Envoyer   |    Oui     |            —            |         —         |
 
 ## Implémentation
 

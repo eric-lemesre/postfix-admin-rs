@@ -170,12 +170,12 @@ master_key = ""
 Toutes les valeurs de configuration peuvent être overridées par des variables
 d'environnement préfixées par `PAR_` avec `__` comme séparateur de niveaux.
 
-| Variable | Correspond à |
-|----------|-------------|
-| `PAR_SERVER__PORT` | `server.port` |
-| `PAR_DATABASE__URL` | `database.url` |
+| Variable                     | Correspond à            |
+|------------------------------|-------------------------|
+| `PAR_SERVER__PORT`           | `server.port`           |
+| `PAR_DATABASE__URL`          | `database.url`          |
 | `PAR_AUTH__SESSION_LIFETIME` | `auth.session_lifetime` |
-| `PAR_LOGGING__LEVEL` | `logging.level` |
+| `PAR_LOGGING__LEVEL`         | `logging.level`         |
 
 ## Validation au démarrage
 

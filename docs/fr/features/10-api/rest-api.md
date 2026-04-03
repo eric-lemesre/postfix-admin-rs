@@ -79,19 +79,19 @@ Response: { "token": "eyJ...", "expires_at": "2024-...", "refresh_token": "..." 
 
 ## Codes HTTP utilisés
 
-| Code | Usage |
-|------|-------|
-| `200` | Succès (GET, PUT, PATCH) |
-| `201` | Création réussie (POST) |
-| `204` | Suppression réussie (DELETE) |
-| `400` | Requête malformée |
-| `401` | Non authentifié |
-| `403` | Pas autorisé (permissions insuffisantes) |
-| `404` | Ressource non trouvée |
+| Code  | Usage                                      |
+|-------|--------------------------------------------|
+| `200` | Succès (GET, PUT, PATCH)                   |
+| `201` | Création réussie (POST)                    |
+| `204` | Suppression réussie (DELETE)               |
+| `400` | Requête malformée                          |
+| `401` | Non authentifié                            |
+| `403` | Pas autorisé (permissions insuffisantes)   |
+| `404` | Ressource non trouvée                      |
 | `409` | Conflit (doublon, violation de contrainte) |
-| `422` | Erreur de validation |
-| `429` | Rate limit dépassé |
-| `500` | Erreur serveur |
+| `422` | Erreur de validation                       |
+| `429` | Rate limit dépassé                         |
+| `500` | Erreur serveur                             |
 
 ## Pagination
 
@@ -102,14 +102,14 @@ GET /api/v1/domains?page=2&per_page=20&sort=domain&order=asc
 
 ### Paramètres communs
 
-| Paramètre | Type | Défaut | Description |
-|-----------|------|--------|-------------|
-| `page` | integer | 1 | Page courante |
-| `per_page` | integer | 20 | Éléments par page (max: 100) |
-| `sort` | string | varie | Champ de tri |
-| `order` | string | `asc` | Ordre (`asc`, `desc`) |
-| `search` | string | — | Recherche textuelle |
-| `active` | boolean | — | Filtrer par statut actif |
+| Paramètre  | Type    | Défaut | Description                  |
+|------------|---------|--------|------------------------------|
+| `page`     | integer | 1      | Page courante                |
+| `per_page` | integer | 20     | Éléments par page (max: 100) |
+| `sort`     | string  | varie  | Champ de tri                 |
+| `order`    | string  | `asc`  | Ordre (`asc`, `desc`)        |
+| `search`   | string  | —      | Recherche textuelle          |
+| `active`   | boolean | —      | Filtrer par statut actif     |
 
 ### Headers de réponse
 ```
@@ -127,56 +127,56 @@ Link: </api/v1/domains?page=3&per_page=20>; rel="next",
 ## Catalogue des endpoints
 
 ### Authentification
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `POST` | `/api/v1/auth/login` | Obtenir un JWT |
-| `POST` | `/api/v1/auth/refresh` | Rafraîchir le JWT |
-| `POST` | `/api/v1/auth/logout` | Invalider le token |
+| Méthode | Route                  | Description        |
+|---------|------------------------|--------------------|
+| `POST`  | `/api/v1/auth/login`   | Obtenir un JWT     |
+| `POST`  | `/api/v1/auth/refresh` | Rafraîchir le JWT  |
+| `POST`  | `/api/v1/auth/logout`  | Invalider le token |
 
 ### Domaines
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains` | Lister |
-| `GET` | `/api/v1/domains/{domain}` | Détails |
-| `POST` | `/api/v1/domains` | Créer |
-| `PUT` | `/api/v1/domains/{domain}` | Modifier |
-| `DELETE` | `/api/v1/domains/{domain}` | Supprimer |
-| `PATCH` | `/api/v1/domains/{domain}/active` | Toggle actif |
+| Méthode  | Route                             | Description  |
+|----------|-----------------------------------|--------------|
+| `GET`    | `/api/v1/domains`                 | Lister       |
+| `GET`    | `/api/v1/domains/{domain}`        | Détails      |
+| `POST`   | `/api/v1/domains`                 | Créer        |
+| `PUT`    | `/api/v1/domains/{domain}`        | Modifier     |
+| `DELETE` | `/api/v1/domains/{domain}`        | Supprimer    |
+| `PATCH`  | `/api/v1/domains/{domain}/active` | Toggle actif |
 
 ### Alias domaines
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/alias-domains` | Lister |
-| `POST` | `/api/v1/alias-domains` | Créer |
-| `DELETE` | `/api/v1/alias-domains/{alias}` | Supprimer |
+| Méthode  | Route                           | Description |
+|----------|---------------------------------|-------------|
+| `GET`    | `/api/v1/alias-domains`         | Lister      |
+| `POST`   | `/api/v1/alias-domains`         | Créer       |
+| `DELETE` | `/api/v1/alias-domains/{alias}` | Supprimer   |
 
 ### Boîtes mail
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/mailboxes` | Lister par domaine |
-| `GET` | `/api/v1/mailboxes/{username}` | Détails |
-| `POST` | `/api/v1/domains/{domain}/mailboxes` | Créer |
-| `PUT` | `/api/v1/mailboxes/{username}` | Modifier |
-| `DELETE` | `/api/v1/mailboxes/{username}` | Supprimer |
-| `POST` | `/api/v1/mailboxes/{username}/password` | Changer mot de passe |
+| Méthode  | Route                                   | Description          |
+|----------|-----------------------------------------|----------------------|
+| `GET`    | `/api/v1/domains/{domain}/mailboxes`    | Lister par domaine   |
+| `GET`    | `/api/v1/mailboxes/{username}`          | Détails              |
+| `POST`   | `/api/v1/domains/{domain}/mailboxes`    | Créer                |
+| `PUT`    | `/api/v1/mailboxes/{username}`          | Modifier             |
+| `DELETE` | `/api/v1/mailboxes/{username}`          | Supprimer            |
+| `POST`   | `/api/v1/mailboxes/{username}/password` | Changer mot de passe |
 
 ### Alias
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/aliases` | Lister par domaine |
-| `GET` | `/api/v1/aliases/{address}` | Détails |
-| `POST` | `/api/v1/domains/{domain}/aliases` | Créer |
-| `PUT` | `/api/v1/aliases/{address}` | Modifier |
-| `DELETE` | `/api/v1/aliases/{address}` | Supprimer |
+| Méthode  | Route                              | Description        |
+|----------|------------------------------------|--------------------|
+| `GET`    | `/api/v1/domains/{domain}/aliases` | Lister par domaine |
+| `GET`    | `/api/v1/aliases/{address}`        | Détails            |
+| `POST`   | `/api/v1/domains/{domain}/aliases` | Créer              |
+| `PUT`    | `/api/v1/aliases/{address}`        | Modifier           |
+| `DELETE` | `/api/v1/aliases/{address}`        | Supprimer          |
 
 ### Admins
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/admins` | Lister |
-| `GET` | `/api/v1/admins/{username}` | Détails |
-| `POST` | `/api/v1/admins` | Créer |
-| `PUT` | `/api/v1/admins/{username}` | Modifier |
-| `DELETE` | `/api/v1/admins/{username}` | Supprimer |
+| Méthode  | Route                       | Description |
+|----------|-----------------------------|-------------|
+| `GET`    | `/api/v1/admins`            | Lister      |
+| `GET`    | `/api/v1/admins/{username}` | Détails     |
+| `POST`   | `/api/v1/admins`            | Créer       |
+| `PUT`    | `/api/v1/admins/{username}` | Modifier    |
+| `DELETE` | `/api/v1/admins/{username}` | Supprimer   |
 
 ### Vacation, Fetchmail, DKIM, Logs
 Voir les spécifications respectives pour les endpoints détaillés.

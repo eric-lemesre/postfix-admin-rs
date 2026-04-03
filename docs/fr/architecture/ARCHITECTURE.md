@@ -241,7 +241,7 @@ Le binaire `par-server` embarque :
 
 ### Ports
 
-| Service | Port par defaut |
-|---------|----------------|
-| HTTP (web + REST) | 8080 |
-| gRPC | 50051 |
+| Service           | Port par defaut |
+|-------------------|-----------------|
+| HTTP (web + REST) | 8080            |
+| gRPC              | 50051           |

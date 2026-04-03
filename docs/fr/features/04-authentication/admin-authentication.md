@@ -9,26 +9,26 @@ Authentification par formulaire web avec session serveur, support optionnel TOTP
 
 ## Entité : `Admin`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK | Identifiant admin (email) |
-| `password` | `VARCHAR(255)` | NOT NULL | Hash du mot de passe |
-| `superadmin` | `BOOLEAN` | NOT NULL, default `false` | Privilège superadmin |
-| `totp_secret` | `VARCHAR(255)` | NULLABLE | Secret TOTP chiffré |
-| `totp_enabled` | `BOOLEAN` | NOT NULL, default `false` | 2FA activé |
-| `token` | `VARCHAR(255)` | NULLABLE | Token de récupération de mot de passe |
-| `token_validity` | `TIMESTAMPTZ` | NULLABLE | Expiration du token |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Compte actif/inactif |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ            | Type           | Contrainte                | Description                           |
+|------------------|----------------|---------------------------|---------------------------------------|
+| `username`       | `VARCHAR(255)` | PK                        | Identifiant admin (email)             |
+| `password`       | `VARCHAR(255)` | NOT NULL                  | Hash du mot de passe                  |
+| `superadmin`     | `BOOLEAN`      | NOT NULL, default `false` | Privilège superadmin                  |
+| `totp_secret`    | `VARCHAR(255)` | NULLABLE                  | Secret TOTP chiffré                   |
+| `totp_enabled`   | `BOOLEAN`      | NOT NULL, default `false` | 2FA activé                            |
+| `token`          | `VARCHAR(255)` | NULLABLE                  | Token de récupération de mot de passe |
+| `token_validity` | `TIMESTAMPTZ`  | NULLABLE                  | Expiration du token                   |
+| `active`         | `BOOLEAN`      | NOT NULL, default `true`  | Compte actif/inactif                  |
+| `created_at`     | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création                      |
+| `updated_at`     | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Dernière modification                 |
 
 ### Entité associée : `DomainAdmin`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | FK → `admin.username` | Identifiant admin |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Domaine administré |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date d'attribution |
+| Champ        | Type           | Contrainte                | Description        |
+|--------------|----------------|---------------------------|--------------------|
+| `username`   | `VARCHAR(255)` | FK → `admin.username`     | Identifiant admin  |
+| `domain`     | `VARCHAR(255)` | FK → `domain.domain`      | Domaine administré |
+| `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date d'attribution |
 
 PK composite : `(username, domain)`
 
@@ -36,8 +36,8 @@ PK composite : `(username, domain)`
 
 ```
 ┌─────────┐     ┌──────────────┐     ┌──────────────┐     ┌────────────┐
-│  Login   │────▶│ Vérification │────▶│  TOTP 2FA ?  │────▶│  Session   │
-│  Form    │     │  Password    │     │  (si activé) │     │  Créée     │
+│  Login  │────▶│ Vérification │────▶│  TOTP 2FA ?  │────▶│  Session   │
+│  Form   │     │  Password    │     │  (si activé) │     │  Créée     │
 └─────────┘     └──────────────┘     └──────────────┘     └────────────┘
                        │                     │
                        ▼                     ▼
@@ -98,24 +98,24 @@ PK composite : `(username, domain)`
 
 ## Routes Web
 
-| Route | Méthode | Description |
-|-------|---------|-------------|
-| `/login` | GET | Formulaire de login |
-| `/login` | POST | Traitement du login |
-| `/logout` | POST | Déconnexion |
-| `/password-recover` | GET | Formulaire de récupération |
-| `/password-recover` | POST | Envoi du token |
-| `/password-reset/{token}` | GET | Formulaire de nouveau mot de passe |
-| `/password-reset/{token}` | POST | Traitement du reset |
+| Route                     | Méthode | Description                        |
+|---------------------------|---------|------------------------------------|
+| `/login`                  | GET     | Formulaire de login                |
+| `/login`                  | POST    | Traitement du login                |
+| `/logout`                 | POST    | Déconnexion                        |
+| `/password-recover`       | GET     | Formulaire de récupération         |
+| `/password-recover`       | POST    | Envoi du token                     |
+| `/password-reset/{token}` | GET     | Formulaire de nouveau mot de passe |
+| `/password-reset/{token}` | POST    | Traitement du reset                |
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `POST` | `/api/v1/auth/login` | Authentification (retourne JWT) |
-| `POST` | `/api/v1/auth/logout` | Invalidation du token |
-| `POST` | `/api/v1/auth/refresh` | Rafraîchissement du token |
-| `POST` | `/api/v1/auth/totp/verify` | Vérification TOTP |
+| Méthode | Route                      | Description                     |
+|---------|----------------------------|---------------------------------|
+| `POST`  | `/api/v1/auth/login`       | Authentification (retourne JWT) |
+| `POST`  | `/api/v1/auth/logout`      | Invalidation du token           |
+| `POST`  | `/api/v1/auth/refresh`     | Rafraîchissement du token       |
+| `POST`  | `/api/v1/auth/totp/verify` | Vérification TOTP               |
 
 ## Notes de sécurité
 

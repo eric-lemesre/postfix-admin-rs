@@ -88,14 +88,14 @@ systématique avant intégration.
 
 ## 3. Niveaux de commentaires
 
-| Préfixe | Signification | Action requise |
-|---------|--------------|----------------|
-| `blocker:` | Problème critique (sécurité, bug, perte de données) | Doit être corrigé avant merge |
-| `issue:` | Problème significatif (logique, performance) | Devrait être corrigé |
-| `nit:` | Détail mineur (style, nommage) | Optionnel, à la discrétion de l'auteur |
-| `question:` | Demande de clarification | Réponse attendue |
-| `suggestion:` | Proposition d'amélioration | À discuter |
-| `praise:` | Point positif à souligner | Encouragement |
+| Préfixe       | Signification                                       | Action requise                         |
+|---------------|-----------------------------------------------------|----------------------------------------|
+| `blocker:`    | Problème critique (sécurité, bug, perte de données) | Doit être corrigé avant merge          |
+| `issue:`      | Problème significatif (logique, performance)        | Devrait être corrigé                   |
+| `nit:`        | Détail mineur (style, nommage)                      | Optionnel, à la discrétion de l'auteur |
+| `question:`   | Demande de clarification                            | Réponse attendue                       |
+| `suggestion:` | Proposition d'amélioration                          | À discuter                             |
+| `praise:`     | Point positif à souligner                           | Encouragement                          |
 
 ### Exemples
 

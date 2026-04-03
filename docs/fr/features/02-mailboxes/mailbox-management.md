@@ -9,20 +9,20 @@ capable de recevoir, stocker et envoyer du courrier via Postfix/Dovecot.
 
 ## Entité : `Mailbox`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK | Adresse email complète (ex: `user@example.com`) |
-| `password` | `VARCHAR(255)` | NOT NULL | Hash du mot de passe (multi-schéma) |
-| `name` | `VARCHAR(255)` | NOT NULL, default `''` | Nom affiché de l'utilisateur |
-| `maildir` | `VARCHAR(255)` | NOT NULL | Chemin maildir relatif (ex: `example.com/user/`) |
-| `quota` | `BIGINT` | NOT NULL, default `0` | Quota en octets (0 = illimité) |
-| `local_part` | `VARCHAR(255)` | NOT NULL | Partie locale de l'adresse (ex: `user`) |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Domaine de la boîte |
-| `password_expiry` | `TIMESTAMPTZ` | NULLABLE | Date d'expiration du mot de passe |
-| `totp_secret` | `VARCHAR(255)` | NULLABLE | Secret TOTP pour le 2FA (chiffré) |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Boîte active/inactive |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ             | Type           | Contrainte                | Description                                      |
+|-------------------|----------------|---------------------------|--------------------------------------------------|
+| `username`        | `VARCHAR(255)` | PK                        | Adresse email complète (ex: `user@example.com`)  |
+| `password`        | `VARCHAR(255)` | NOT NULL                  | Hash du mot de passe (multi-schéma)              |
+| `name`            | `VARCHAR(255)` | NOT NULL, default `''`    | Nom affiché de l'utilisateur                     |
+| `maildir`         | `VARCHAR(255)` | NOT NULL                  | Chemin maildir relatif (ex: `example.com/user/`) |
+| `quota`           | `BIGINT`       | NOT NULL, default `0`     | Quota en octets (0 = illimité)                   |
+| `local_part`      | `VARCHAR(255)` | NOT NULL                  | Partie locale de l'adresse (ex: `user`)          |
+| `domain`          | `VARCHAR(255)` | FK → `domain.domain`      | Domaine de la boîte                              |
+| `password_expiry` | `TIMESTAMPTZ`  | NULLABLE                  | Date d'expiration du mot de passe                |
+| `totp_secret`     | `VARCHAR(255)` | NULLABLE                  | Secret TOTP pour le 2FA (chiffré)                |
+| `active`          | `BOOLEAN`      | NOT NULL, default `true`  | Boîte active/inactive                            |
+| `created_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création                                 |
+| `updated_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Dernière modification                            |
 
 ### Index
 
@@ -100,12 +100,12 @@ capable de recevoir, stocker et envoyer du courrier via Postfix/Dovecot.
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/mailboxes` | Lister les boîtes du domaine |
-| `GET` | `/api/v1/mailboxes/{username}` | Détails d'une boîte |
-| `POST` | `/api/v1/domains/{domain}/mailboxes` | Créer une boîte |
-| `PUT` | `/api/v1/mailboxes/{username}` | Modifier une boîte |
-| `DELETE` | `/api/v1/mailboxes/{username}` | Supprimer une boîte |
-| `PATCH` | `/api/v1/mailboxes/{username}/active` | Activer/désactiver |
-| `POST` | `/api/v1/mailboxes/{username}/password` | Changer le mot de passe |
+| Méthode  | Route                                   | Description                  |
+|----------|-----------------------------------------|------------------------------|
+| `GET`    | `/api/v1/domains/{domain}/mailboxes`    | Lister les boîtes du domaine |
+| `GET`    | `/api/v1/mailboxes/{username}`          | Détails d'une boîte          |
+| `POST`   | `/api/v1/domains/{domain}/mailboxes`    | Créer une boîte              |
+| `PUT`    | `/api/v1/mailboxes/{username}`          | Modifier une boîte           |
+| `DELETE` | `/api/v1/mailboxes/{username}`          | Supprimer une boîte          |
+| `PATCH`  | `/api/v1/mailboxes/{username}/active`   | Activer/désactiver           |
+| `POST`   | `/api/v1/mailboxes/{username}/password` | Changer le mot de passe      |

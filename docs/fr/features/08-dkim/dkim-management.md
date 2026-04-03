@@ -10,28 +10,28 @@ paires de clés cryptographiques utilisées pour signer le courrier sortant.
 
 ## Entité : `DkimKey`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Identifiant auto-incrémenté |
-| `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domaine |
-| `description` | `VARCHAR(255)` | default `''` | Description de la clé |
-| `selector` | `VARCHAR(63)` | NOT NULL, default `'default'` | Sélecteur DKIM |
-| `private_key` | `TEXT` | NOT NULL | Clé privée (PEM, chiffrée au repos) |
-| `public_key` | `TEXT` | NOT NULL | Clé publique (PEM) |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ         | Type           | Contrainte                             | Description                         |
+|---------------|----------------|----------------------------------------|-------------------------------------|
+| `id`          | `SERIAL`       | PK                                     | Identifiant auto-incrémenté         |
+| `domain_name` | `VARCHAR(255)` | FK → `domain.domain` ON DELETE CASCADE | Domaine                             |
+| `description` | `VARCHAR(255)` | default `''`                           | Description de la clé               |
+| `selector`    | `VARCHAR(63)`  | NOT NULL, default `'default'`          | Sélecteur DKIM                      |
+| `private_key` | `TEXT`         | NOT NULL                               | Clé privée (PEM, chiffrée au repos) |
+| `public_key`  | `TEXT`         | NOT NULL                               | Clé publique (PEM)                  |
+| `created_at`  | `TIMESTAMPTZ`  | NOT NULL, default `now()`              | Date de création                    |
+| `updated_at`  | `TIMESTAMPTZ`  | NOT NULL, default `now()`              | Dernière modification               |
 
 Index : `(domain_name, description)`
 
 ## Entité : `DkimSigning`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Identifiant auto-incrémenté |
-| `author` | `VARCHAR(255)` | NOT NULL | Pattern d'auteur (ex: `*@example.com`) |
-| `dkim_id` | `INTEGER` | FK → `dkim_key.id` ON DELETE CASCADE | Clé DKIM à utiliser |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ        | Type           | Contrainte                           | Description                            |
+|--------------|----------------|--------------------------------------|----------------------------------------|
+| `id`         | `SERIAL`       | PK                                   | Identifiant auto-incrémenté            |
+| `author`     | `VARCHAR(255)` | NOT NULL                             | Pattern d'auteur (ex: `*@example.com`) |
+| `dkim_id`    | `INTEGER`      | FK → `dkim_key.id` ON DELETE CASCADE | Clé DKIM à utiliser                    |
+| `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Date de création                       |
+| `updated_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()`            | Dernière modification                  |
 
 Index : `(author)`
 
@@ -89,12 +89,12 @@ Index : `(author)`
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/dkim/keys` | Lister les clés |
-| `POST` | `/api/v1/domains/{domain}/dkim/keys` | Générer une clé |
-| `DELETE` | `/api/v1/dkim/keys/{id}` | Supprimer une clé |
-| `GET` | `/api/v1/domains/{domain}/dkim/signing` | Lister les règles de signature |
-| `POST` | `/api/v1/domains/{domain}/dkim/signing` | Créer une règle |
-| `DELETE` | `/api/v1/dkim/signing/{id}` | Supprimer une règle |
-| `GET` | `/api/v1/domains/{domain}/dkim/dns-check` | Vérifier DNS |
+| Méthode  | Route                                     | Description                    |
+|----------|-------------------------------------------|--------------------------------|
+| `GET`    | `/api/v1/domains/{domain}/dkim/keys`      | Lister les clés                |
+| `POST`   | `/api/v1/domains/{domain}/dkim/keys`      | Générer une clé                |
+| `DELETE` | `/api/v1/dkim/keys/{id}`                  | Supprimer une clé              |
+| `GET`    | `/api/v1/domains/{domain}/dkim/signing`   | Lister les règles de signature |
+| `POST`   | `/api/v1/domains/{domain}/dkim/signing`   | Créer une règle                |
+| `DELETE` | `/api/v1/dkim/signing/{id}`               | Supprimer une règle            |
+| `GET`    | `/api/v1/domains/{domain}/dkim/dns-check` | Vérifier DNS                   |

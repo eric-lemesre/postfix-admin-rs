@@ -166,16 +166,16 @@ Attribute order:
 
 ### When to use Alpine.js
 
-| Use case | HTMX | Alpine.js |
-|-------------|------|-----------|
-| Loading server data | Yes | No |
-| Dropdown/menu | No | Yes |
-| Confirmation modal | No | Yes |
-| Local visibility toggle | No | Yes |
-| Client-side validation | No | Yes |
-| Local tabs | No | Yes |
-| Form submission | Yes | No |
-| List update | Yes | No |
+| Use case                | HTMX | Alpine.js |
+|-------------------------|------|-----------|
+| Loading server data     | Yes  | No        |
+| Dropdown/menu           | No   | Yes       |
+| Confirmation modal      | No   | Yes       |
+| Local visibility toggle | No   | Yes       |
+| Client-side validation  | No   | Yes       |
+| Local tabs              | No   | Yes       |
+| Form submission         | Yes  | No        |
+| List update             | Yes  | No        |
 
 ### Alpine.js Rules
 

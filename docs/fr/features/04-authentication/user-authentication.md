@@ -15,30 +15,30 @@ La vérification se fait contre `mailbox.password`.
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌──────────────┐
-│ User Login   │────▶│ Vérification │────▶│  Dashboard   │
-│ (email/pass) │     │ vs mailbox   │     │  Utilisateur │
+│ User Login  │────▶│ Vérification │────▶│  Dashboard   │
+│ (email/pass)│     │ vs mailbox   │     │  Utilisateur │
 └─────────────┘     └──────────────┘     └──────────────┘
 ```
 
 ## Différences avec l'authentification admin
 
-| Aspect | Admin | Utilisateur |
-|--------|-------|-------------|
-| Table | `admin` | `mailbox` |
-| Identifiant | admin username | adresse email |
-| TOTP 2FA | Supporté | Supporté (optionnel) |
-| Session | Même mécanisme | Même mécanisme |
-| Portée | Multi-domaines | Sa propre boîte uniquement |
+| Aspect      | Admin          | Utilisateur                |
+|-------------|----------------|----------------------------|
+| Table       | `admin`        | `mailbox`                  |
+| Identifiant | admin username | adresse email              |
+| TOTP 2FA    | Supporté       | Supporté (optionnel)       |
+| Session     | Même mécanisme | Même mécanisme             |
+| Portée      | Multi-domaines | Sa propre boîte uniquement |
 
 ## Fonctions accessibles à l'utilisateur
 
-| Fonction | Description |
-|----------|-------------|
-| Changement de mot de passe | Ancien + nouveau mot de passe |
-| Gestion vacation | Activation/édition du répondeur automatique |
-| Profil | Modification du nom affiché |
-| TOTP 2FA | Activation/désactivation du 2FA |
-| Mots de passe applicatifs | Gestion des app passwords |
+| Fonction                   | Description                                 |
+|----------------------------|---------------------------------------------|
+| Changement de mot de passe | Ancien + nouveau mot de passe               |
+| Gestion vacation           | Activation/édition du répondeur automatique |
+| Profil                     | Modification du nom affiché                 |
+| TOTP 2FA                   | Activation/désactivation du 2FA             |
+| Mots de passe applicatifs  | Gestion des app passwords                   |
 
 ## Règles métier
 
@@ -62,14 +62,14 @@ La vérification se fait contre `mailbox.password`.
 
 ## Routes Web
 
-| Route | Méthode | Description |
-|-------|---------|-------------|
-| `/user/login` | GET | Formulaire de login utilisateur |
-| `/user/login` | POST | Traitement du login |
-| `/user/logout` | POST | Déconnexion |
-| `/user/dashboard` | GET | Tableau de bord utilisateur |
-| `/user/password` | GET/POST | Changement de mot de passe |
-| `/user/vacation` | GET/POST | Gestion du vacation |
-| `/user/profile` | GET/POST | Modification du profil |
-| `/user/totp` | GET/POST | Configuration TOTP |
-| `/user/app-passwords` | GET/POST | Gestion app passwords |
+| Route                 | Méthode  | Description                     |
+|-----------------------|----------|---------------------------------|
+| `/user/login`         | GET      | Formulaire de login utilisateur |
+| `/user/login`         | POST     | Traitement du login             |
+| `/user/logout`        | POST     | Déconnexion                     |
+| `/user/dashboard`     | GET      | Tableau de bord utilisateur     |
+| `/user/password`      | GET/POST | Changement de mot de passe      |
+| `/user/vacation`      | GET/POST | Gestion du vacation             |
+| `/user/profile`       | GET/POST | Modification du profil          |
+| `/user/totp`          | GET/POST | Configuration TOTP              |
+| `/user/app-passwords` | GET/POST | Gestion app passwords           |

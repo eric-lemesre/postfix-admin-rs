@@ -11,19 +11,19 @@ Dovecot pour le suivi en temps réel de l'utilisation du stockage.
 
 ### `Quota` (suivi Dovecot — table legacy)
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK (composite) | Adresse email |
-| `path` | `VARCHAR(100)` | PK (composite) | Chemin de stockage |
-| `current` | `BIGINT` | default `0` | Utilisation courante en octets |
+| Champ      | Type           | Contrainte     | Description                    |
+|------------|----------------|----------------|--------------------------------|
+| `username` | `VARCHAR(255)` | PK (composite) | Adresse email                  |
+| `path`     | `VARCHAR(100)` | PK (composite) | Chemin de stockage             |
+| `current`  | `BIGINT`       | default `0`    | Utilisation courante en octets |
 
 ### `Quota2` (suivi Dovecot >= 1.2)
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(100)` | PK | Adresse email |
-| `bytes` | `BIGINT` | default `0` | Octets utilisés |
-| `messages` | `INTEGER` | NOT NULL, default `0` | Nombre de messages |
+| Champ      | Type           | Contrainte            | Description        |
+|------------|----------------|-----------------------|--------------------|
+| `username` | `VARCHAR(100)` | PK                    | Adresse email      |
+| `bytes`    | `BIGINT`       | default `0`           | Octets utilisés    |
+| `messages` | `INTEGER`      | NOT NULL, default `0` | Nombre de messages |
 
 ## Niveaux de quota
 
@@ -79,7 +79,7 @@ Si domain.quota > 0 :
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/quota` | Résumé quota du domaine |
-| `GET` | `/api/v1/mailboxes/{username}/quota` | Quota détaillé d'une boîte |
+| Méthode | Route                                | Description                |
+|---------|--------------------------------------|----------------------------|
+| `GET`   | `/api/v1/domains/{domain}/quota`     | Résumé quota du domaine    |
+| `GET`   | `/api/v1/mailboxes/{username}/quota` | Quota détaillé d'une boîte |

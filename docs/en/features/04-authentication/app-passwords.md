@@ -5,15 +5,15 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`MailboxAppPassword`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateAppPassword`, `AppPasswordResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`AppPasswordRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| Password generation and hashing | `postfix-admin-auth` | Pending | M4 |
-| Web UI management page | `postfix-admin-web` | Pending | M5 |
+| Component                                         | Crate                | Status  | Milestone |
+|---------------------------------------------------|----------------------|---------|-----------|
+| Model (`MailboxAppPassword`)                      | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateAppPassword`, `AppPasswordResponse`) | `postfix-admin-core` | Done    | M1        |
+| Repository trait (`AppPasswordRepository`)        | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                             | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                                  | `postfix-admin-db`   | Pending | M2        |
+| Password generation and hashing                   | `postfix-admin-auth` | Pending | M4        |
+| Web UI management page                            | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -21,14 +21,14 @@ Application passwords allow users to generate dedicated passwords for mail clien
 
 ## Entity: `MailboxAppPassword`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Auto-incremented identifier |
-| `username` | `VARCHAR(255)` | FK → `mailbox.username` | Owner |
-| `description` | `VARCHAR(255)` | NOT NULL | Description (e.g., "iPhone", "Thunderbird") |
-| `password_hash` | `VARCHAR(255)` | NOT NULL | Hash of the application password |
-| `last_used` | `TIMESTAMPTZ` | NULLABLE | Last usage |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
+| Field           | Type           | Constraint                | Description                                 |
+|-----------------|----------------|---------------------------|---------------------------------------------|
+| `id`            | `SERIAL`       | PK                        | Auto-incremented identifier                 |
+| `username`      | `VARCHAR(255)` | FK → `mailbox.username`   | Owner                                       |
+| `description`   | `VARCHAR(255)` | NOT NULL                  | Description (e.g., "iPhone", "Thunderbird") |
+| `password_hash` | `VARCHAR(255)` | NOT NULL                  | Hash of the application password            |
+| `last_used`     | `TIMESTAMPTZ`  | NULLABLE                  | Last usage                                  |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date                               |
 
 ## Business Rules
 

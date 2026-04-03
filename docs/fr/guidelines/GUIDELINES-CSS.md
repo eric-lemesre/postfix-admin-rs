@@ -96,17 +96,17 @@ Suivre l'ordre logique (layout → box → typographie → visuel → états) :
 
 ## 3. Palette de couleurs
 
-| Rôle | Light | Dark |
-|------|-------|------|
-| Fond principal | `bg-white` | `dark:bg-gray-900` |
-| Fond secondaire | `bg-gray-50` | `dark:bg-gray-800` |
-| Texte principal | `text-gray-900` | `dark:text-gray-100` |
-| Texte secondaire | `text-gray-500` | `dark:text-gray-400` |
-| Accent primaire | `indigo-600` | `dark:indigo-400` |
-| Succès | `green-600` | `dark:green-400` |
-| Avertissement | `amber-500` | `dark:amber-400` |
-| Erreur | `red-600` | `dark:red-400` |
-| Bordures | `border-gray-200` | `dark:border-gray-700` |
+| Rôle             | Light             | Dark                   |
+|------------------|-------------------|------------------------|
+| Fond principal   | `bg-white`        | `dark:bg-gray-900`     |
+| Fond secondaire  | `bg-gray-50`      | `dark:bg-gray-800`     |
+| Texte principal  | `text-gray-900`   | `dark:text-gray-100`   |
+| Texte secondaire | `text-gray-500`   | `dark:text-gray-400`   |
+| Accent primaire  | `indigo-600`      | `dark:indigo-400`      |
+| Succès           | `green-600`       | `dark:green-400`       |
+| Avertissement    | `amber-500`       | `dark:amber-400`       |
+| Erreur           | `red-600`         | `dark:red-400`         |
+| Bordures         | `border-gray-200` | `dark:border-gray-700` |
 
 ---
 
@@ -146,13 +146,13 @@ Suivre l'ordre logique (layout → box → typographie → visuel → états) :
 
 ## 5. Responsive breakpoints
 
-| Breakpoint | Largeur min | Usage |
-|------------|------------|-------|
-| (base) | 0px | Mobile |
-| `sm:` | 640px | Tablette portrait |
-| `md:` | 768px | Tablette paysage |
-| `lg:` | 1024px | Desktop |
-| `xl:` | 1280px | Grand écran |
+| Breakpoint | Largeur min | Usage             |
+|------------|-------------|-------------------|
+| (base)     | 0px         | Mobile            |
+| `sm:`      | 640px       | Tablette portrait |
+| `md:`      | 768px       | Tablette paysage  |
+| `lg:`      | 1024px      | Desktop           |
+| `xl:`      | 1280px      | Grand écran       |
 
 ### Règles responsive
 

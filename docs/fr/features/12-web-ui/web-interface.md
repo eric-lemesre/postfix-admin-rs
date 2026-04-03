@@ -10,13 +10,13 @@ Approche "HTML over the wire" : pas de framework JavaScript lourd.
 
 ## Stack frontend
 
-| Technologie | Rôle | Version |
-|-------------|------|---------|
-| **Askama** | Templates compilés Rust | Latest |
-| **HTMX** | Interactivité (requêtes AJAX déclaratives) | 2.x |
-| **Tailwind CSS** | Système de design utilitaire | 3.x |
-| **Alpine.js** | Micro-interactivité (dropdowns, modales) | 3.x |
-| **Heroicons** | Icônes SVG | 2.x |
+| Technologie      | Rôle                                       | Version |
+|------------------|--------------------------------------------|---------|
+| **Askama**       | Templates compilés Rust                    | Latest  |
+| **HTMX**         | Interactivité (requêtes AJAX déclaratives) | 2.x     |
+| **Tailwind CSS** | Système de design utilitaire               | 3.x     |
+| **Alpine.js**    | Micro-interactivité (dropdowns, modales)   | 3.x     |
+| **Heroicons**    | Icônes SVG                                 | 2.x     |
 
 ## Layout et navigation
 
@@ -87,26 +87,26 @@ Approche "HTML over the wire" : pas de framework JavaScript lourd.
 
 ## Fonctionnalités HTMX
 
-| Fonctionnalité | Attribut HTMX | Description |
-|---------------|---------------|-------------|
-| Pagination | `hx-get`, `hx-target` | Charge la page suivante sans reload |
-| Recherche live | `hx-get`, `hx-trigger="keyup changed delay:300ms"` | Filtre la liste en temps réel |
-| Toggle actif | `hx-patch`, `hx-swap="outerHTML"` | Bascule le statut inline |
-| Suppression | `hx-delete`, `hx-confirm` | Supprime avec confirmation |
-| Formulaires | `hx-post`, `hx-target="#errors"` | Soumission AJAX avec erreurs inline |
-| Navigation | `hx-get`, `hx-push-url` | Navigation SPA-like |
+| Fonctionnalité | Attribut HTMX                                      | Description                         |
+|----------------|----------------------------------------------------|-------------------------------------|
+| Pagination     | `hx-get`, `hx-target`                              | Charge la page suivante sans reload |
+| Recherche live | `hx-get`, `hx-trigger="keyup changed delay:300ms"` | Filtre la liste en temps réel       |
+| Toggle actif   | `hx-patch`, `hx-swap="outerHTML"`                  | Bascule le statut inline            |
+| Suppression    | `hx-delete`, `hx-confirm`                          | Supprime avec confirmation          |
+| Formulaires    | `hx-post`, `hx-target="#errors"`                   | Soumission AJAX avec erreurs inline |
+| Navigation     | `hx-get`, `hx-push-url`                            | Navigation SPA-like                 |
 
 ## Design system
 
 ### Couleurs
 
-| Usage | Couleur Tailwind |
-|-------|-----------------|
-| Primaire | `indigo-600` |
-| Succès | `green-600` |
-| Avertissement | `amber-500` |
-| Erreur | `red-600` |
-| Fond | `gray-50` (clair) / `gray-900` (sombre) |
+| Usage         | Couleur Tailwind                        |
+|---------------|-----------------------------------------|
+| Primaire      | `indigo-600`                            |
+| Succès        | `green-600`                             |
+| Avertissement | `amber-500`                             |
+| Erreur        | `red-600`                               |
+| Fond          | `gray-50` (clair) / `gray-900` (sombre) |
 
 ### Mode sombre
 - Support natif via `class="dark"` sur `<html>`

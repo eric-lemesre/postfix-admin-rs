@@ -5,16 +5,16 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`Fetchmail`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateFetchmail`, `UpdateFetchmail`, `FetchmailResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`FetchmailRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| Fetchmail CRUD + polling daemon | `postfix-admin-server` | Pending | M12 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| Component                                                        | Crate                  | Status  | Milestone |
+|------------------------------------------------------------------|------------------------|---------|-----------|
+| Model (`Fetchmail`)                                              | `postfix-admin-core`   | Done    | M1        |
+| DTOs (`CreateFetchmail`, `UpdateFetchmail`, `FetchmailResponse`) | `postfix-admin-core`   | Done    | M1        |
+| Repository trait (`FetchmailRepository`)                         | `postfix-admin-core`   | Done    | M1        |
+| PostgreSQL repository                                            | `postfix-admin-db`     | Pending | M2        |
+| MySQL repository                                                 | `postfix-admin-db`     | Pending | M2        |
+| Fetchmail CRUD + polling daemon                                  | `postfix-admin-server` | Pending | M12       |
+| REST API endpoints                                               | `postfix-admin-api`    | Pending | M6        |
+| Web UI pages                                                     | `postfix-admin-web`    | Pending | M5        |
 
 ## Summary
 
@@ -22,29 +22,29 @@ Allows users to retrieve mail from remote servers (POP3/IMAP) and deliver it to 
 
 ## Entity: `Fetchmail`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Auto-incremented identifier |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Local domain |
-| `mailbox` | `VARCHAR(255)` | FK → `mailbox.username` | Destination mailbox |
-| `src_server` | `VARCHAR(255)` | NOT NULL | Remote server (hostname/IP) |
-| `src_auth` | `VARCHAR(50)` | default `'password'` | Auth method (password, kerberos, ntlm, etc.) |
-| `src_user` | `VARCHAR(255)` | NOT NULL | Remote username |
-| `src_password` | `VARCHAR(255)` | NOT NULL | Remote password (encrypted) |
-| `src_folder` | `VARCHAR(255)` | default `''` | Source folder (IMAP) |
-| `poll_time` | `INTEGER` | NOT NULL, default `10` | Polling interval in minutes |
-| `fetchall` | `BOOLEAN` | NOT NULL, default `false` | Retrieve all messages (not just new ones) |
-| `keep` | `BOOLEAN` | NOT NULL, default `false` | Keep messages on the remote server |
-| `protocol` | `VARCHAR(10)` | NOT NULL, default `'IMAP'` | Protocol (POP3, IMAP) |
-| `usessl` | `BOOLEAN` | NOT NULL, default `true` | Use SSL/TLS |
-| `sslcertck` | `BOOLEAN` | NOT NULL, default `true` | Verify SSL certificate |
-| `extra_options` | `TEXT` | NULLABLE | Additional fetchmail options |
-| `mda` | `VARCHAR(255)` | default `''` | Custom MDA |
-| `returned_text` | `TEXT` | NULLABLE | Last fetchmail output |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Active/inactive |
-| `date` | `TIMESTAMPTZ` | default `now()` | Last polling |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last update |
+| Field           | Type           | Constraint                 | Description                                  |
+|-----------------|----------------|----------------------------|----------------------------------------------|
+| `id`            | `SERIAL`       | PK                         | Auto-incremented identifier                  |
+| `domain`        | `VARCHAR(255)` | FK → `domain.domain`       | Local domain                                 |
+| `mailbox`       | `VARCHAR(255)` | FK → `mailbox.username`    | Destination mailbox                          |
+| `src_server`    | `VARCHAR(255)` | NOT NULL                   | Remote server (hostname/IP)                  |
+| `src_auth`      | `VARCHAR(50)`  | default `'password'`       | Auth method (password, kerberos, ntlm, etc.) |
+| `src_user`      | `VARCHAR(255)` | NOT NULL                   | Remote username                              |
+| `src_password`  | `VARCHAR(255)` | NOT NULL                   | Remote password (encrypted)                  |
+| `src_folder`    | `VARCHAR(255)` | default `''`               | Source folder (IMAP)                         |
+| `poll_time`     | `INTEGER`      | NOT NULL, default `10`     | Polling interval in minutes                  |
+| `fetchall`      | `BOOLEAN`      | NOT NULL, default `false`  | Retrieve all messages (not just new ones)    |
+| `keep`          | `BOOLEAN`      | NOT NULL, default `false`  | Keep messages on the remote server           |
+| `protocol`      | `VARCHAR(10)`  | NOT NULL, default `'IMAP'` | Protocol (POP3, IMAP)                        |
+| `usessl`        | `BOOLEAN`      | NOT NULL, default `true`   | Use SSL/TLS                                  |
+| `sslcertck`     | `BOOLEAN`      | NOT NULL, default `true`   | Verify SSL certificate                       |
+| `extra_options` | `TEXT`         | NULLABLE                   | Additional fetchmail options                 |
+| `mda`           | `VARCHAR(255)` | default `''`               | Custom MDA                                   |
+| `returned_text` | `TEXT`         | NULLABLE                   | Last fetchmail output                        |
+| `active`        | `BOOLEAN`      | NOT NULL, default `true`   | Active/inactive                              |
+| `date`          | `TIMESTAMPTZ`  | default `now()`            | Last polling                                 |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()`  | Creation date                                |
+| `updated_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()`  | Last update                                  |
 
 ## Business Rules
 
@@ -85,12 +85,12 @@ Allows users to retrieve mail from remote servers (POP3/IMAP) and deliver it to 
 
 ## API Endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/mailboxes/{username}/fetchmail` | List fetchmail configs |
-| `POST` | `/api/v1/mailboxes/{username}/fetchmail` | Create a config |
-| `PUT` | `/api/v1/fetchmail/{id}` | Update a config |
-| `DELETE` | `/api/v1/fetchmail/{id}` | Delete a config |
-| `POST` | `/api/v1/fetchmail/{id}/test` | Test connection |
+| Method   | Route                                    | Description            |
+|----------|------------------------------------------|------------------------|
+| `GET`    | `/api/v1/mailboxes/{username}/fetchmail` | List fetchmail configs |
+| `POST`   | `/api/v1/mailboxes/{username}/fetchmail` | Create a config        |
+| `PUT`    | `/api/v1/fetchmail/{id}`                 | Update a config        |
+| `DELETE` | `/api/v1/fetchmail/{id}`                 | Delete a config        |
+| `POST`   | `/api/v1/fetchmail/{id}/test`            | Test connection        |
 
 ---

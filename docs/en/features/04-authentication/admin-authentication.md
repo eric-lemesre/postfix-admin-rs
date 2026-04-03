@@ -4,18 +4,18 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Models (`Admin`, `DomainAdmin`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateAdmin`, `UpdateAdmin`, `AdminResponse`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateDomainAdmin`, `DomainAdminResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`AdminRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| Password hashing and verification | `postfix-admin-auth` | Pending | M4 |
-| Session management | `postfix-admin-auth` | Pending | M4 |
-| TOTP verification | `postfix-admin-auth` | Pending | M4 |
-| Web UI login page | `postfix-admin-web` | Pending | M5 |
+| Component                                            | Crate                | Status  | Milestone |
+|------------------------------------------------------|----------------------|---------|-----------|
+| Models (`Admin`, `DomainAdmin`)                      | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateAdmin`, `UpdateAdmin`, `AdminResponse`) | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateDomainAdmin`, `DomainAdminResponse`)    | `postfix-admin-core` | Done    | M1        |
+| Repository trait (`AdminRepository`)                 | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                                | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                                     | `postfix-admin-db`   | Pending | M2        |
+| Password hashing and verification                    | `postfix-admin-auth` | Pending | M4        |
+| Session management                                   | `postfix-admin-auth` | Pending | M4        |
+| TOTP verification                                    | `postfix-admin-auth` | Pending | M4        |
+| Web UI login page                                    | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -24,26 +24,26 @@ Web form authentication with server-side session, optional TOTP 2FA support.
 
 ## Entity: `Admin`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | PK | Admin identifier (email) |
-| `password` | `VARCHAR(255)` | NOT NULL | Password hash |
-| `superadmin` | `BOOLEAN` | NOT NULL, default `false` | Superadmin privilege |
-| `totp_secret` | `VARCHAR(255)` | NULLABLE | Encrypted TOTP secret |
-| `totp_enabled` | `BOOLEAN` | NOT NULL, default `false` | 2FA enabled |
-| `token` | `VARCHAR(255)` | NULLABLE | Password recovery token |
-| `token_validity` | `TIMESTAMPTZ` | NULLABLE | Token expiration |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Account active/inactive |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last modification |
+| Field            | Type           | Constraint                | Description              |
+|------------------|----------------|---------------------------|--------------------------|
+| `username`       | `VARCHAR(255)` | PK                        | Admin identifier (email) |
+| `password`       | `VARCHAR(255)` | NOT NULL                  | Password hash            |
+| `superadmin`     | `BOOLEAN`      | NOT NULL, default `false` | Superadmin privilege     |
+| `totp_secret`    | `VARCHAR(255)` | NULLABLE                  | Encrypted TOTP secret    |
+| `totp_enabled`   | `BOOLEAN`      | NOT NULL, default `false` | 2FA enabled              |
+| `token`          | `VARCHAR(255)` | NULLABLE                  | Password recovery token  |
+| `token_validity` | `TIMESTAMPTZ`  | NULLABLE                  | Token expiration         |
+| `active`         | `BOOLEAN`      | NOT NULL, default `true`  | Account active/inactive  |
+| `created_at`     | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date            |
+| `updated_at`     | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Last modification        |
 
 ### Associated Entity: `DomainAdmin`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `username` | `VARCHAR(255)` | FK → `admin.username` | Admin identifier |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Administered domain |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Assignment date |
+| Field        | Type           | Constraint                | Description         |
+|--------------|----------------|---------------------------|---------------------|
+| `username`   | `VARCHAR(255)` | FK → `admin.username`     | Admin identifier    |
+| `domain`     | `VARCHAR(255)` | FK → `domain.domain`      | Administered domain |
+| `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Assignment date     |
 
 Composite PK: `(username, domain)`
 
@@ -51,14 +51,14 @@ Composite PK: `(username, domain)`
 
 ```
 ┌─────────┐     ┌──────────────┐     ┌──────────────┐     ┌────────────┐
-│  Login   │────▶│ Vérification │────▶│  TOTP 2FA ?  │────▶│  Session   │
-│  Form    │     │  Password    │     │  (if enabled)│     │  Created   │
+│  Login  │────▶│ Vérification │────▶│  TOTP 2FA ?  │────▶│  Session   │
+│  Form   │     │  Password    │     │  (if enabled)│     │  Created   │
 └─────────┘     └──────────────┘     └──────────────┘     └────────────┘
                        │                     │
                        ▼                     ▼
                  ┌──────────┐          ┌──────────┐
-                 │  Failure  │          │  Failure  │
-                 │  (log)    │          │  (log)    │
+                 │  Failure │          │  Failure │
+                 │  (log)   │          │  (log)   │
                  └──────────┘          └──────────┘
 ```
 
@@ -113,24 +113,24 @@ Composite PK: `(username, domain)`
 
 ## Web Routes
 
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/login` | GET | Login form |
-| `/login` | POST | Login processing |
-| `/logout` | POST | Logout |
-| `/password-recover` | GET | Recovery form |
-| `/password-recover` | POST | Token sending |
-| `/password-reset/{token}` | GET | New password form |
-| `/password-reset/{token}` | POST | Reset processing |
+| Route                     | Method | Description       |
+|---------------------------|--------|-------------------|
+| `/login`                  | GET    | Login form        |
+| `/login`                  | POST   | Login processing  |
+| `/logout`                 | POST   | Logout            |
+| `/password-recover`       | GET    | Recovery form     |
+| `/password-recover`       | POST   | Token sending     |
+| `/password-reset/{token}` | GET    | New password form |
+| `/password-reset/{token}` | POST   | Reset processing  |
 
 ## API Endpoints
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| `POST` | `/api/v1/auth/login` | Authentication (returns JWT) |
-| `POST` | `/api/v1/auth/logout` | Token invalidation |
-| `POST` | `/api/v1/auth/refresh` | Token refresh |
-| `POST` | `/api/v1/auth/totp/verify` | TOTP verification |
+| Method | Route                      | Description                  |
+|--------|----------------------------|------------------------------|
+| `POST` | `/api/v1/auth/login`       | Authentication (returns JWT) |
+| `POST` | `/api/v1/auth/logout`      | Token invalidation           |
+| `POST` | `/api/v1/auth/refresh`     | Token refresh                |
+| `POST` | `/api/v1/auth/totp/verify` | TOTP verification            |
 
 ## Security Notes
 

@@ -5,15 +5,15 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`Log`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateLog`, `LogResponse`, `LogFilter`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`LogRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI log viewer | `postfix-admin-web` | Pending | M5 |
+| Component                                      | Crate                | Status  | Milestone |
+|------------------------------------------------|----------------------|---------|-----------|
+| Model (`Log`)                                  | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateLog`, `LogResponse`, `LogFilter`) | `postfix-admin-core` | Done    | M1        |
+| Repository trait (`LogRepository`)             | `postfix-admin-core` | Done    | M1        |
+| PostgreSQL repository                          | `postfix-admin-db`   | Pending | M2        |
+| MySQL repository                               | `postfix-admin-db`   | Pending | M2        |
+| REST API endpoints                             | `postfix-admin-api`  | Pending | M6        |
+| Web UI log viewer                              | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -23,16 +23,16 @@ configuration.
 
 ## Entity: `Log`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `BIGSERIAL` | PK | Auto-incremented identifier |
-| `timestamp` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date and time of the action |
-| `username` | `VARCHAR(255)` | NOT NULL | Author of the action |
-| `domain` | `VARCHAR(255)` | NOT NULL | Domain concerned |
-| `action` | `VARCHAR(255)` | NOT NULL | Type of action |
-| `data` | `TEXT` | NOT NULL, default `''` | Details of the action |
-| `ip_address` | `VARCHAR(46)` | NULLABLE | Source IP address |
-| `user_agent` | `VARCHAR(512)` | NULLABLE | User-Agent (web) or identifier (API/CLI) |
+| Field        | Type           | Constraint                | Description                              |
+|--------------|----------------|---------------------------|------------------------------------------|
+| `id`         | `BIGSERIAL`    | PK                        | Auto-incremented identifier              |
+| `timestamp`  | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date and time of the action              |
+| `username`   | `VARCHAR(255)` | NOT NULL                  | Author of the action                     |
+| `domain`     | `VARCHAR(255)` | NOT NULL                  | Domain concerned                         |
+| `action`     | `VARCHAR(255)` | NOT NULL                  | Type of action                           |
+| `data`       | `TEXT`         | NOT NULL, default `''`    | Details of the action                    |
+| `ip_address` | `VARCHAR(46)`  | NULLABLE                  | Source IP address                        |
+| `user_agent` | `VARCHAR(512)` | NULLABLE                  | User-Agent (web) or identifier (API/CLI) |
 
 ### Index
 
@@ -42,28 +42,28 @@ configuration.
 
 ## Logged actions
 
-| Action | Description | Typical data |
-|--------|-------------|-----------------|
-| `create_domain` | Domain creation | Domain name, parameters |
-| `edit_domain` | Domain modification | Modified fields |
-| `delete_domain` | Domain deletion | Domain name |
-| `create_mailbox` | Mailbox creation | Username, quota |
-| `edit_mailbox` | Mailbox modification | Modified fields (never the password) |
-| `delete_mailbox` | Mailbox deletion | Username |
-| `create_alias` | Alias creation | Address → destinations |
-| `edit_alias` | Alias modification | New destinations |
-| `delete_alias` | Alias deletion | Address |
-| `edit_vacation` | Vacation modification | Activation/deactivation |
-| `create_admin` | Admin creation | Username, assigned domains |
-| `edit_admin` | Admin modification | Modified fields |
-| `delete_admin` | Admin deletion | Username |
-| `login_success` | Successful login | IP, user-agent |
-| `login_failure` | Login failure | IP, user-agent, reason |
-| `password_change` | Password change | Username (never the password) |
-| `totp_enable` | 2FA activation | Username |
-| `totp_disable` | 2FA deactivation | Username |
-| `create_dkim` | DKIM key creation | Domain, selector |
-| `toggle_active` | Activation/deactivation | Entity, old state → new state |
+| Action            | Description             | Typical data                         |
+|-------------------|-------------------------|--------------------------------------|
+| `create_domain`   | Domain creation         | Domain name, parameters              |
+| `edit_domain`     | Domain modification     | Modified fields                      |
+| `delete_domain`   | Domain deletion         | Domain name                          |
+| `create_mailbox`  | Mailbox creation        | Username, quota                      |
+| `edit_mailbox`    | Mailbox modification    | Modified fields (never the password) |
+| `delete_mailbox`  | Mailbox deletion        | Username                             |
+| `create_alias`    | Alias creation          | Address → destinations               |
+| `edit_alias`      | Alias modification      | New destinations                     |
+| `delete_alias`    | Alias deletion          | Address                              |
+| `edit_vacation`   | Vacation modification   | Activation/deactivation              |
+| `create_admin`    | Admin creation          | Username, assigned domains           |
+| `edit_admin`      | Admin modification      | Modified fields                      |
+| `delete_admin`    | Admin deletion          | Username                             |
+| `login_success`   | Successful login        | IP, user-agent                       |
+| `login_failure`   | Login failure           | IP, user-agent, reason               |
+| `password_change` | Password change         | Username (never the password)        |
+| `totp_enable`     | 2FA activation          | Username                             |
+| `totp_disable`    | 2FA deactivation        | Username                             |
+| `create_dkim`     | DKIM key creation       | Domain, selector                     |
+| `toggle_active`   | Activation/deactivation | Entity, old state → new state        |
 
 ## Business rules
 
@@ -104,16 +104,16 @@ configuration.
 
 ## Web routes
 
-| Route | Method | Description |
-|-------|---------|-------------|
-| `/admin/logs` | GET | Log consultation (paginated, filterable) |
-| `/admin/logs/export` | GET | CSV/JSON export |
+| Route                | Method | Description                              |
+|----------------------|--------|------------------------------------------|
+| `/admin/logs`        | GET    | Log consultation (paginated, filterable) |
+| `/admin/logs/export` | GET    | CSV/JSON export                          |
 
 ## API endpoints
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/logs` | List logs (paginated, filterable) |
-| `GET` | `/api/v1/domains/{domain}/logs` | Logs of a domain |
+| Method | Route                           | Description                       |
+|--------|---------------------------------|-----------------------------------|
+| `GET`  | `/api/v1/logs`                  | List logs (paginated, filterable) |
+| `GET`  | `/api/v1/domains/{domain}/logs` | Logs of a domain                  |
 
 ---

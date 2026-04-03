@@ -10,14 +10,14 @@ The project supports three backends (PostgreSQL, MySQL, SQLite). Migrations and 
 
 ## 1. Naming Conventions
 
-| Element           | Convention                                    | Example                                        |
-|-------------------|-----------------------------------------------|------------------------------------------------|
-| Table             | snake_case, singular                         | `domain`, `mailbox`, `alias`                   |
-| Column            | snake_case                                    | `created_at`, `domain_name`                    |
-| Primary Key       | Descriptive name or `id`                      | `domain` (natural PK), `id` (synthetic PK)    |
-| Foreign Key       | `{referenced_table}_{column}` or logical name | `domain` (FK to domain.domain)                 |
-| Index             | `idx_{table}_{columns}`                       | `idx_mailbox_domain`                           |
-| Unique Constraint | `uq_{table}_{columns}`                        | `uq_alias_domain_alias`                        |
+| Element           | Convention                                    | Example                                    |
+|-------------------|-----------------------------------------------|--------------------------------------------|
+| Table             | snake_case, singular                          | `domain`, `mailbox`, `alias`               |
+| Column            | snake_case                                    | `created_at`, `domain_name`                |
+| Primary Key       | Descriptive name or `id`                      | `domain` (natural PK), `id` (synthetic PK) |
+| Foreign Key       | `{referenced_table}_{column}` or logical name | `domain` (FK to domain.domain)             |
+| Index             | `idx_{table}_{columns}`                       | `idx_mailbox_domain`                       |
+| Unique Constraint | `uq_{table}_{columns}`                        | `uq_alias_domain_alias`                    |
 
 ### Table Prefix
 

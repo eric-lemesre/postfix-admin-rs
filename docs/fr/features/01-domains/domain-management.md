@@ -10,20 +10,20 @@ paramètres de transport.
 
 ## Entité : `Domain`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `domain` | `VARCHAR(255)` | PK | Nom de domaine (ex: `example.com`) |
-| `description` | `VARCHAR(255)` | NOT NULL, default `''` | Description libre |
-| `aliases` | `INTEGER` | NOT NULL, default `0` | Limite d'alias (0 = illimité) |
-| `mailboxes` | `INTEGER` | NOT NULL, default `0` | Limite de boîtes mail (0 = illimité) |
-| `maxquota` | `BIGINT` | NOT NULL, default `0` | Quota max par boîte en Mo (0 = illimité) |
-| `quota` | `BIGINT` | NOT NULL, default `0` | Quota total du domaine en Mo (0 = illimité) |
-| `transport` | `VARCHAR(255)` | NULLABLE | Transport Postfix (ex: `virtual:`, `lmtp:unix:...`) |
-| `backupmx` | `BOOLEAN` | NOT NULL, default `false` | Le serveur est MX de backup pour ce domaine |
-| `password_expiry` | `INTEGER` | NOT NULL, default `0` | Expiration mots de passe en jours (0 = désactivé) |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Domaine actif/inactif |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ             | Type           | Contrainte                | Description                                         |
+|-------------------|----------------|---------------------------|-----------------------------------------------------|
+| `domain`          | `VARCHAR(255)` | PK                        | Nom de domaine (ex: `example.com`)                  |
+| `description`     | `VARCHAR(255)` | NOT NULL, default `''`    | Description libre                                   |
+| `aliases`         | `INTEGER`      | NOT NULL, default `0`     | Limite d'alias (0 = illimité)                       |
+| `mailboxes`       | `INTEGER`      | NOT NULL, default `0`     | Limite de boîtes mail (0 = illimité)                |
+| `maxquota`        | `BIGINT`       | NOT NULL, default `0`     | Quota max par boîte en Mo (0 = illimité)            |
+| `quota`           | `BIGINT`       | NOT NULL, default `0`     | Quota total du domaine en Mo (0 = illimité)         |
+| `transport`       | `VARCHAR(255)` | NULLABLE                  | Transport Postfix (ex: `virtual:`, `lmtp:unix:...`) |
+| `backupmx`        | `BOOLEAN`      | NOT NULL, default `false` | Le serveur est MX de backup pour ce domaine         |
+| `password_expiry` | `INTEGER`      | NOT NULL, default `0`     | Expiration mots de passe en jours (0 = désactivé)   |
+| `active`          | `BOOLEAN`      | NOT NULL, default `true`  | Domaine actif/inactif                               |
+| `created_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création                                    |
+| `updated_at`      | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Dernière modification                               |
 
 ### Index
 
@@ -95,23 +95,23 @@ paramètres de transport.
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains` | Lister les domaines (paginé, filtrable) |
-| `GET` | `/api/v1/domains/{domain}` | Détails d'un domaine |
-| `POST` | `/api/v1/domains` | Créer un domaine |
-| `PUT` | `/api/v1/domains/{domain}` | Modifier un domaine |
-| `DELETE` | `/api/v1/domains/{domain}` | Supprimer un domaine |
-| `PATCH` | `/api/v1/domains/{domain}/active` | Activer/désactiver |
+| Méthode  | Route                             | Description                             |
+|----------|-----------------------------------|-----------------------------------------|
+| `GET`    | `/api/v1/domains`                 | Lister les domaines (paginé, filtrable) |
+| `GET`    | `/api/v1/domains/{domain}`        | Détails d'un domaine                    |
+| `POST`   | `/api/v1/domains`                 | Créer un domaine                        |
+| `PUT`    | `/api/v1/domains/{domain}`        | Modifier un domaine                     |
+| `DELETE` | `/api/v1/domains/{domain}`        | Supprimer un domaine                    |
+| `PATCH`  | `/api/v1/domains/{domain}/active` | Activer/désactiver                      |
 
 ## Routes Web
 
-| Route | Vue | Description |
-|-------|-----|-------------|
-| `GET /domains` | `domain-list.html` | Liste des domaines |
-| `GET /domains/new` | `domain-form.html` | Formulaire de création |
-| `GET /domains/{domain}/edit` | `domain-form.html` | Formulaire d'édition |
-| `POST /domains` | — | Traitement création |
-| `POST /domains/{domain}` | — | Traitement modification |
-| `POST /domains/{domain}/delete` | — | Traitement suppression |
-| `POST /domains/{domain}/toggle` | — | HTMX toggle actif |
+| Route                           | Vue                | Description             |
+|---------------------------------|--------------------|-------------------------|
+| `GET /domains`                  | `domain-list.html` | Liste des domaines      |
+| `GET /domains/new`              | `domain-form.html` | Formulaire de création  |
+| `GET /domains/{domain}/edit`    | `domain-form.html` | Formulaire d'édition    |
+| `POST /domains`                 | —                  | Traitement création     |
+| `POST /domains/{domain}`        | —                  | Traitement modification |
+| `POST /domains/{domain}/delete` | —                  | Traitement suppression  |
+| `POST /domains/{domain}/toggle` | —                  | HTMX toggle actif       |

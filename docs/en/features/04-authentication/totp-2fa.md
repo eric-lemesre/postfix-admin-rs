@@ -5,16 +5,16 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`TotpExceptionAddress`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateTotpException`, `TotpExceptionResponse`) | `postfix-admin-core` | Done | M1 |
-| TOTP secret generation | `postfix-admin-auth` | Pending | M4 |
-| TOTP verification | `postfix-admin-auth` | Pending | M4 |
-| QR code generation | `postfix-admin-auth` | Pending | M4 |
-| Recovery codes | `postfix-admin-auth` | Pending | M4 |
-| IP exceptions | `postfix-admin-auth` | Pending | M4 |
-| Web UI setup page | `postfix-admin-web` | Pending | M5 |
+| Component                                             | Crate                | Status  | Milestone |
+|-------------------------------------------------------|----------------------|---------|-----------|
+| Model (`TotpExceptionAddress`)                        | `postfix-admin-core` | Done    | M1        |
+| DTOs (`CreateTotpException`, `TotpExceptionResponse`) | `postfix-admin-core` | Done    | M1        |
+| TOTP secret generation                                | `postfix-admin-auth` | Pending | M4        |
+| TOTP verification                                     | `postfix-admin-auth` | Pending | M4        |
+| QR code generation                                    | `postfix-admin-auth` | Pending | M4        |
+| Recovery codes                                        | `postfix-admin-auth` | Pending | M4        |
+| IP exceptions                                         | `postfix-admin-auth` | Pending | M4        |
+| Web UI setup page                                     | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -24,21 +24,21 @@ applications (Google Authenticator, Authy, FreeOTP, etc.).
 
 ## TOTP Parameters
 
-| Parameter | Value |
-|-----------|-------|
-| Algorithm | SHA-1 (maximum compatibility with apps) |
-| Period | 30 seconds |
-| Digits | 6 |
-| Tolerance window | 1 period before/after (±30s) |
+| Parameter        | Value                                   |
+|------------------|-----------------------------------------|
+| Algorithm        | SHA-1 (maximum compatibility with apps) |
+| Period           | 30 seconds                              |
+| Digits           | 6                                       |
+| Tolerance window | 1 period before/after (±30s)            |
 
 ## Entity: `TotpExceptionAddress`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `id` | `SERIAL` | PK | Auto-incremented identifier |
-| `ip` | `VARCHAR(46)` | NOT NULL | IP address (v4 or v6) |
-| `username` | `VARCHAR(255)` | NULLABLE | Admin/user (NULL = global) |
-| `description` | `VARCHAR(255)` | NULLABLE | Exception description |
+| Field         | Type           | Constraint | Description                 |
+|---------------|----------------|------------|-----------------------------|
+| `id`          | `SERIAL`       | PK         | Auto-incremented identifier |
+| `ip`          | `VARCHAR(46)`  | NOT NULL   | IP address (v4 or v6)       |
+| `username`    | `VARCHAR(255)` | NULLABLE   | Admin/user (NULL = global)  |
+| `description` | `VARCHAR(255)` | NULLABLE   | Exception description       |
 
 Unique constraint: `(ip, username)`
 

@@ -5,12 +5,12 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Protobuf definitions | `postfix-admin-api` | Pending | M7 |
-| tonic service implementations | `postfix-admin-api` | Pending | M7 |
-| Authentication interceptor | `postfix-admin-auth` | Pending | M7 |
-| Integration tests | `postfix-admin-api` | Pending | M7 |
+| Component                     | Crate                | Status  | Milestone |
+|-------------------------------|----------------------|---------|-----------|
+| Protobuf definitions          | `postfix-admin-api`  | Pending | M7        |
+| tonic service implementations | `postfix-admin-api`  | Pending | M7        |
+| Authentication interceptor    | `postfix-admin-auth` | Pending | M7        |
+| Integration tests             | `postfix-admin-api`  | Pending | M7        |
 
 ## Summary
 
@@ -74,14 +74,14 @@ service AdminService {
 
 ## gRPC Advantages
 
-| Aspect | REST | gRPC |
-|--------|------|------|
-| Serialization | JSON (text) | Protobuf (binary) |
-| Transport | HTTP/1.1 or 2 | HTTP/2 mandatory |
-| Streaming | Not native | Bidirectional |
-| Typing | OpenAPI schema | Strict proto |
-| Performance | Good | Excellent |
-| Client tooling | curl, browser | grpcurl, generated code |
+| Aspect         | REST           | gRPC                    |
+|----------------|----------------|-------------------------|
+| Serialization  | JSON (text)    | Protobuf (binary)       |
+| Transport      | HTTP/1.1 or 2  | HTTP/2 mandatory        |
+| Streaming      | Not native     | Bidirectional           |
+| Typing         | OpenAPI schema | Strict proto            |
+| Performance    | Good           | Excellent               |
+| Client tooling | curl, browser  | grpcurl, generated code |
 
 ## Priority use cases
 

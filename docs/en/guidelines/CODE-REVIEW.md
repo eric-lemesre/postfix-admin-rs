@@ -87,14 +87,14 @@ Ensure the quality, security and maintainability of the code through systematic 
 
 ## 3. Comment Levels
 
-| Prefix | Meaning | Required Action |
-|--------|---------|----------------|
-| `blocker:` | Critical issue (security, bug, data loss) | Must be fixed before merge |
-| `issue:` | Significant problem (logic, performance) | Should be fixed |
-| `nit:` | Minor detail (style, naming) | Optional, at author's discretion |
-| `question:` | Request for clarification | Response expected |
-| `suggestion:` | Improvement proposal | To discuss |
-| `praise:` | Positive point to highlight | Encouragement |
+| Prefix        | Meaning                                   | Required Action                  |
+|---------------|-------------------------------------------|----------------------------------|
+| `blocker:`    | Critical issue (security, bug, data loss) | Must be fixed before merge       |
+| `issue:`      | Significant problem (logic, performance)  | Should be fixed                  |
+| `nit:`        | Minor detail (style, naming)              | Optional, at author's discretion |
+| `question:`   | Request for clarification                 | Response expected                |
+| `suggestion:` | Improvement proposal                      | To discuss                       |
+| `praise:`     | Positive point to highlight               | Encouragement                    |
 
 ### Examples
 

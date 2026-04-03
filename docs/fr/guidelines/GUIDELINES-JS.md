@@ -167,16 +167,16 @@ Ordre des attributs :
 
 ### Quand utiliser Alpine.js
 
-| Cas d'usage | HTMX | Alpine.js |
-|-------------|------|-----------|
-| Charger des donnees serveur | Oui | Non |
-| Dropdown/menu | Non | Oui |
-| Modal de confirmation | Non | Oui |
-| Toggle de visibilite locale | Non | Oui |
-| Validation cote client | Non | Oui |
-| Onglets locaux | Non | Oui |
-| Soumission de formulaire | Oui | Non |
-| Mise a jour de liste | Oui | Non |
+| Cas d'usage                 | HTMX | Alpine.js |
+|-----------------------------|------|-----------|
+| Charger des donnees serveur | Oui  | Non       |
+| Dropdown/menu               | Non  | Oui       |
+| Modal de confirmation       | Non  | Oui       |
+| Toggle de visibilite locale | Non  | Oui       |
+| Validation cote client      | Non  | Oui       |
+| Onglets locaux              | Non  | Oui       |
+| Soumission de formulaire    | Oui  | Non       |
+| Mise a jour de liste        | Oui  | Non       |
 
 ### Regles Alpine.js
 

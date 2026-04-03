@@ -5,17 +5,17 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`AliasDomain`) | `postfix-admin-core` | Done | M1 |
-| DTOs (`CreateAliasDomain`, `AliasDomainResponse`) | `postfix-admin-core` | Done | M1 |
-| Repository trait (`AliasDomainRepository`) | `postfix-admin-core` | Done | M1 |
-| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
-| MySQL repository | `postfix-admin-db` | Pending | M2 |
-| REST API endpoints | `postfix-admin-api` | Pending | M6 |
-| Web UI pages | `postfix-admin-web` | Pending | M5 |
-| CLI commands | `postfix-admin-cli` | Pending | M8 |
-| Routing logic | `postfix-admin-server` | Pending | M13 |
+| Component                                         | Crate                  | Status  | Milestone |
+|---------------------------------------------------|------------------------|---------|-----------|
+| Model (`AliasDomain`)                             | `postfix-admin-core`   | Done    | M1        |
+| DTOs (`CreateAliasDomain`, `AliasDomainResponse`) | `postfix-admin-core`   | Done    | M1        |
+| Repository trait (`AliasDomainRepository`)        | `postfix-admin-core`   | Done    | M1        |
+| PostgreSQL repository                             | `postfix-admin-db`     | Pending | M2        |
+| MySQL repository                                  | `postfix-admin-db`     | Pending | M2        |
+| REST API endpoints                                | `postfix-admin-api`    | Pending | M6        |
+| Web UI pages                                      | `postfix-admin-web`    | Pending | M5        |
+| CLI commands                                      | `postfix-admin-cli`    | Pending | M8        |
+| Routing logic                                     | `postfix-admin-server` | Pending | M13       |
 
 ## Summary
 
@@ -25,13 +25,13 @@ is delivered to `user@example.com`.
 
 ## Entity: `AliasDomain`
 
-| Field | Type | Constraint | Description |
-|-------|------|-----------|-------------|
-| `alias_domain` | `VARCHAR(255)` | PK | Source domain (alias) |
-| `target_domain` | `VARCHAR(255)` | FK → `domain.domain` | Target domain |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Active/inactive |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Creation date |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Last update |
+| Field           | Type           | Constraint                | Description           |
+|-----------------|----------------|---------------------------|-----------------------|
+| `alias_domain`  | `VARCHAR(255)` | PK                        | Source domain (alias) |
+| `target_domain` | `VARCHAR(255)` | FK → `domain.domain`      | Target domain         |
+| `active`        | `BOOLEAN`      | NOT NULL, default `true`  | Active/inactive       |
+| `created_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Creation date         |
+| `updated_at`    | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Last update           |
 
 ### Index
 
@@ -73,11 +73,11 @@ is delivered to `user@example.com`.
 
 ## API Endpoints
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| `GET` | `/api/v1/alias-domains` | List alias domains |
-| `POST` | `/api/v1/alias-domains` | Create an alias domain |
-| `DELETE` | `/api/v1/alias-domains/{alias_domain}` | Delete |
-| `PATCH` | `/api/v1/alias-domains/{alias_domain}/active` | Activate/deactivate |
+| Method   | Route                                         | Description            |
+|----------|-----------------------------------------------|------------------------|
+| `GET`    | `/api/v1/alias-domains`                       | List alias domains     |
+| `POST`   | `/api/v1/alias-domains`                       | Create an alias domain |
+| `DELETE` | `/api/v1/alias-domains/{alias_domain}`        | Delete                 |
+| `PATCH`  | `/api/v1/alias-domains/{alias_domain}/active` | Activate/deactivate    |
 
 ---

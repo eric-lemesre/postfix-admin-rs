@@ -10,14 +10,14 @@ fondamental de routage du courrier virtuel dans Postfix.
 
 ## Entité : `Alias`
 
-| Champ | Type | Contrainte | Description |
-|-------|------|-----------|-------------|
-| `address` | `VARCHAR(255)` | PK | Adresse source (ex: `info@example.com`) |
-| `goto` | `TEXT` | NOT NULL | Destinations séparées par des virgules |
-| `domain` | `VARCHAR(255)` | FK → `domain.domain` | Domaine de l'alias |
-| `active` | `BOOLEAN` | NOT NULL, default `true` | Actif/inactif |
-| `created_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Date de création |
-| `updated_at` | `TIMESTAMPTZ` | NOT NULL, default `now()` | Dernière modification |
+| Champ        | Type           | Contrainte                | Description                             |
+|--------------|----------------|---------------------------|-----------------------------------------|
+| `address`    | `VARCHAR(255)` | PK                        | Adresse source (ex: `info@example.com`) |
+| `goto`       | `TEXT`         | NOT NULL                  | Destinations séparées par des virgules  |
+| `domain`     | `VARCHAR(255)` | FK → `domain.domain`      | Domaine de l'alias                      |
+| `active`     | `BOOLEAN`      | NOT NULL, default `true`  | Actif/inactif                           |
+| `created_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Date de création                        |
+| `updated_at` | `TIMESTAMPTZ`  | NOT NULL, default `now()` | Dernière modification                   |
 
 ### Index
 
@@ -93,14 +93,14 @@ fondamental de routage du courrier virtuel dans Postfix.
 
 ## Endpoints API
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/aliases` | Lister les alias |
-| `GET` | `/api/v1/aliases/{address}` | Détails d'un alias |
-| `POST` | `/api/v1/domains/{domain}/aliases` | Créer un alias |
-| `PUT` | `/api/v1/aliases/{address}` | Modifier un alias |
-| `DELETE` | `/api/v1/aliases/{address}` | Supprimer un alias |
-| `PATCH` | `/api/v1/aliases/{address}/active` | Activer/désactiver |
+| Méthode  | Route                              | Description        |
+|----------|------------------------------------|--------------------|
+| `GET`    | `/api/v1/domains/{domain}/aliases` | Lister les alias   |
+| `GET`    | `/api/v1/aliases/{address}`        | Détails d'un alias |
+| `POST`   | `/api/v1/domains/{domain}/aliases` | Créer un alias     |
+| `PUT`    | `/api/v1/aliases/{address}`        | Modifier un alias  |
+| `DELETE` | `/api/v1/aliases/{address}`        | Supprimer un alias |
+| `PATCH`  | `/api/v1/aliases/{address}/active` | Activer/désactiver |
 
 ## Notes d'intégration Postfix
 

@@ -5,13 +5,13 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Model (`Mailbox` — auth fields) | `postfix-admin-core` | Done | M1 |
-| Password hashing and verification | `postfix-admin-auth` | Pending | M4 |
-| Session management | `postfix-admin-auth` | Pending | M4 |
-| JWT token generation | `postfix-admin-auth` | Pending | M4 |
-| Web UI login page | `postfix-admin-web` | Pending | M5 |
+| Component                         | Crate                | Status  | Milestone |
+|-----------------------------------|----------------------|---------|-----------|
+| Model (`Mailbox` — auth fields)   | `postfix-admin-core` | Done    | M1        |
+| Password hashing and verification | `postfix-admin-auth` | Pending | M4        |
+| Session management                | `postfix-admin-auth` | Pending | M4        |
+| JWT token generation              | `postfix-admin-auth` | Pending | M4        |
+| Web UI login page                 | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
 
@@ -25,31 +25,31 @@ The user logs in with their email address and mail password.
 Verification is done against `mailbox.password`.
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌──────────────┐
-│ User Login   │────▶│ Verification │────▶│  User Dashboard   │
-│ (email/pass) │     │ vs mailbox   │     │                │
-└─────────────┘     └──────────────┘     └──────────────┘
+┌─────────────┐     ┌──────────────┐     ┌────────────────┐
+│ User Login  │────▶│ Verification │────▶│ User Dashboard │
+│ (email/pass)│     │ vs mailbox   │     │                │
+└─────────────┘     └──────────────┘     └────────────────┘
 ```
 
 ## Differences with Admin Authentication
 
-| Aspect | Admin | User |
-|--------|-------|-------------|
-| Table | `admin` | `mailbox` |
-| Identifier | admin username | email address |
-| TOTP 2FA | Supported | Supported (optional) |
-| Session | Same mechanism | Same mechanism |
-| Scope | Multi-domain | Their own mailbox only |
+| Aspect     | Admin          | User                   |
+|------------|----------------|------------------------|
+| Table      | `admin`        | `mailbox`              |
+| Identifier | admin username | email address          |
+| TOTP 2FA   | Supported      | Supported (optional)   |
+| Session    | Same mechanism | Same mechanism         |
+| Scope      | Multi-domain   | Their own mailbox only |
 
 ## Functions Accessible to the User
 
-| Function | Description |
-|----------|-------------|
-| Password Change | Old + new password |
+| Function            | Description                       |
+|---------------------|-----------------------------------|
+| Password Change     | Old + new password                |
 | Vacation Management | Auto-responder activation/editing |
-| Profile | Modify displayed name |
-| TOTP 2FA | Enable/disable 2FA |
-| App Passwords | Manage app passwords |
+| Profile             | Modify displayed name             |
+| TOTP 2FA            | Enable/disable 2FA                |
+| App Passwords       | Manage app passwords              |
 
 ## Business Rules
 
@@ -73,16 +73,16 @@ Verification is done against `mailbox.password`.
 
 ## Web Routes
 
-| Route | Method | Description |
-|-------|---------|-------------|
-| `/user/login` | GET | User login form |
-| `/user/login` | POST | Process login |
-| `/user/logout` | POST | Logout |
-| `/user/dashboard` | GET | User dashboard |
-| `/user/password` | GET/POST | Change password |
-| `/user/vacation` | GET/POST | Manage vacation |
-| `/user/profile` | GET/POST | Edit profile |
-| `/user/totp` | GET/POST | Configure TOTP |
+| Route                 | Method   | Description          |
+|-----------------------|----------|----------------------|
+| `/user/login`         | GET      | User login form      |
+| `/user/login`         | POST     | Process login        |
+| `/user/logout`        | POST     | Logout               |
+| `/user/dashboard`     | GET      | User dashboard       |
+| `/user/password`      | GET/POST | Change password      |
+| `/user/vacation`      | GET/POST | Manage vacation      |
+| `/user/profile`       | GET/POST | Edit profile         |
+| `/user/totp`          | GET/POST | Configure TOTP       |
 | `/user/app-passwords` | GET/POST | Manage app passwords |
 
 ---

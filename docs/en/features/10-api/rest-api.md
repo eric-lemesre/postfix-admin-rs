@@ -5,16 +5,16 @@
 
 ## Implementation Status
 
-| Component | Crate | Status | Milestone |
-|-----------|-------|--------|-----------|
-| Pagination types | `postfix-admin-core` | Done | M1 |
-| Error types (for API responses) | `postfix-admin-core` | Done | M1 |
-| API router setup | `postfix-admin-api` | Pending | M6 |
-| JWT authentication middleware | `postfix-admin-auth` | Pending | M4 |
-| RFC 7807 error handling | `postfix-admin-api` | Pending | M6 |
-| OpenAPI generation (utoipa) | `postfix-admin-api` | Pending | M6 |
-| All CRUD endpoints | `postfix-admin-api` | Pending | M6 |
-| Newman test collections | `tests/newman/` | Pending | M14 |
+| Component                       | Crate                | Status  | Milestone |
+|---------------------------------|----------------------|---------|-----------|
+| Pagination types                | `postfix-admin-core` | Done    | M1        |
+| Error types (for API responses) | `postfix-admin-core` | Done    | M1        |
+| API router setup                | `postfix-admin-api`  | Pending | M6        |
+| JWT authentication middleware   | `postfix-admin-auth` | Pending | M4        |
+| RFC 7807 error handling         | `postfix-admin-api`  | Pending | M6        |
+| OpenAPI generation (utoipa)     | `postfix-admin-api`  | Pending | M6        |
+| All CRUD endpoints              | `postfix-admin-api`  | Pending | M6        |
+| Newman test collections         | `tests/newman/`      | Pending | M14       |
 
 ## Summary
 
@@ -92,19 +92,19 @@ Response: { "token": "eyJ...", "expires_at": "2024-...", "refresh_token": "..." 
 
 ## HTTP Status Codes Used
 
-| Code | Usage |
-|------|-------|
-| `200` | Success (GET, PUT, PATCH) |
-| `201` | Successful creation (POST) |
-| `204` | Successful deletion (DELETE) |
-| `400` | Malformed request |
-| `401` | Unauthenticated |
-| `403` | Forbidden (insufficient permissions) |
-| `404` | Resource not found |
+| Code  | Usage                                      |
+|-------|--------------------------------------------|
+| `200` | Success (GET, PUT, PATCH)                  |
+| `201` | Successful creation (POST)                 |
+| `204` | Successful deletion (DELETE)               |
+| `400` | Malformed request                          |
+| `401` | Unauthenticated                            |
+| `403` | Forbidden (insufficient permissions)       |
+| `404` | Resource not found                         |
 | `409` | Conflict (duplicate, constraint violation) |
-| `422` | Validation error |
-| `429` | Rate limit exceeded |
-| `500` | Server error |
+| `422` | Validation error                           |
+| `429` | Rate limit exceeded                        |
+| `500` | Server error                               |
 
 ## Pagination
 
@@ -115,14 +115,14 @@ GET /api/v1/domains?page=2&per_page=20&sort=domain&order=asc
 
 ### Common Parameters
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `page` | integer | 1 | Current page |
-| `per_page` | integer | 20 | Items per page (max: 100) |
-| `sort` | string | varies | Sort field |
-| `order` | string | `asc` | Order (`asc`, `desc`) |
-| `search` | string | — | Text search |
-| `active` | boolean | — | Filter by active status |
+| Parameter  | Type    | Default | Description               |
+|------------|---------|---------|---------------------------|
+| `page`     | integer | 1       | Current page              |
+| `per_page` | integer | 20      | Items per page (max: 100) |
+| `sort`     | string  | varies  | Sort field                |
+| `order`    | string  | `asc`   | Order (`asc`, `desc`)     |
+| `search`   | string  | —       | Text search               |
+| `active`   | boolean | —       | Filter by active status   |
 
 ### Response Headers
 ```
@@ -140,56 +140,56 @@ Link: </api/v1/domains?page=3&per_page=20>; rel="next",
 ## Endpoint Catalog
 
 ### Authentication
-| Method | Route | Description |
-|---------|-------|-------------|
-| `POST` | `/api/v1/auth/login` | Obtain JWT |
-| `POST` | `/api/v1/auth/refresh` | Refresh JWT |
-| `POST` | `/api/v1/auth/logout` | Invalidate token |
+| Method | Route                  | Description      |
+|--------|------------------------|------------------|
+| `POST` | `/api/v1/auth/login`   | Obtain JWT       |
+| `POST` | `/api/v1/auth/refresh` | Refresh JWT      |
+| `POST` | `/api/v1/auth/logout`  | Invalidate token |
 
 ### Domains
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains` | List |
-| `GET` | `/api/v1/domains/{domain}` | Details |
-| `POST` | `/api/v1/domains` | Create |
-| `PUT` | `/api/v1/domains/{domain}` | Modify |
-| `DELETE` | `/api/v1/domains/{domain}` | Delete |
-| `PATCH` | `/api/v1/domains/{domain}/active` | Toggle active |
+| Method   | Route                             | Description   |
+|----------|-----------------------------------|---------------|
+| `GET`    | `/api/v1/domains`                 | List          |
+| `GET`    | `/api/v1/domains/{domain}`        | Details       |
+| `POST`   | `/api/v1/domains`                 | Create        |
+| `PUT`    | `/api/v1/domains/{domain}`        | Modify        |
+| `DELETE` | `/api/v1/domains/{domain}`        | Delete        |
+| `PATCH`  | `/api/v1/domains/{domain}/active` | Toggle active |
 
 ### Alias Domains
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/alias-domains` | List |
-| `POST` | `/api/v1/alias-domains` | Create |
-| `DELETE` | `/api/v1/alias-domains/{alias}` | Delete |
+| Method   | Route                           | Description |
+|----------|---------------------------------|-------------|
+| `GET`    | `/api/v1/alias-domains`         | List        |
+| `POST`   | `/api/v1/alias-domains`         | Create      |
+| `DELETE` | `/api/v1/alias-domains/{alias}` | Delete      |
 
 ### Mailboxes
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/mailboxes` | List by domain |
-| `GET` | `/api/v1/mailboxes/{username}` | Details |
-| `POST` | `/api/v1/domains/{domain}/mailboxes` | Create |
-| `PUT` | `/api/v1/mailboxes/{username}` | Modify |
-| `DELETE` | `/api/v1/mailboxes/{username}` | Delete |
-| `POST` | `/api/v1/mailboxes/{username}/password` | Change password |
+| Method   | Route                                   | Description     |
+|----------|-----------------------------------------|-----------------|
+| `GET`    | `/api/v1/domains/{domain}/mailboxes`    | List by domain  |
+| `GET`    | `/api/v1/mailboxes/{username}`          | Details         |
+| `POST`   | `/api/v1/domains/{domain}/mailboxes`    | Create          |
+| `PUT`    | `/api/v1/mailboxes/{username}`          | Modify          |
+| `DELETE` | `/api/v1/mailboxes/{username}`          | Delete          |
+| `POST`   | `/api/v1/mailboxes/{username}/password` | Change password |
 
 ### Aliases
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/domains/{domain}/aliases` | List by domain |
-| `GET` | `/api/v1/aliases/{address}` | Details |
-| `POST` | `/api/v1/domains/{domain}/aliases` | Create |
-| `PUT` | `/api/v1/aliases/{address}` | Modify |
-| `DELETE` | `/api/v1/aliases/{address}` | Delete |
+| Method   | Route                              | Description    |
+|----------|------------------------------------|----------------|
+| `GET`    | `/api/v1/domains/{domain}/aliases` | List by domain |
+| `GET`    | `/api/v1/aliases/{address}`        | Details        |
+| `POST`   | `/api/v1/domains/{domain}/aliases` | Create         |
+| `PUT`    | `/api/v1/aliases/{address}`        | Modify         |
+| `DELETE` | `/api/v1/aliases/{address}`        | Delete         |
 
 ### Admins
-| Method | Route | Description |
-|---------|-------|-------------|
-| `GET` | `/api/v1/admins` | List |
-| `GET` | `/api/v1/admins/{username}` | Details |
-| `POST` | `/api/v1/admins` | Create |
-| `PUT` | `/api/v1/admins/{username}` | Modify |
-| `DELETE` | `/api/v1/admins/{username}` | Delete |
+| Method   | Route                       | Description |
+|----------|-----------------------------|-------------|
+| `GET`    | `/api/v1/admins`            | List        |
+| `GET`    | `/api/v1/admins/{username}` | Details     |
+| `POST`   | `/api/v1/admins`            | Create      |
+| `PUT`    | `/api/v1/admins/{username}` | Modify      |
+| `DELETE` | `/api/v1/admins/{username}` | Delete      |
 
 ### Vacation, Fetchmail, DKIM, Logs
 See respective specifications for detailed endpoints.

@@ -86,15 +86,15 @@ postfix-admin-rs completion <SHELL>              # Génération auto-complétion
 
 ## Options globales
 
-| Option | Court | Description |
-|--------|-------|-------------|
-| `--config` | `-c` | Chemin du fichier de configuration |
-| `--database-url` | | URL de connexion BDD (override config) |
-| `--format` | `-f` | Format de sortie : `table` (défaut), `json`, `csv` |
-| `--quiet` | `-q` | Sortie minimale |
-| `--verbose` | `-v` | Sortie détaillée (-vv pour debug) |
-| `--yes` | `-y` | Confirmer automatiquement les actions destructives |
-| `--color` | | Forcer/désactiver les couleurs (`auto`, `always`, `never`) |
+| Option           | Court | Description                                                |
+|------------------|-------|------------------------------------------------------------|
+| `--config`       | `-c`  | Chemin du fichier de configuration                         |
+| `--database-url` |       | URL de connexion BDD (override config)                     |
+| `--format`       | `-f`  | Format de sortie : `table` (défaut), `json`, `csv`         |
+| `--quiet`        | `-q`  | Sortie minimale                                            |
+| `--verbose`      | `-v`  | Sortie détaillée (-vv pour debug)                          |
+| `--yes`          | `-y`  | Confirmer automatiquement les actions destructives         |
+| `--color`        |       | Forcer/désactiver les couleurs (`auto`, `always`, `never`) |
 
 ## Format de sortie
 
@@ -139,12 +139,12 @@ par l'API (mode direct).
 
 ## Codes de sortie
 
-| Code | Signification |
-|------|--------------|
-| `0` | Succès |
-| `1` | Erreur générale |
-| `2` | Erreur de configuration |
-| `3` | Erreur de connexion BDD |
-| `4` | Erreur de validation |
-| `5` | Ressource non trouvée |
+| Code | Signification                    |
+|------|----------------------------------|
+| `0`  | Succès                           |
+| `1`  | Erreur générale                  |
+| `2`  | Erreur de configuration          |
+| `3`  | Erreur de connexion BDD          |
+| `4`  | Erreur de validation             |
+| `5`  | Ressource non trouvée            |
 | `10` | Action annulée par l'utilisateur |
