@@ -1,0 +1,25 @@
+# postfix-admin-rs — test profile overrides
+
+[server]
+workers = 1
+port = 0                            # OS-assigned port
+
+[database]
+url = "postgresql://postfix_admin:password@localhost:5432/postfix_admin_test"
+
+[auth]
+allow_cleartext = true
+
+[auth.argon2]
+memory_cost = 4096                  # Faster hashing for tests
+time_cost = 1
+
+[password_policy]
+min_length = 4
+
+[logging]
+level = "debug"
+format = "pretty"
+
+[server.tls]
+enabled = false

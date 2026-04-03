@@ -1,0 +1,12 @@
+# postfix-admin-rs — pre-production profile overrides
+# Production-like validation rules apply to this profile.
+
+[auth]
+allow_cleartext = false
+
+[logging]
+level = "info"
+format = "json"
+
+[server.tls]
+enabled = true

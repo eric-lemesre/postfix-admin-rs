@@ -1,12 +1,12 @@
-# postfix-admin-rs configuration
-# Copy this file to config.toml and adjust values.
-# Resolution priority: CLI args > env vars (PAR_*) > config.local.toml > config.toml > defaults
+# postfix-admin-rs configuration example
+# See config/ directory for profile-based configuration.
+# Resolution priority: CLI args > PAR_* env vars > secrets.toml > local.toml > {profile}.toml > default.toml > compiled defaults
 
 # --------------------------------------------------------------------------
 # Server
 # --------------------------------------------------------------------------
 [server]
-bind_address = "0.0.0.0"
+bind_address = "127.0.0.1"
 port = 8080
 workers = 0                         # 0 = auto-detect (number of CPUs)
 base_url = "https://mail.example.com"
@@ -22,7 +22,7 @@ key_path = "/etc/ssl/private/mail.key"
 # --------------------------------------------------------------------------
 [database]
 # Supported: postgresql://, mysql://
-url = "postgresql://postfix:password@localhost:5432/postfix"
+url = "postgresql://postfix_admin:password@localhost:5432/postfix_admin"
 max_connections = 10
 min_connections = 2
 connect_timeout_seconds = 5

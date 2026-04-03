@@ -1,0 +1,12 @@
+# postfix-admin-rs — production profile overrides
+# Strict validation rules apply. Secrets must be provided externally.
+
+[auth]
+allow_cleartext = false
+
+[logging]
+level = "info"
+format = "json"
+
+[server.tls]
+enabled = true

@@ -1,0 +1,21 @@
+[Unit]
+Description=PostfixAdmin RS - Mail Administration Server
+After=network-online.target postgresql.service mysql.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=postfix-admin-rs
+Group=postfix-admin-rs
+ExecStart=/usr/bin/postfix-admin-rs-server
+EnvironmentFile=-/etc/postfix-admin-rs/secrets.env
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/postfix-admin-rs
+ReadOnlyPaths=/etc/postfix-admin-rs
+
+[Install]
+WantedBy=multi-user.target

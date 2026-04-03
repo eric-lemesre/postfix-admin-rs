@@ -1,5 +1,7 @@
 use thiserror::Error;
 
+use crate::config::ConfigError;
+
 #[derive(Debug, Error)]
 pub enum CoreError {
     #[error("validation error: {0}")]
@@ -7,6 +9,9 @@ pub enum CoreError {
 
     #[error("domain error: {0}")]
     Domain(#[from] DomainError),
+
+    #[error("configuration error: {0}")]
+    Config(#[from] ConfigError),
 
     #[error("not found: {entity} '{id}'")]
     NotFound { entity: &'static str, id: String },
@@ -114,5 +119,12 @@ mod tests {
     fn repository_error_display_shows_message() {
         let err = CoreError::repository("connection failed");
         assert_eq!(err.to_string(), "repository error: connection failed");
+    }
+
+    #[test]
+    fn config_error_converts_to_core_error() {
+        let cfg_err = ConfigError::validation("database.url", "must not be empty");
+        let core_err: CoreError = cfg_err.into();
+        assert!(matches!(core_err, CoreError::Config(_)));
     }
 }

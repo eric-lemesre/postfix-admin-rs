@@ -1,0 +1,99 @@
+# postfix-admin-rs — deployed configuration
+# Place this file at /etc/postfix-admin-rs/config.toml
+# Secrets go in /etc/postfix-admin-rs/secrets.toml (mode 0600)
+
+[server]
+bind_address = "127.0.0.1"
+port = 8080
+workers = 0
+base_url = "https://mail.example.com"
+
+[server.tls]
+enabled = true
+cert_path = "/etc/ssl/certs/mail.pem"
+key_path = "/etc/ssl/private/mail.key"
+
+[database]
+# url is in secrets.toml
+max_connections = 10
+min_connections = 2
+connect_timeout_seconds = 5
+idle_timeout_seconds = 300
+table_prefix = ""
+
+[grpc]
+enabled = false
+bind_address = "0.0.0.0"
+port = 50051
+
+[auth]
+session_lifetime = 3600
+max_login_attempts = 5
+lockout_duration = 900
+password_scheme = "argon2id"
+allow_cleartext = false
+
+[auth.argon2]
+memory_cost = 19456
+time_cost = 2
+parallelism = 1
+
+[auth.jwt]
+access_token_lifetime = 900
+refresh_token_lifetime = 604800
+
+[password_policy]
+min_length = 8
+max_length = 256
+require_uppercase = true
+require_lowercase = true
+require_digit = true
+require_special = false
+
+[mail]
+smtp_host = "localhost"
+smtp_port = 25
+smtp_tls = false
+from_address = "postmaster@example.com"
+from_name = "PostfixAdmin"
+
+[vacation]
+enabled = true
+domain = "autoreply.example.com"
+
+[fetchmail]
+enabled = true
+min_poll_interval = 5
+
+[dkim]
+enabled = true
+default_key_size = 2048
+
+[logging]
+level = "info"
+format = "json"
+audit_retention_days = 365
+syslog_enabled = false
+syslog_facility = "mail"
+
+[ui]
+page_size = 20
+default_language = "en"
+available_languages = ["en", "fr"]
+default_theme = "auto"
+site_name = "PostfixAdmin"
+
+[domain_defaults]
+aliases = 0
+mailboxes = 0
+maxquota = 0
+quota = 0
+transport = "virtual:"
+backupmx = false
+
+[security]
+dns_check_enabled = true
+local_alias_only = false
+csp_enabled = true
+hsts_enabled = true
+hsts_max_age = 31536000

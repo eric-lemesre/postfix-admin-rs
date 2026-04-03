@@ -104,12 +104,19 @@
 ### M3: Configuration system `v0.4.0` [M]
 > Specs: [SPEC-13.1](docs/en/features/13-configuration/configuration.md)
 
-- [ ] Config struct definitions matching `config.toml` structure
-- [ ] config-rs integration (TOML file + env vars + CLI overrides)
-- [ ] Resolution priority: CLI > env > config.local.toml > config.toml > defaults
-- [ ] Startup validation (database URL, secret keys, TLS paths, etc.)
-- [ ] Auto-generation of `secret_key` and `master_key` on first launch
-- [ ] Unit tests for config loading and validation
+- [x] Config struct definitions matching `config.toml` structure
+- [x] config-rs integration (TOML file + env vars + CLI overrides)
+- [x] Resolution priority: CLI > env > secrets.toml > local.toml > {profile}.toml > default.toml > defaults
+- [x] Profile system (dev, test, prep, prod) with contextual validation
+- [x] Operating mode detection (development `./config/` vs deployed `/etc/postfix-admin-rs/`)
+- [x] Startup validation (database URL, secret keys, password schemes, log levels)
+- [x] Auto-generation of `secret_key` and `master_key` in dev/test mode
+- [x] `SecretString` newtype (zeroize, masked debug, no serialize)
+- [x] Secrets file separation (`secrets.toml`, `.gitignore`)
+- [x] Unit tests for all config modules
+- [x] Integration tests (`config_loading.rs`) with tempfile
+- [x] Deployment templates (`dist/config.toml`, `dist/secrets.toml`, `dist/postfix-admin-rs.service`)
+- [x] Wire `AppConfig::load()` into server `main.rs`
 
 ---
 
@@ -361,6 +368,7 @@
 
 ## Out of scope for v1.0 (deferred)
 
+- [ ] Packaging (deb, rpm, Docker) — separate milestone
 - [ ] SQLite backend support (v1.1)
 - [ ] Automated migration tool from PostfixAdmin PHP (v1.1)
 - [ ] LDAP authentication backend (v1.2)

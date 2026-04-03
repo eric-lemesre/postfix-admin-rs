@@ -1,41 +1,91 @@
 > **Language:** [English](../en/features/13-configuration/configuration.md) | Francais
 
-# SPEC-13.1 — Système de configuration
+# SPEC-13.1 — Systeme de configuration
 
-## Résumé
+## Statut d'implementation
 
-Configuration centralisée en TOML avec support multi-sources (fichier, variables
-d'environnement, arguments CLI). Basé sur la crate `config-rs`.
+| Composant                                  | Crate                | Statut    | Milestone |
+|--------------------------------------------|----------------------|-----------|-----------|
+| Definitions des structs de config          | `postfix-admin-core` | Fait      | M3        |
+| Integration config-rs                      | `postfix-admin-core` | Fait      | M3        |
+| Priorite de resolution (CLI > env > file)  | `postfix-admin-core` | Fait      | M3        |
+| Validation au demarrage                    | `postfix-admin-core` | Fait      | M3        |
+| Auto-generation des secrets                | `postfix-admin-core` | Fait      | M3        |
+| Systeme de profils (dev/test/prep/prod)    | `postfix-admin-core` | Fait      | M3        |
+| Detection du mode de fonctionnement        | `postfix-admin-core` | Fait      | M3        |
+| Separation du fichier de secrets           | `postfix-admin-core` | Fait      | M3        |
 
-## Fichier de configuration principal
+## Resume
 
-Chemin par défaut : `/etc/postfix-admin-rs/config.toml`
+Configuration centralisee en TOML avec support multi-sources (fichier, variables
+d'environnement, arguments CLI). Base sur la crate `config-rs`.
 
-Override : `--config /path/to/config.toml` ou `PAR_CONFIG=/path/to/config.toml`
+Deux modes de fonctionnement :
+- **Developpement** : charge depuis le repertoire `./config/`
+- **Deploye** : charge depuis le repertoire `/etc/postfix-admin-rs/`
 
-## Priorité de résolution
+Quatre profils : `dev`, `test`, `prep`, `prod`.
+
+## Fichiers de configuration
+
+### Mode developpement (`./config/` existe)
 
 ```
-1. Arguments CLI (--database-url, etc.)        ← Plus haute priorité
-2. Variables d'environnement (PAR_*)
-3. Fichier config.local.toml (overrides locaux)
-4. Fichier config.toml (configuration principale)
-5. Valeurs par défaut compilées                ← Plus basse priorité
+config/
+├── default.toml     # Defauts partages (commite)
+├── dev.toml         # Profil developpement (commite)
+├── test.toml        # Profil test (commite)
+├── prep.toml        # Profil pre-production (commite)
+├── prod.toml        # Profil production (commite)
+├── local.toml       # Overrides personnels (.gitignore)
+└── secrets.toml     # Secrets dev (.gitignore)
 ```
 
-## Structure complète
+### Mode deploye (`/etc/postfix-admin-rs/` existe)
+
+```
+/etc/postfix-admin-rs/
+├── config.toml        # Configuration principale
+├── config.local.toml  # Overrides locaux
+└── secrets.toml       # Secrets (mode 0600)
+```
+
+## Priorite de resolution
+
+### Mode developpement
+
+```
+1. Arguments CLI (--database-url, etc.)        ← Plus haute priorite
+2. Variables d'environnement PAR_*
+3. config/secrets.toml
+4. config/local.toml
+5. config/{profil}.toml
+6. config/default.toml
+7. Valeurs par defaut compilees                ← Plus basse priorite
+```
+
+De plus, les fichiers `.env` sont charges via `dotenvy` en profils dev/test.
+
+### Mode deploye
+
+```
+1. Arguments CLI                               ← Plus haute priorite
+2. Variables d'environnement PAR_*
+3. /etc/postfix-admin-rs/secrets.toml
+4. /etc/postfix-admin-rs/config.local.toml
+5. /etc/postfix-admin-rs/config.toml
+6. Valeurs par defaut compilees                ← Plus basse priorite
+```
+
+## Structure complete
 
 ```toml
-# ============================================================
-# postfix-admin-rs — Configuration
-# ============================================================
-
 [server]
-bind_address = "0.0.0.0"
+bind_address = "127.0.0.1"
 port = 8080
 workers = 0                    # 0 = auto (nombre de CPUs)
 base_url = "https://mail.example.com"
-secret_key = ""                # Clé de chiffrement (généré au setup si vide)
+secret_key = ""                # Cle de chiffrement (auto-generee en dev/test)
 
 [server.tls]
 enabled = false
@@ -43,16 +93,11 @@ cert_path = "/etc/ssl/certs/mail.pem"
 key_path = "/etc/ssl/private/mail.key"
 
 [database]
-# Formats supportés :
-# PostgreSQL : "postgresql://user:pass@host:5432/dbname"
-# MySQL      : "mysql://user:pass@host:3306/dbname"
-# SQLite     : "sqlite:///path/to/database.db"
-url = "postgresql://postfix:password@localhost:5432/postfix"
+url = "postgresql://postfix_admin:password@localhost:5432/postfix_admin"
 max_connections = 10
 min_connections = 2
 connect_timeout_seconds = 5
 idle_timeout_seconds = 300
-# Préfixe optionnel pour les noms de tables
 table_prefix = ""
 
 [grpc]
@@ -64,15 +109,10 @@ tls_cert_path = ""
 tls_key_path = ""
 
 [auth]
-# Durée de session en secondes
 session_lifetime = 3600
-# Nombre maximum de tentatives de login par IP / 15 min
 max_login_attempts = 5
-# Durée du blocage après dépassement (secondes)
 lockout_duration = 900
-# Algorithme de hachage pour les nouveaux mots de passe
 password_scheme = "argon2id"
-# Permettre le texte clair (JAMAIS en production)
 allow_cleartext = false
 
 [auth.argon2]
@@ -81,7 +121,6 @@ time_cost = 2
 parallelism = 1
 
 [auth.jwt]
-# Durée de vie du JWT (secondes)
 access_token_lifetime = 900
 refresh_token_lifetime = 604800
 
@@ -94,7 +133,6 @@ require_digit = true
 require_special = false
 
 [mail]
-# Configuration SMTP pour les emails sortants (récupération mot de passe, etc.)
 smtp_host = "localhost"
 smtp_port = 25
 smtp_tls = false
@@ -109,35 +147,24 @@ domain = "autoreply.example.com"
 
 [fetchmail]
 enabled = true
-# Intervalle minimum de polling (minutes)
 min_poll_interval = 5
 
 [dkim]
 enabled = true
-# Taille par défaut des clés RSA
 default_key_size = 2048
 
 [logging]
-# Niveau : trace, debug, info, warn, error
 level = "info"
-# Format : json, pretty, compact
 format = "pretty"
-# Rétention des logs d'audit (jours, 0 = illimité)
 audit_retention_days = 365
-# Syslog
 syslog_enabled = false
 syslog_facility = "mail"
 
 [ui]
-# Nombre d'éléments par page
 page_size = 20
-# Langue par défaut
 default_language = "en"
-# Langues disponibles
 available_languages = ["en", "fr"]
-# Thème par défaut : "light", "dark", "auto"
 default_theme = "auto"
-# Nom affiché dans l'interface
 site_name = "PostfixAdmin"
 
 [domain_defaults]
@@ -149,43 +176,50 @@ transport = "virtual:"
 backupmx = false
 
 [security]
-# Vérification DNS des domaines
 dns_check_enabled = true
-# Restreindre les alias aux domaines locaux
 local_alias_only = false
-# Headers de sécurité HTTP
 csp_enabled = true
 hsts_enabled = true
 hsts_max_age = 31536000
 
 [encryption]
-# Clé de chiffrement pour les secrets (TOTP, mots de passe fetchmail)
-# Doit être exactement 32 octets en base64
-# Généré automatiquement au setup si vide
 master_key = ""
 ```
 
 ## Variables d'environnement
 
-Toutes les valeurs de configuration peuvent être overridées par des variables
-d'environnement préfixées par `PAR_` avec `__` comme séparateur de niveaux.
+Toutes les valeurs de configuration peuvent etre surchargees par des variables
+d'environnement prefixees par `PAR_` avec `__` comme separateur de niveaux.
 
-| Variable                     | Correspond à            |
+| Variable                     | Correspond a            |
 |------------------------------|-------------------------|
+| `PAR_PROFILE`                | Profil actif            |
 | `PAR_SERVER__PORT`           | `server.port`           |
 | `PAR_DATABASE__URL`          | `database.url`          |
 | `PAR_AUTH__SESSION_LIFETIME` | `auth.session_lifetime` |
 | `PAR_LOGGING__LEVEL`         | `logging.level`         |
 
-## Validation au démarrage
+## Validation au demarrage
 
-Au lancement, la configuration est validée :
+Au lancement, la configuration est validee contextuellement :
 
-1. `database.url` doit être défini et valide
-2. `server.secret_key` doit être défini (ou généré au premier lancement)
-3. `encryption.master_key` doit être défini (ou généré au premier lancement)
-4. Les chemins de certificats TLS doivent exister si TLS est activé
-5. `password_policy.min_length >= 6`
-6. `auth.password_scheme` doit être un schéma supporté
+### Toujours validee
 
-Toute erreur de validation empêche le démarrage avec un message explicite.
+1. `database.url` ne doit pas etre vide
+2. `password_policy.min_length >= 4`
+3. `auth.password_scheme` doit etre un schema supporte (`argon2id`, `bcrypt`, `sha512-crypt`, `sha256-crypt`)
+4. `logging.level` doit etre valide (`trace`, `debug`, `info`, `warn`, `error`)
+
+### Production-like (prep, prod, deploye)
+
+- `auth.allow_cleartext = true` → **erreur fatale**
+- `server.secret_key` vide → **erreur fatale**
+- `encryption.master_key` vide → **erreur fatale**
+- `server.tls.enabled = false` → **warning**
+- `logging.level = trace|debug` → **warning**
+
+### Dev/Test
+
+- `secret_key` / `master_key` vides → **auto-generes** (32 octets aleatoires, encodes en base64)
+
+Toute erreur de validation empeche le demarrage avec un message explicite.

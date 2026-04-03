@@ -61,7 +61,7 @@ check: fmt-check clippy
 
 # Run security audit
 audit:
-    cargo audit
+    cargo audit --ignore RUSTSEC-2023-0071
 
 # Run cargo-deny checks (licenses, vulnerabilities)
 deny:

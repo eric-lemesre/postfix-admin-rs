@@ -1,0 +1,106 @@
+# postfix-admin-rs — shared defaults for all profiles
+# Profile-specific files (dev.toml, test.toml, etc.) override these values.
+
+[server]
+bind_address = "127.0.0.1"
+port = 8080
+workers = 0                         # 0 = auto-detect (number of CPUs)
+base_url = ""
+
+[server.tls]
+enabled = false
+cert_path = ""
+key_path = ""
+
+[database]
+url = "postgresql://postfix_admin:password@localhost:5432/postfix_admin"
+max_connections = 10
+min_connections = 2
+connect_timeout_seconds = 5
+idle_timeout_seconds = 300
+table_prefix = ""
+
+[grpc]
+enabled = false
+bind_address = "0.0.0.0"
+port = 50051
+tls_enabled = false
+tls_cert_path = ""
+tls_key_path = ""
+
+[auth]
+session_lifetime = 3600
+max_login_attempts = 5
+lockout_duration = 900
+password_scheme = "argon2id"
+allow_cleartext = false
+
+[auth.argon2]
+memory_cost = 19456                 # KiB (OWASP 2024)
+time_cost = 2
+parallelism = 1
+
+[auth.jwt]
+access_token_lifetime = 900         # 15 minutes
+refresh_token_lifetime = 604800     # 7 days
+
+[password_policy]
+min_length = 8
+max_length = 256
+require_uppercase = true
+require_lowercase = true
+require_digit = true
+require_special = false
+
+[mail]
+smtp_host = "localhost"
+smtp_port = 25
+smtp_tls = false
+smtp_username = ""
+smtp_password = ""
+from_address = "postmaster@example.com"
+from_name = "PostfixAdmin"
+
+[vacation]
+enabled = true
+domain = "autoreply.example.com"
+
+[fetchmail]
+enabled = true
+min_poll_interval = 5
+
+[dkim]
+enabled = true
+default_key_size = 2048
+
+[logging]
+level = "info"
+format = "pretty"
+audit_retention_days = 365
+syslog_enabled = false
+syslog_facility = "mail"
+
+[ui]
+page_size = 20
+default_language = "en"
+available_languages = ["en", "fr"]
+default_theme = "auto"
+site_name = "PostfixAdmin"
+
+[domain_defaults]
+aliases = 0
+mailboxes = 0
+maxquota = 0
+quota = 0
+transport = "virtual:"
+backupmx = false
+
+[security]
+dns_check_enabled = true
+local_alias_only = false
+csp_enabled = true
+hsts_enabled = true
+hsts_max_age = 31536000
+
+[encryption]
+master_key = ""

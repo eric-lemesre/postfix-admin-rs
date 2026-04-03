@@ -11,7 +11,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 rust-version = "1.83"
 authors = ["Eric Lemesre"]
@@ -43,6 +43,7 @@ validator = { version = "0.19", features = ["derive"] }
 
 # Security
 zeroize = { version = "1", features = ["derive"] }
+getrandom = "0.3"
 
 # Regex
 regex = "1"
@@ -63,7 +64,13 @@ tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
+# Configuration
+config = { version = "0.15", features = ["toml"] }
+dotenvy = "0.15"
+base64 = "0.22"
+
 # Testing
+tempfile = "3"
 testcontainers = "0.27"
 testcontainers-modules = { version = "0.15", features = ["postgres", "mysql"] }
 
