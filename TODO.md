@@ -151,6 +151,11 @@
 - [ ] CSRF token generation and validation
 - [ ] Rate limiting (login attempts, configurable per SPEC-04.1)
 - [ ] Brute-force protection (progressive delays, IP lockout)
+- [x] mTLS configuration (`MtlsConfig` struct, validation rules)
+- [x] mTLS certificate info extraction (`CertificateInfo`, `MtlsVerifier`)
+- [x] mTLS DN parsing (RFC 2253 and OpenSSL formats)
+- [ ] mTLS middleware integration (extract cert info from request headers)
+- [ ] mTLS enforcement per role (require cert for superadmin/domain admin)
 - [ ] Unit tests for all password schemes
 - [ ] Unit tests for JWT, TOTP, RBAC, rate limiting
 

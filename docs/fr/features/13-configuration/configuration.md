@@ -107,6 +107,8 @@ port = 50051
 tls_enabled = false
 tls_cert_path = ""
 tls_key_path = ""
+tls_ca_cert_path = ""
+require_client_cert = false
 
 [auth]
 session_lifetime = 3600
@@ -123,6 +125,15 @@ parallelism = 1
 [auth.jwt]
 access_token_lifetime = 900
 refresh_token_lifetime = 604800
+
+[auth.mtls]
+enabled = false
+trusted_proxy_header = "X-SSL-Client-Verify"
+subject_header = "X-SSL-Client-S-DN"
+serial_header = "X-SSL-Client-Serial"
+require_for_superadmin = false
+require_for_domain_admin = false
+cn_field = "emailAddress"
 
 [password_policy]
 min_length = 8
@@ -198,6 +209,8 @@ d'environnement prefixees par `PAR_` avec `__` comme separateur de niveaux.
 | `PAR_DATABASE__URL`          | `database.url`          |
 | `PAR_AUTH__SESSION_LIFETIME` | `auth.session_lifetime` |
 | `PAR_LOGGING__LEVEL`         | `logging.level`         |
+| `PAR_AUTH__MTLS__ENABLED`    | `auth.mtls.enabled`     |
+| `PAR_GRPC__REQUIRE_CLIENT_CERT` | `grpc.require_client_cert` |
 
 ## Validation au demarrage
 
@@ -209,6 +222,8 @@ Au lancement, la configuration est validee contextuellement :
 2. `password_policy.min_length >= 4`
 3. `auth.password_scheme` doit etre un schema supporte (`argon2id`, `bcrypt`, `sha512-crypt`, `sha256-crypt`)
 4. `logging.level` doit etre valide (`trace`, `debug`, `info`, `warn`, `error`)
+5. Si `auth.mtls.enabled` : `trusted_proxy_header`, `subject_header` et `cn_field` ne doivent pas etre vides
+6. Si `grpc.require_client_cert` : `tls_enabled` doit etre `true` et `tls_ca_cert_path` ne doit pas etre vide
 
 ### Production-like (prep, prod, deploye)
 
@@ -217,6 +232,8 @@ Au lancement, la configuration est validee contextuellement :
 - `encryption.master_key` vide → **erreur fatale**
 - `server.tls.enabled = false` → **warning**
 - `logging.level = trace|debug` → **warning**
+- `auth.mtls.enabled = false` → **warning** (recommande pour les comptes admin)
+- `auth.mtls.enabled = true` et `require_for_superadmin = false` → **warning**
 
 ### Dev/Test
 

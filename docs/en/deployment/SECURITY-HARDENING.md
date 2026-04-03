@@ -488,7 +488,106 @@ systemctl reload nginx
 
 ---
 
-## 9. gRPC security
+## 9. Client certificate authentication (mTLS) for administrators
+
+Client certificates provide a strong additional authentication factor for privileged accounts. The reverse proxy handles TLS client certificate verification and forwards identity information to the application via HTTP headers.
+
+### Generating a CA and client certificates
+
+```bash
+# Create a CA for admin client certificates
+openssl genrsa -out admin-ca.key 4096
+openssl req -new -x509 -days 3650 -key admin-ca.key \
+    -out admin-ca.crt -subj "/CN=PostfixAdmin Admin CA/O=Example Inc"
+
+# Generate a client certificate for an administrator
+openssl genrsa -out admin-client.key 2048
+openssl req -new -key admin-client.key \
+    -out admin-client.csr -subj "/emailAddress=admin@example.com/CN=Admin User/O=Example Inc"
+openssl x509 -req -days 365 -in admin-client.csr \
+    -CA admin-ca.crt -CAkey admin-ca.key -CAcreateserial \
+    -out admin-client.crt
+
+# Create PKCS#12 bundle for browser import
+openssl pkcs12 -export -out admin-client.p12 \
+    -inkey admin-client.key -in admin-client.crt -certfile admin-ca.crt
+```
+
+### Nginx configuration
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name mail-admin.example.com;
+
+    # ... existing TLS config ...
+
+    # Client certificate verification
+    ssl_client_certificate /etc/ssl/admin-ca.crt;
+    ssl_verify_client optional;    # optional = don't require for all users
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Forward client certificate info to the application
+        proxy_set_header X-SSL-Client-Verify $ssl_client_verify;
+        proxy_set_header X-SSL-Client-S-DN $ssl_client_s_dn;
+        proxy_set_header X-SSL-Client-Serial $ssl_client_serial;
+    }
+}
+```
+
+### Apache configuration
+
+```apache
+<VirtualHost *:443>
+    ServerName mail-admin.example.com
+
+    # ... existing TLS config ...
+
+    # Client certificate verification
+    SSLCACertificateFile /etc/ssl/admin-ca.crt
+    SSLVerifyClient optional
+    SSLVerifyDepth 2
+
+    # Forward client certificate info
+    RequestHeader set X-SSL-Client-Verify "%{SSL_CLIENT_VERIFY}s"
+    RequestHeader set X-SSL-Client-S-DN "%{SSL_CLIENT_S_DN}s"
+    RequestHeader set X-SSL-Client-Serial "%{SSL_CLIENT_M_SERIAL}s"
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:8080/
+    ProxyPassReverse / http://127.0.0.1:8080/
+</VirtualHost>
+```
+
+### Application configuration
+
+```toml
+[auth.mtls]
+enabled = true
+trusted_proxy_header = "X-SSL-Client-Verify"
+subject_header = "X-SSL-Client-S-DN"
+serial_header = "X-SSL-Client-Serial"
+require_for_superadmin = true
+require_for_domain_admin = false
+cn_field = "emailAddress"
+```
+
+### Security considerations
+
+- **Header spoofing:** The reverse proxy MUST strip any client-set `X-SSL-Client-*` headers before forwarding. Nginx does this automatically for `ssl_client_*` variables; Apache requires `RequestHeader unset` directives for untrusted requests.
+- **Certificate revocation:** Use CRL or OCSP to handle revoked certificates. Configure `ssl_crl` (Nginx) or `SSLCARevocationFile` (Apache).
+- **Certificate validity:** Client certificates should have a short validity period (90-365 days) and be rotated regularly.
+- **CA security:** The admin CA private key must be stored offline or in an HSM. Never store it on the web server.
+
+---
+
+## 10. gRPC security
 
 If the gRPC API is enabled, apply these measures:
 
@@ -527,7 +626,7 @@ ssh -L 50051:127.0.0.1:50051 admin@mail-admin.example.com
 
 ---
 
-## 10. Security monitoring and logging
+## 11. Security monitoring and logging
 
 ### Audit logging
 
@@ -606,7 +705,7 @@ Set up alerts for:
 
 ---
 
-## 11. Data protection and GDPR
+## 12. Data protection and GDPR
 
 ### Encryption at rest
 
@@ -669,7 +768,7 @@ postfix-admin-rs user export --email user@example.com --format json
 
 ---
 
-## 12. Production deployment checklist
+## 13. Production deployment checklist
 
 ### TLS/SSL
 - [ ] TLS 1.2+ enforced, TLS 1.0/1.1 disabled
@@ -696,6 +795,7 @@ postfix-admin-rs user export --email user@example.com --format json
 - [ ] Strong password policy enforced
 - [ ] Rate limiting on login endpoints
 - [ ] 2FA (TOTP) enabled for admin accounts
+- [ ] Client certificates (mTLS) enabled for superadmin accounts
 - [ ] Session cookies: HttpOnly, Secure, SameSite=Strict
 
 ### Secrets
@@ -722,6 +822,13 @@ postfix-admin-rs user export --email user@example.com --format json
 - [ ] File permissions: config `600`, binary `755`
 - [ ] WAF enabled (ModSecurity or managed solution)
 - [ ] `cargo audit` run — no known vulnerabilities
+
+### Client certificates (mTLS)
+- [ ] Admin CA generated and stored securely (offline/HSM)
+- [ ] Client certificates issued to all admin accounts
+- [ ] Reverse proxy configured to verify client certs
+- [ ] X-SSL-Client-* headers cannot be spoofed by clients
+- [ ] Certificate revocation mechanism in place (CRL/OCSP)
 
 ### Data protection
 - [ ] Database encryption at rest (LUKS or equivalent)

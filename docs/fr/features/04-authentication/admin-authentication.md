@@ -77,6 +77,28 @@ PK composite : `(username, domain)`
 - Les informations de blocage sont en mémoire (pas en BDD)
 - Header `X-Forwarded-For` respecté si configuré (reverse proxy)
 
+### Authentification par certificat client (BR-AUTH-05)
+- Facteur mTLS optionnel pour les comptes administrateurs (superadmin, admin de domaine)
+- La verification du certificat est effectuee par le reverse proxy (Nginx/Apache)
+- Le proxy transmet les informations d'identite via des en-tetes HTTP
+- L'application extrait l'identite admin du sujet DN du certificat
+- Configurable par role : peut exiger les certificats pour les superadmin uniquement, ou tous les admins
+- L'identite du certificat (champ emailAddress) doit correspondre au username admin
+- Ne remplace pas password + TOTP — ajoute un facteur d'authentification supplementaire
+
+#### Configuration
+
+```toml
+[auth.mtls]
+enabled = true
+trusted_proxy_header = "X-SSL-Client-Verify"
+subject_header = "X-SSL-Client-S-DN"
+serial_header = "X-SSL-Client-Serial"
+require_for_superadmin = true
+require_for_domain_admin = false
+cn_field = "emailAddress"
+```
+
 ## Cas d'utilisation
 
 ### UC-AUTH-01 : Login admin

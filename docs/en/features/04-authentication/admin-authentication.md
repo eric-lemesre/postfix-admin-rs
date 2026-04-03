@@ -15,6 +15,7 @@
 | Password hashing and verification                    | `postfix-admin-auth` | Pending | M4        |
 | Session management                                   | `postfix-admin-auth` | Pending | M4        |
 | TOTP verification                                    | `postfix-admin-auth` | Pending | M4        |
+| mTLS client certificate extraction                   | `postfix-admin-auth` | Done    | M4        |
 | Web UI login page                                    | `postfix-admin-web`  | Pending | M5        |
 
 ## Summary
@@ -91,6 +92,40 @@ Composite PK: `(username, domain)`
 - After M failures → temporary IP block (15 min)
 - Blocking information is in memory (not in database)
 - `X-Forwarded-For` header respected if configured (reverse proxy)
+
+### Client Certificate Authentication (BR-AUTH-05)
+- Optional mTLS factor for administrator accounts (superadmin, domain admin)
+- Certificate verification is performed by the reverse proxy (Nginx/Apache)
+- The proxy forwards identity information via HTTP headers
+- The application extracts the admin identity from the certificate subject DN
+- Configurable per role: can require certificates for superadmin only, or all admins
+- Certificate identity (emailAddress field) must match the admin username
+- Does not replace password + TOTP — adds an additional authentication factor
+
+```mermaid
+flowchart LR
+    A[Client + Cert] -->|TLS handshake| B[Reverse Proxy]
+    B -->|Verify cert| C{Valid?}
+    C -->|No| D[403 Forbidden]
+    C -->|Yes| E[Set headers]
+    E -->|X-SSL-Client-Verify: SUCCESS<br/>X-SSL-Client-S-DN: ...| F[postfix-admin-rs]
+    F -->|Extract identity| G[Match admin username]
+    G -->|Match| H[Auth continues]
+    G -->|No match| I[Auth denied]
+```
+
+#### Configuration
+
+```toml
+[auth.mtls]
+enabled = true
+trusted_proxy_header = "X-SSL-Client-Verify"
+subject_header = "X-SSL-Client-S-DN"
+serial_header = "X-SSL-Client-Serial"
+require_for_superadmin = true
+require_for_domain_admin = false
+cn_field = "emailAddress"
+```
 
 ## Use Cases
 

@@ -111,3 +111,22 @@ Champs de domaine modifiables par un admin de domaine :
 - Un superadmin est implicitement admin de tous les domaines
 - Il n'est pas nécessaire de créer des entrées dans `domain_admins` pour un superadmin
 - Un admin peut être à la fois admin et avoir une boîte mail (double session possible)
+
+---
+
+## Niveaux d'assurance d'authentification
+
+Les actions administratives peuvent necessiter differents niveaux d'assurance d'authentification selon le role et la sensibilite de l'operation.
+
+| Niveau | Nom    | Facteurs                             | Requis pour                      |
+|--------|--------|--------------------------------------|----------------------------------|
+| AAL1   | Faible | Mot de passe seul                    | Operations utilisateur (mailbox) |
+| AAL2   | Moyen  | Mot de passe + TOTP                  | Operations admin de domaine      |
+| AAL3   | Eleve  | Mot de passe + TOTP + Certificat     | Operations superadmin            |
+
+### Regles d'application
+
+- Quand `auth.mtls.require_for_superadmin = true`, les actions superadmin requierent AAL3
+- Quand `auth.mtls.require_for_domain_admin = true`, les actions admin de domaine requierent AAL3
+- L'application du TOTP est independante du mTLS et configuree par compte
+- Un admin qui n'a pas presente de certificat client est retrograde au niveau le plus eleve que ses facteurs d'authentification permettent

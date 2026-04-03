@@ -45,6 +45,7 @@ To report a vulnerability:
 - Keep postfix-admin-rs up to date
 - Use strong passwords for admin accounts
 - Enable TOTP 2FA for all admin accounts
+- Use client certificates (mTLS) for superadmin accounts when possible
 - Restrict network access to the administration interface
 - Regularly back up the database
 - Monitor audit logs
