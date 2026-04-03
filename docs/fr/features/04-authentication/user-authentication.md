@@ -2,6 +2,18 @@
 
 # SPEC-04.2 — Authentification des utilisateurs
 
+## Statut d'implémentation
+
+| Composant                                         | Crate                | Statut   | Milestone |
+|---------------------------------------------------|----------------------|----------|-----------|
+| Modèle (`Mailbox` — champs auth)                  | `postfix-admin-core` | Fait     | M1        |
+| Hashage et vérification des mots de passe         | `postfix-admin-auth` | Fait     | M4        |
+| Gestion de session (HttpOnly, Secure, SameSite)   | `postfix-admin-auth` | Fait     | M4        |
+| Génération et rafraîchissement JWT                | `postfix-admin-auth` | Fait     | M4        |
+| TOTP génération, vérification, codes récupération | `postfix-admin-auth` | Fait     | M4        |
+| Génération et hashage app passwords               | `postfix-admin-auth` | Fait     | M4        |
+| Page de login Web UI                              | `postfix-admin-web`  | En cours | M6        |
+
 ## Résumé
 
 Interface en libre-service pour les utilisateurs de boîtes mail. Permet la gestion

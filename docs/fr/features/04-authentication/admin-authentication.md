@@ -2,6 +2,26 @@
 
 # SPEC-04.1 — Authentification des administrateurs
 
+## Statut d'implémentation
+
+| Composant                                             | Crate                | Statut  | Milestone |
+|-------------------------------------------------------|----------------------|---------|-----------|
+| Modèles (`Admin`, `DomainAdmin`)                      | `postfix-admin-core` | Fait    | M1        |
+| DTOs (`CreateAdmin`, `UpdateAdmin`, `AdminResponse`)  | `postfix-admin-core` | Fait    | M1        |
+| DTOs (`CreateDomainAdmin`, `DomainAdminResponse`)     | `postfix-admin-core` | Fait    | M1        |
+| Trait repository (`AdminRepository`)                  | `postfix-admin-core` | Fait    | M1        |
+| Repository PostgreSQL                                 | `postfix-admin-db`   | Fait    | M2        |
+| Repository MySQL                                      | `postfix-admin-db`   | Fait    | M2        |
+| Hashage et vérification des mots de passe             | `postfix-admin-auth` | Fait    | M4        |
+| Génération et vérification JWT                        | `postfix-admin-auth` | Fait    | M4        |
+| Gestion de session (HttpOnly, Secure, SameSite)       | `postfix-admin-auth` | Fait    | M4        |
+| Génération et validation de token CSRF                | `postfix-admin-auth` | Fait    | M4        |
+| Rate limiting et protection brute-force               | `postfix-admin-auth` | Fait    | M4        |
+| TOTP génération, vérification, codes de récupération  | `postfix-admin-auth` | Fait    | M4        |
+| Extraction certificat client mTLS                     | `postfix-admin-auth` | Fait    | M4        |
+| Intégration middleware mTLS (par rôle)                | `postfix-admin-api`  | Fait    | M4        |
+| Page de login Web UI                                  | `postfix-admin-web`  | Fait    | M6        |
+
 ## Résumé
 
 Système d'authentification pour les comptes administrateurs (superadmin et admin de domaine).

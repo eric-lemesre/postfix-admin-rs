@@ -5,11 +5,14 @@
 
 ## Implementation Status
 
-| Component              | Crate                | Status  | Milestone |
-|------------------------|----------------------|---------|-----------|
-| RBAC extractors        | `postfix-admin-auth` | Pending | M4        |
-| Scope verification     | `postfix-admin-auth` | Pending | M4        |
-| Middleware integration | `postfix-admin-api`  | Pending | M6        |
+| Component                                        | Crate                | Status  | Milestone |
+|--------------------------------------------------|----------------------|---------|-----------|
+| RBAC roles and identity (`Role`, `AuthIdentity`) | `postfix-admin-auth` | Done    | M4        |
+| Domain access check (`check_domain_access`)      | `postfix-admin-auth` | Done    | M4        |
+| Assurance level check (`check_assurance_level`)  | `postfix-admin-auth` | Done    | M4        |
+| `RequireSuperAdmin` extractor (+ mTLS)           | `postfix-admin-api`  | Done    | M4        |
+| `RequireDomainAdmin` extractor                   | `postfix-admin-api`  | Done    | M4        |
+| `RequireUser` extractor                          | `postfix-admin-api`  | Pending | M6        |
 
 ## Summary
 

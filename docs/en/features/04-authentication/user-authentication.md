@@ -5,13 +5,15 @@
 
 ## Implementation Status
 
-| Component                         | Crate                | Status  | Milestone |
-|-----------------------------------|----------------------|---------|-----------|
-| Model (`Mailbox` — auth fields)   | `postfix-admin-core` | Done    | M1        |
-| Password hashing and verification | `postfix-admin-auth` | Pending | M4        |
-| Session management                | `postfix-admin-auth` | Pending | M4        |
-| JWT token generation              | `postfix-admin-auth` | Pending | M4        |
-| Web UI login page                 | `postfix-admin-web`  | Pending | M5        |
+| Component                                        | Crate                | Status  | Milestone |
+|--------------------------------------------------|----------------------|---------|-----------|
+| Model (`Mailbox` — auth fields)                  | `postfix-admin-core` | Done    | M1        |
+| Password hashing and verification                | `postfix-admin-auth` | Done    | M4        |
+| Session management (HttpOnly, Secure, SameSite)  | `postfix-admin-auth` | Done    | M4        |
+| JWT token generation and refresh                 | `postfix-admin-auth` | Done    | M4        |
+| TOTP generation, verification, recovery codes    | `postfix-admin-auth` | Done    | M4        |
+| App password generation and hashing              | `postfix-admin-auth` | Done    | M4        |
+| Web UI login page                                | `postfix-admin-web`  | Pending | M6        |
 
 ## Summary
 

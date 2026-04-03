@@ -2,6 +2,18 @@
 
 # SPEC-04.5 — Schémas de mots de passe
 
+## Statut d'implémentation
+
+| Composant                                | Crate                | Statut | Milestone |
+|------------------------------------------|----------------------|--------|-----------|
+| Newtype mot de passe (`Password`, zeroize)| `postfix-admin-core` | Fait   | M1        |
+| Hashage Argon2id                         | `postfix-admin-auth` | Fait   | M4        |
+| Hashage Bcrypt                           | `postfix-admin-auth` | Fait   | M4        |
+| SHA-512/256 crypt                        | `postfix-admin-auth` | Fait   | M4        |
+| Détection de schéma legacy (MD5, DES)    | `postfix-admin-auth` | Fait   | M4        |
+| Comparaison constant-time (subtle)       | `postfix-admin-auth` | Fait   | M4        |
+| Rehash transparent                       | `postfix-admin-auth` | Fait   | M4        |
+
 ## Résumé
 
 Pour permettre une migration transparente depuis PostfixAdmin PHP et pour assurer la
