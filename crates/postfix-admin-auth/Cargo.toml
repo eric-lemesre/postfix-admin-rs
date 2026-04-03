@@ -18,6 +18,8 @@ bcrypt = { workspace = true }
 sha-crypt = { workspace = true }
 jsonwebtoken = { workspace = true }
 rand = { workspace = true }
+subtle = { workspace = true }
+data-encoding = { workspace = true }
 tracing = { workspace = true }
 
 [lints]

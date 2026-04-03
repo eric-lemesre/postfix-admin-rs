@@ -3,11 +3,13 @@
 //! Handles multi-scheme password verification, session management,
 //! JSON Web Tokens, TOTP two-factor authentication, and role-based access control.
 
+pub mod app_password;
 pub mod error;
 pub mod jwt;
 pub mod mtls;
 pub mod password;
 
+pub use app_password::{generate_app_password, hash_app_password, verify_app_password};
 pub use error::AuthError;
 pub use jwt::{Claims, JwtManager, TokenPair};
 pub use mtls::{CertificateInfo, MtlsError, MtlsVerifier};

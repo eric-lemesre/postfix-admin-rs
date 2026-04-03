@@ -6,6 +6,7 @@
 use argon2::password_hash::rand_core::OsRng;
 use argon2::password_hash::SaltString;
 use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
+use subtle::ConstantTimeEq;
 
 use crate::error::AuthError;
 
@@ -69,10 +70,17 @@ pub fn verify_password(password: &str, hash: &str) -> Result<bool, AuthError> {
         Ok(verify_sha256_crypt(password, hash))
     } else if hash.starts_with("$1$") {
         // MD5 crypt — legacy read-only, always reject for security
+        tracing::warn!("MD5 crypt hash detected — legacy scheme, rejecting authentication");
+        Ok(false)
+    } else if is_des_crypt_hash(hash) {
+        // DES crypt — legacy read-only, always reject for security
+        tracing::warn!("DES crypt hash detected — legacy scheme, rejecting authentication");
         Ok(false)
     } else {
         // Cleartext comparison (dev mode only — caller should check config)
-        Ok(password == hash)
+        // Uses constant-time comparison to prevent timing attacks
+        let result: bool = password.as_bytes().ct_eq(hash.as_bytes()).into();
+        Ok(result)
     }
 }
 
@@ -87,6 +95,16 @@ pub fn needs_rehash(hash: &str, target: PasswordScheme) -> bool {
         PasswordScheme::Sha512Crypt => !hash.starts_with("$6$"),
         PasswordScheme::Sha256Crypt => !hash.starts_with("$5$"),
     }
+}
+
+/// Check if a hash looks like a DES crypt hash.
+///
+/// DES crypt hashes are exactly 13 characters from the set `[a-zA-Z0-9./]`.
+fn is_des_crypt_hash(hash: &str) -> bool {
+    hash.len() == 13
+        && hash
+            .bytes()
+            .all(|b| b.is_ascii_alphanumeric() || b == b'.' || b == b'/')
 }
 
 // --- Argon2id ---
@@ -234,5 +252,20 @@ mod tests {
     #[test]
     fn password_scheme_from_config_invalid() {
         assert!(PasswordScheme::from_config("md5").is_err());
+    }
+
+    #[test]
+    fn verify_des_crypt_hash_returns_false() {
+        // DES crypt hash: 13 chars of [a-zA-Z0-9./]
+        let result = verify_password("password", "abJnggxhB/yWI");
+        assert!(result.is_ok());
+        assert!(!result.unwrap_or_else(|_| unreachable!()));
+    }
+
+    #[test]
+    fn verify_md5_crypt_hash_returns_false() {
+        let result = verify_password("password", "$1$salt$hash1234567890ab");
+        assert!(result.is_ok());
+        assert!(!result.unwrap_or_else(|_| unreachable!()));
     }
 }
