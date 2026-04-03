@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}{% if is_edit %}Edit{% else %}New{% endif %} Domain - PostfixAdmin{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-gray-900 mb-6">{% if is_edit %}Edit Domain: {{ domain_name }}{% else %}New Domain{% endif %}</h1>
+
+{% if let Some(err) = error %}
+<div class="rounded-md bg-red-50 p-4 mb-6">
+    <p class="text-sm text-red-700">{{ err }}</p>
+</div>
+{% endif %}
+
+<form method="post" action="{% if is_edit %}/domains/{{ domain_name }}/edit{% else %}/domains/new{% endif %}" class="space-y-6 max-w-xl">
+    {% if !is_edit %}
+    <div>
+        <label for="domain" class="block text-sm font-medium text-gray-700">Domain name</label>
+        <input type="text" name="domain" id="domain" required
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+               placeholder="example.com">
+    </div>
+    {% endif %}
+
+    <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+        <input type="text" name="description" id="description"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+               value="{{ description }}">
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label for="aliases" class="block text-sm font-medium text-gray-700">Max aliases (0=unlimited)</label>
+            <input type="number" name="aliases" id="aliases" min="0" value="{{ aliases }}"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="mailboxes" class="block text-sm font-medium text-gray-700">Max mailboxes (0=unlimited)</label>
+            <input type="number" name="mailboxes" id="mailboxes" min="0" value="{{ mailboxes }}"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
+    </div>
+
+    <div>
+        <label for="active" class="flex items-center">
+            <input type="checkbox" name="active" id="active" {% if active %}checked{% endif %}
+                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+            <span class="ml-2 text-sm text-gray-700">Active</span>
+        </label>
+    </div>
+
+    <div class="flex gap-3">
+        <button type="submit"
+                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+            {% if is_edit %}Update{% else %}Create{% endif %}
+        </button>
+        <a href="/domains" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</a>
+    </div>
+</form>
+{% endblock %}
