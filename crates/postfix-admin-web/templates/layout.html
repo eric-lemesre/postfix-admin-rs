@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="min-h-full">
+    <nav class="bg-indigo-600">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-white text-xl font-bold">PostfixAdmin</span>
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <a href="/domains" class="text-indigo-200 hover:bg-indigo-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Domains</a>
+                        <a href="/admins" class="text-indigo-200 hover:bg-indigo-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admins</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-indigo-200 text-sm mr-4">{{ admin_username }}</span>
+                    <form method="post" action="/logout">
+                        <button type="submit" class="text-indigo-200 hover:text-white text-sm">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% if let Some(msg) = flash_message %}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="rounded-md bg-green-50 p-4">
+            <p class="text-sm text-green-700">{{ msg }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if let Some(err) = flash_error %}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="rounded-md bg-red-50 p-4">
+            <p class="text-sm text-red-700">{{ err }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

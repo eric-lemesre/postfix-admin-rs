@@ -10,6 +10,15 @@ repository.workspace = true
 [dependencies]
 postfix-admin-core = { workspace = true }
 thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+argon2 = { workspace = true }
+bcrypt = { workspace = true }
+sha-crypt = { workspace = true }
+jsonwebtoken = { workspace = true }
+rand = { workspace = true }
+tracing = { workspace = true }
 
 [lints]
 workspace = true

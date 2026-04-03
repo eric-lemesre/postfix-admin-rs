@@ -1,7 +1,19 @@
 //! REST and gRPC API for postfix-admin-rs.
 //!
-//! Provides the HTTP REST API (axum) and gRPC API (tonic)
-//! with `OpenAPI` documentation and authentication middleware.
+//! Provides the HTTP REST API (axum) with JWT authentication,
+//! RFC 7807 error handling, and CRUD endpoints for all entities.
+
+// Route handlers all return `Result` — doc `# Errors` sections are not
+// useful for axum handlers whose error semantics are defined by `IntoResponse`.
+#![allow(clippy::missing_errors_doc)]
+
+pub mod error;
+pub mod extractors;
+pub mod routes;
+pub mod state;
+
+pub use routes::api_router;
+pub use state::AppState;
 
 #[cfg(test)]
 mod tests {

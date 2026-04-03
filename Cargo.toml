@@ -44,6 +44,13 @@ validator = { version = "0.19", features = ["derive"] }
 # Security
 zeroize = { version = "1", features = ["derive"] }
 getrandom = "0.3"
+argon2 = "0.5"
+bcrypt = "0.17"
+sha-crypt = "0.5"
+rand = "0.9"
+
+# JWT
+jsonwebtoken = "9"
 
 # Regex
 regex = "1"
@@ -56,6 +63,22 @@ sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "mysql
 
 # Async
 async-trait = "0.1"
+
+# Web framework
+axum = { version = "0.8", features = ["macros"] }
+axum-extra = { version = "0.10", features = ["typed-header"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "compression-gzip", "trace", "catch-panic"] }
+hyper = "1"
+
+# Templates
+askama = "0.12"
+
+# Sessions
+tower-sessions = "0.15"
+
+# Serialization (JSON)
+serde_json = "1"
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }

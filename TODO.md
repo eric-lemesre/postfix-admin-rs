@@ -13,8 +13,8 @@
 | v0.3.0     | M2        | Foundation  | DB crate (PG + MySQL repos, migrations)           | XL     |
 | v0.4.0     | M3        | Foundation  | Configuration system (config-rs)                  | M      |
 | v0.5.0     | M4        | Auth        | Auth crate (passwords, sessions, JWT, TOTP, RBAC) | XL     |
-| v0.6.0     | M5        | Interfaces  | Web interface (Askama, HTMX, Tailwind, i18n)      | XL     |
-| v0.7.0     | M6        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     |
+| v0.6.0     | M5        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     |
+| v0.7.0     | M6        | Interfaces  | Web interface (Askama, HTMX, Tailwind, i18n)      | XL     |
 | v0.7.1     | M7        | Interfaces  | gRPC API (tonic, protobuf)                        | M      |
 | v0.7.2     | M8        | Interfaces  | CLI (clap, formatters)                            | L      |
 | v0.8.0     | M9        | Server      | Server composition (startup, shutdown, routing)   | M      |
@@ -30,7 +30,7 @@
 > **Effort scale (solo developer):**
 > S = small, M = medium, L = large, XL = very large.
 > Critical path: M0 → M1 → M2 → M4 → M9 (each blocks the next).
-> M5/M6/M7/M8 can be parallelized after M4.
+> M5/M6/M7/M8 can be parallelized after M4 (M5 API before M6 Web recommended).
 > M10-M13 can be done in any order after M9.
 
 ---
@@ -163,39 +163,7 @@
 
 ## Phase 3 — Interfaces
 
-### M5: postfix-admin-web `v0.6.0` [XL]
-> Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
-
-- [ ] Askama template base layout (header, sidebar, main, footer)
-- [ ] Tailwind CSS build pipeline (standalone CLI or npm)
-- [ ] Dark mode support (class="dark", localStorage, prefers-color-scheme)
-- [ ] Responsive design (mobile-first, collapsible sidebar)
-- [ ] HTMX integration (CDN or vendored)
-- [ ] Alpine.js integration (dropdowns, modals, confirmations)
-- [ ] i18n system (TOML language files, EN + FR)
-- [ ] Language detection (Accept-Language, cookie, config)
-- [ ] Login page (admin + user)
-- [ ] Dashboard (stats, quota charts, recent logs, alerts)
-- [ ] Domain list (pagination, sorting, search, bulk actions, inline toggle)
-- [ ] Domain create/edit form (validation, error display)
-- [ ] Mailbox list + create/edit forms
-- [ ] Alias list + create/edit forms
-- [ ] Admin list + create/edit forms
-- [ ] Alias domain list + create/edit forms
-- [ ] Vacation configuration page (user scope)
-- [ ] DKIM key management pages (generate, list, signing, DNS check)
-- [ ] Fetchmail configuration pages
-- [ ] Audit log viewer (filterable, paginated, export CSV/JSON)
-- [ ] User pages: password change, vacation, app passwords, TOTP setup
-- [ ] Flash messages (success, error, warning)
-- [ ] Breadcrumb navigation
-- [ ] CSRF token on all POST forms
-- [ ] Security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
-- [ ] Static assets (Heroicons SVG, compiled CSS/JS)
-- [ ] Accessibility: ARIA, keyboard nav, WCAG 2.1 AA contrast
-- [ ] Template unit tests (render without errors)
-
-### M6: REST API `v0.7.0` [XL]
+### M5: REST API `v0.6.0` [XL]
 > Specs: [SPEC-10.1](docs/en/features/10-api/rest-api.md)
 
 - [ ] API router setup (`/api/v1/`)
@@ -228,6 +196,38 @@
 - [ ] Newman test collection: log endpoints
 - [ ] Newman test collection: alias domain endpoints
 - [ ] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
+
+### M6: postfix-admin-web `v0.7.0` [XL]
+> Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
+
+- [ ] Askama template base layout (header, sidebar, main, footer)
+- [ ] Tailwind CSS build pipeline (standalone CLI or npm)
+- [ ] Dark mode support (class="dark", localStorage, prefers-color-scheme)
+- [ ] Responsive design (mobile-first, collapsible sidebar)
+- [ ] HTMX integration (CDN or vendored)
+- [ ] Alpine.js integration (dropdowns, modals, confirmations)
+- [ ] i18n system (TOML language files, EN + FR)
+- [ ] Language detection (Accept-Language, cookie, config)
+- [ ] Login page (admin + user)
+- [ ] Dashboard (stats, quota charts, recent logs, alerts)
+- [ ] Domain list (pagination, sorting, search, bulk actions, inline toggle)
+- [ ] Domain create/edit form (validation, error display)
+- [ ] Mailbox list + create/edit forms
+- [ ] Alias list + create/edit forms
+- [ ] Admin list + create/edit forms
+- [ ] Alias domain list + create/edit forms
+- [ ] Vacation configuration page (user scope)
+- [ ] DKIM key management pages (generate, list, signing, DNS check)
+- [ ] Fetchmail configuration pages
+- [ ] Audit log viewer (filterable, paginated, export CSV/JSON)
+- [ ] User pages: password change, vacation, app passwords, TOTP setup
+- [ ] Flash messages (success, error, warning)
+- [ ] Breadcrumb navigation
+- [ ] CSRF token on all POST forms
+- [ ] Security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
+- [ ] Static assets (Heroicons SVG, compiled CSS/JS)
+- [ ] Accessibility: ARIA, keyboard nav, WCAG 2.1 AA contrast
+- [ ] Template unit tests (render without errors)
 
 ### M7: gRPC API `v0.7.1` [M]
 > Specs: [SPEC-10.2](docs/en/features/10-api/grpc-api.md)
