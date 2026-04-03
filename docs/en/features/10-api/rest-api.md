@@ -3,6 +3,19 @@
 ---
 # SPEC-10.1 — REST API
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Pagination types | `postfix-admin-core` | Done | M1 |
+| Error types (for API responses) | `postfix-admin-core` | Done | M1 |
+| API router setup | `postfix-admin-api` | Pending | M6 |
+| JWT authentication middleware | `postfix-admin-auth` | Pending | M4 |
+| RFC 7807 error handling | `postfix-admin-api` | Pending | M6 |
+| OpenAPI generation (utoipa) | `postfix-admin-api` | Pending | M6 |
+| All CRUD endpoints | `postfix-admin-api` | Pending | M6 |
+| Newman test collections | `tests/newman/` | Pending | M14 |
+
 ## Summary
 
 Complete JSON RESTful API for programmatic administration of the mail server.

@@ -6,14 +6,14 @@
 
 ```
                     ┌─────────────────────────────────────┐
-                    │          Clients                     │
-                    │  Browser  │  CLI  │  API clients     │
+                    │          Clients                    │
+                    │  Browser  │  CLI  │  API clients    │
                     └─────┬─────┴───┬───┴──────┬──────────┘
                           │         │          │
                     ┌─────▼─────────▼──────────▼──────────┐
-                    │         postfix-admin-server                    │
-                    │   (composition + startup)             │
-                    └──┬──────────┬──────────┬─────────────┘
+                    │         postfix-admin-server        │
+                    │   (composition + startup)           │
+                    └──┬──────────┬──────────┬────────────┘
                        │          │          │
               ┌────────▼──┐  ┌───▼────┐  ┌──▼──────┐
               │  postfix-admin-web   │  │postfix-admin-api │  │ postfix-admin-cli │
@@ -24,22 +24,22 @@
                      └────────┬───┘             │
                               │                 │
                     ┌─────────▼─────────────────▼─────────┐
-                    │            postfix-admin-auth                   │
-                    │  (sessions, JWT, TOTP, passwords)     │
-                    └──────────────┬───────────────────────┘
+                    │            postfix-admin-auth       │
+                    │  (sessions, JWT, TOTP, passwords)   │
+                    └──────────────┬──────────────────────┘
                                    │
                     ┌──────────────▼───────────────────────┐
-                    │             postfix-admin-db                    │
-                    │   (repositories, pool, migrations)    │
+                    │             postfix-admin-db         │
+                    │   (repositories, pool, migrations)   │
                     └──────────────┬───────────────────────┘
                                    │
-                    ┌──────────────▼───────────────────────┐
-                    │            postfix-admin-core                   │
-                    │  (models, traits, types, validation) │
+                    ┌──────────────▼──────────────────────┐
+                    │            postfix-admin-core       │
+                    │  (models, traits, types, validation)│
                     └─────────────────────────────────────┘
                                    │
-                    ┌──────────────▼───────────────────────┐
-                    │     PostgreSQL / MySQL / SQLite       │
+                    ┌──────────────▼──────────────────────┐
+                    │     PostgreSQL / MySQL / SQLite     │
                     └─────────────────────────────────────┘
 ```
 

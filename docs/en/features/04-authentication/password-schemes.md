@@ -3,6 +3,17 @@
 ---
 # SPEC-04.5 — Password Schemes
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Password newtype (`Password`, zeroize) | `postfix-admin-core` | Done | M1 |
+| Argon2id hashing | `postfix-admin-auth` | Pending | M4 |
+| Bcrypt hashing | `postfix-admin-auth` | Pending | M4 |
+| SHA-512/256 crypt | `postfix-admin-auth` | Pending | M4 |
+| Legacy scheme detection | `postfix-admin-auth` | Pending | M4 |
+| Transparent rehashing | `postfix-admin-auth` | Pending | M4 |
+
 ## Summary
 
 To allow for seamless migration from PostfixAdmin PHP and to ensure compatibility with Dovecot, the application supports multiple password hashing schemes for reading, while using argon2id for new hashes.

@@ -3,6 +3,18 @@
 ---
 # SPEC-04.4 — App Passwords (App Passwords)
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`MailboxAppPassword`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateAppPassword`, `AppPasswordResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`AppPasswordRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| Password generation and hashing | `postfix-admin-auth` | Pending | M4 |
+| Web UI management page | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Application passwords allow users to generate dedicated passwords for mail clients (Thunderbird, Outlook, smartphones) without exposing the main password. Particularly useful when TOTP 2FA is enabled, as mail clients do not support interactive 2FA.

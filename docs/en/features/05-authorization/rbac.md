@@ -3,6 +3,14 @@
 ---
 # SPEC-05.1 — Role-Based Access Control (RBAC)
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| RBAC extractors | `postfix-admin-auth` | Pending | M4 |
+| Scope verification | `postfix-admin-auth` | Pending | M4 |
+| Middleware integration | `postfix-admin-api` | Pending | M6 |
+
 ## Summary
 
 Three-level role system with hierarchical permission model. Each application action is protected by a role and scope check.

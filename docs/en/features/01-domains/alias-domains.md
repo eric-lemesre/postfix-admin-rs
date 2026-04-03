@@ -3,6 +3,20 @@
 ---
 # SPEC-01.2 — Alias Domains
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`AliasDomain`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateAliasDomain`, `AliasDomainResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`AliasDomainRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| CLI commands | `postfix-admin-cli` | Pending | M8 |
+| Routing logic | `postfix-admin-server` | Pending | M13 |
+
 ## Summary
 
 An alias domain redirects all mail from one domain to another domain.

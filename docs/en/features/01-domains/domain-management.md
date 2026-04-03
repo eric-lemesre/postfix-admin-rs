@@ -2,6 +2,20 @@
 
 # SPEC-01.1 — Virtual Domain Management
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Domain`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateDomain`, `UpdateDomain`, `DomainResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`DomainRepository`) | `postfix-admin-core` | Done | M1 |
+| Validation (quotas, limits, active check) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| CLI commands | `postfix-admin-cli` | Pending | M8 |
+
 ## Summary
 
 CRUD management of virtual email domains hosted by the Postfix server.

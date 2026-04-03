@@ -3,6 +3,17 @@
 ---
 # SPEC-12.1 — Web Interface
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Askama template base layout | `postfix-admin-web` | Pending | M5 |
+| Tailwind CSS build pipeline | `postfix-admin-web` | Pending | M5 |
+| HTMX + Alpine.js integration | `postfix-admin-web` | Pending | M5 |
+| i18n system (EN + FR) | `postfix-admin-web` | Pending | M5 |
+| All CRUD pages | `postfix-admin-web` | Pending | M5 |
+| Security headers middleware | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Modern web administration interface using server-side rendering (SSR) with Askama,
@@ -11,13 +22,13 @@ enhanced by HTMX for interactivity and styled with Tailwind CSS.
 
 ## Frontend stack
 
-| Technology | Role | Version |
-|-------------|------|---------|
-| **Askama** | Rust compiled templates | Latest |
-| **HTMX** | Interactivity (declarative AJAX requests) | 2.x |
-| **Tailwind CSS** | Utility design system | 3.x |
-| **Alpine.js** | Micro-interactivity (dropdowns, modals) | 3.x |
-| **Heroicons** | SVG icons | 2.x |
+| Technology       | Role                                      | Version |
+|------------------|-------------------------------------------|---------|
+| **Askama**       | Rust compiled templates                   | Latest  |
+| **HTMX**         | Interactivity (declarative AJAX requests) | 2.x     |
+| **Tailwind CSS** | Utility design system                     | 3.x     |
+| **Alpine.js**    | Micro-interactivity (dropdowns, modals)   | 3.x     |
+| **Heroicons**    | SVG icons                                 | 2.x     |
 
 ## Layout and navigation
 
@@ -27,7 +38,7 @@ enhanced by HTMX for interactivity and styled with Tailwind CSS.
 │  Header : Logo + Main Nav + User menu           │
 ├──────────┬──────────────────────────────────────┤
 │          │                                      │
-│ Sidebar  │        Main content                 │
+│ Sidebar  │        Main content                  │
 │ (context)│  ┌────────────────────────────────┐  │
 │          │  │  Breadcrumb                    │  │
 │          │  ├────────────────────────────────┤  │
@@ -39,7 +50,7 @@ enhanced by HTMX for interactivity and styled with Tailwind CSS.
 │          │  └────────────────────────────────┘  │
 │          │                                      │
 ├──────────┴──────────────────────────────────────┤
-│  Footer : Version + Links                      │
+│  Footer : Version + Links                       │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -87,25 +98,25 @@ enhanced by HTMX for interactivity and styled with Tailwind CSS.
 
 ## HTMX features
 
-| Feature | HTMX attribute | Description |
-|---------------|---------------|-------------|
-| Pagination | `hx-get`, `hx-target` | Loads next page without reload |
-| Live search | `hx-get`, `hx-trigger="keyup changed delay:300ms"` | Real-time list filtering |
-| Active toggle | `hx-patch`, `hx-swap="outerHTML"` | Toggles status inline |
-| Deletion | `hx-delete`, `hx-confirm` | Deletes with confirmation |
-| Forms | `hx-post`, `hx-target="#errors"` | AJAX submission with inline errors |
-| Navigation | `hx-get`, `hx-push-url` | SPA-like navigation |
+| Feature       | HTMX attribute                                     | Description                        |
+|---------------|----------------------------------------------------|------------------------------------|
+| Pagination    | `hx-get`, `hx-target`                              | Loads next page without reload     |
+| Live search   | `hx-get`, `hx-trigger="keyup changed delay:300ms"` | Real-time list filtering           |
+| Active toggle | `hx-patch`, `hx-swap="outerHTML"`                  | Toggles status inline              |
+| Deletion      | `hx-delete`, `hx-confirm`                          | Deletes with confirmation          |
+| Forms         | `hx-post`, `hx-target="#errors"`                   | AJAX submission with inline errors |
+| Navigation    | `hx-get`, `hx-push-url`                            | SPA-like navigation                |
 
 ## Design system
 
 ### Colors
 
-| Usage | Tailwind color |
-|-------|-----------------|
-| Primary | `indigo-600` |
-| Success | `green-600` |
-| Warning | `amber-500` |
-| Error | `red-600` |
+| Usage      | Tailwind color                        |
+|------------|---------------------------------------|
+| Primary    | `indigo-600`                          |
+| Success    | `green-600`                           |
+| Warning    | `amber-500`                           |
+| Error      | `red-600`                             |
 | Background | `gray-50` (light) / `gray-900` (dark) |
 
 ### Dark mode

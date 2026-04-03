@@ -3,6 +3,16 @@
 ---
 # SPEC-04.2 — User Authentication
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Mailbox` — auth fields) | `postfix-admin-core` | Done | M1 |
+| Password hashing and verification | `postfix-admin-auth` | Pending | M4 |
+| Session management | `postfix-admin-auth` | Pending | M4 |
+| JWT token generation | `postfix-admin-auth` | Pending | M4 |
+| Web UI login page | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Self-service interface for mailbox users. Allows management of password,

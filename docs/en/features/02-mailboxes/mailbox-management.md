@@ -3,6 +3,20 @@
 ---
 # SPEC-02.1 — Mailbox Management
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Mailbox`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateMailbox`, `UpdateMailbox`, `MailboxResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`MailboxRepository`) | `postfix-admin-core` | Done | M1 |
+| Validation (maildir, domain limits) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| CLI commands | `postfix-admin-cli` | Pending | M8 |
+
 ## Summary
 
 CRUD management of virtual mailboxes. Each mailbox represents a user account

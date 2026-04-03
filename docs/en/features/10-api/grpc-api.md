@@ -3,6 +3,15 @@
 ---
 # SPEC-10.2 — gRPC API
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Protobuf definitions | `postfix-admin-api` | Pending | M7 |
+| tonic service implementations | `postfix-admin-api` | Pending | M7 |
+| Authentication interceptor | `postfix-admin-auth` | Pending | M7 |
+| Integration tests | `postfix-admin-api` | Pending | M7 |
+
 ## Summary
 
 High-performance gRPC API for inter-service integrations and automation.

@@ -3,6 +3,20 @@
 ---
 # SPEC-08.1 — DKIM Management
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Models (`DkimKey`, `DkimSigning`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateDkimKey`, `DkimKeyResponse`, etc.) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`DkimRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| RSA key generation | `postfix-admin-server` | Pending | M11 |
+| Private key encryption at rest | `postfix-admin-auth` | Pending | M11 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Management of DKIM (DomainKeys Identified Mail) keys and signature tables

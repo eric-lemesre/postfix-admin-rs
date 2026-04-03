@@ -3,6 +3,16 @@
 ---
 # SPEC-13.1 — Configuration System
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Config struct definitions | `postfix-admin-server` | Pending | M3 |
+| config-rs integration | `postfix-admin-server` | Pending | M3 |
+| Resolution priority (CLI > env > file) | `postfix-admin-server` | Pending | M3 |
+| Startup validation | `postfix-admin-server` | Pending | M3 |
+| Auto-generation of secrets | `postfix-admin-server` | Pending | M3 |
+
 ## Summary
 
 Centralized configuration in TOML with multi-source support (file, environment

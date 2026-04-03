@@ -3,6 +3,19 @@
 ---
 # SPEC-06.1 — Auto-responder (Vacation)
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Models (`Vacation`, `VacationNotification`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`UpdateVacation`, `VacationResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`VacationRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| Vacation CRUD logic | `postfix-admin-server` | Pending | M10 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 The auto-responder sends a predefined response to emails received during the user's absence. Integration with Postfix `vacation` transport and a deduplication system to avoid responding multiple times to the same sender.

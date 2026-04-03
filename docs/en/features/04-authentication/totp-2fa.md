@@ -3,6 +3,19 @@
 ---
 # SPEC-04.3 — Two-factor authentication TOTP
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`TotpExceptionAddress`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateTotpException`, `TotpExceptionResponse`) | `postfix-admin-core` | Done | M1 |
+| TOTP secret generation | `postfix-admin-auth` | Pending | M4 |
+| TOTP verification | `postfix-admin-auth` | Pending | M4 |
+| QR code generation | `postfix-admin-auth` | Pending | M4 |
+| Recovery codes | `postfix-admin-auth` | Pending | M4 |
+| IP exceptions | `postfix-admin-auth` | Pending | M4 |
+| Web UI setup page | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Support for two-factor authentication (2FA) via TOTP (Time-based One-Time Password,

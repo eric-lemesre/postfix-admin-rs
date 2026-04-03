@@ -3,6 +3,20 @@
 ---
 # SPEC-03.1 — Alias Management
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Alias`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateAlias`, `UpdateAlias`, `AliasResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`AliasRepository`) | `postfix-admin-core` | Done | M1 |
+| Validation (alias destinations) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+| CLI commands | `postfix-admin-cli` | Pending | M8 |
+
 ## Summary
 
 Aliases define email redirection rules. An alias maps a source address to one or more destination addresses. It's the fundamental mechanism for virtual mail routing in Postfix.

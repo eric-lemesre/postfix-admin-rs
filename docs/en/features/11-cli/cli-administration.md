@@ -3,6 +3,15 @@
 ---
 # SPEC-11.1 — Command Line Interface (CLI)
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| clap command structure | `postfix-admin-cli` | Pending | M8 |
+| Domain/Mailbox/Alias/Admin commands | `postfix-admin-cli` | Pending | M8 |
+| Utility commands (setup, migrate, etc.) | `postfix-admin-cli` | Pending | M8 |
+| Output formatters (table, JSON, CSV) | `postfix-admin-cli` | Pending | M8 |
+
 ## Summary
 
 CLI for server mail administration without web interface.

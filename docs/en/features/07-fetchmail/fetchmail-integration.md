@@ -3,6 +3,19 @@
 ---
 # SPEC-07.1 — Fetchmail Integration
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Fetchmail`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateFetchmail`, `UpdateFetchmail`, `FetchmailResponse`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`FetchmailRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| Fetchmail CRUD + polling daemon | `postfix-admin-server` | Pending | M12 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI pages | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Allows users to retrieve mail from remote servers (POP3/IMAP) and deliver it to their local mailbox. Configuration is stored in the database and read by a fetchmail daemon.

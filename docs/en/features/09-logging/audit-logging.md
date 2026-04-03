@@ -3,6 +3,18 @@
 ---
 # SPEC-09.1 — Audit log
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Model (`Log`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`CreateLog`, `LogResponse`, `LogFilter`) | `postfix-admin-core` | Done | M1 |
+| Repository trait (`LogRepository`) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| REST API endpoints | `postfix-admin-api` | Pending | M6 |
+| Web UI log viewer | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 System for logging all administrative actions performed via the web interface,

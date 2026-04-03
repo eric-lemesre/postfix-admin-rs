@@ -50,22 +50,22 @@
 - [x] Create Newman test directory structure (`tests/newman/`)
 
 ### M1: postfix-admin-core `v0.2.0` [L]
-- [ ] Domain models: `Domain`, `Mailbox`, `Alias`, `Admin`
-- [ ] Domain models: `Vacation`, `VacationNotification`
-- [ ] Domain models: `DkimKey`, `DkimSigning`
-- [ ] Domain models: `Fetchmail`, `Log`
-- [ ] Domain models: `MailboxAppPassword`, `TotpExceptionAddress`
-- [ ] Domain models: `AliasDomain`, `Quota`, `Quota2`
-- [ ] Validated newtypes: `DomainName`, `EmailAddress`, `Password` (zeroize)
-- [ ] DTOs: `Create*`, `Update*`, `*Response` for all entities
-- [ ] Repository traits: `DomainRepository`, `MailboxRepository`, `AliasRepository`
-- [ ] Repository traits: `AdminRepository`, `VacationRepository`
-- [ ] Repository traits: `DkimRepository`, `FetchmailRepository`, `LogRepository`
-- [ ] Repository traits: `AppPasswordRepository`, `AliasDomainRepository`
-- [ ] Error types: `CoreError`, `ValidationError`, `DomainError`
-- [ ] Business validation logic (validator + custom rules)
-- [ ] Pagination types: `PageRequest`, `PageResponse<T>`
-- [ ] Unit tests for all models, newtypes, and validation
+- [x] Domain models: `Domain`, `Mailbox`, `Alias`, `Admin`
+- [x] Domain models: `Vacation`, `VacationNotification`
+- [x] Domain models: `DkimKey`, `DkimSigning`
+- [x] Domain models: `Fetchmail`, `Log`
+- [x] Domain models: `MailboxAppPassword`, `TotpExceptionAddress`
+- [x] Domain models: `AliasDomain`, `Quota`, `Quota2`
+- [x] Validated newtypes: `DomainName`, `EmailAddress`, `Password` (zeroize)
+- [x] DTOs: `Create*`, `Update*`, `*Response` for all entities
+- [x] Repository traits: `DomainRepository`, `MailboxRepository`, `AliasRepository`
+- [x] Repository traits: `AdminRepository`, `VacationRepository`
+- [x] Repository traits: `DkimRepository`, `FetchmailRepository`, `LogRepository`
+- [x] Repository traits: `AppPasswordRepository`, `AliasDomainRepository`
+- [x] Error types: `CoreError`, `ValidationError`, `DomainError`
+- [x] Business validation logic (validator + custom rules)
+- [x] Pagination types: `PageRequest`, `PageResponse<T>`
+- [x] Unit tests for all models, newtypes, and validation
 
 ### M2: postfix-admin-db `v0.3.0` [XL]
 - [ ] Connection pool management (sqlx, multi-backend)

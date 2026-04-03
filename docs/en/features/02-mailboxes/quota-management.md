@@ -3,6 +3,17 @@
 ---
 # SPEC-02.2 — Quota Management
 
+## Implementation Status
+
+| Component | Crate | Status | Milestone |
+|-----------|-------|--------|-----------|
+| Models (`Quota`, `Quota2`) | `postfix-admin-core` | Done | M1 |
+| DTOs (`QuotaResponse`, `Quota2Response`) | `postfix-admin-core` | Done | M1 |
+| Validation (quota within domain) | `postfix-admin-core` | Done | M1 |
+| PostgreSQL repository | `postfix-admin-db` | Pending | M2 |
+| MySQL repository | `postfix-admin-db` | Pending | M2 |
+| Web UI (quota display, charts) | `postfix-admin-web` | Pending | M5 |
+
 ## Summary
 
 Two-level quota system (domain and individual mailbox) integrated with
