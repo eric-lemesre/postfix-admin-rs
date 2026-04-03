@@ -12,6 +12,7 @@ pub struct AuthConfig {
     pub argon2: Argon2Config,
     pub jwt: JwtConfig,
     pub mtls: MtlsConfig,
+    pub totp: TotpConfig,
 }
 
 impl Default for AuthConfig {
@@ -25,6 +26,7 @@ impl Default for AuthConfig {
             argon2: Argon2Config::default(),
             jwt: JwtConfig::default(),
             mtls: MtlsConfig::default(),
+            totp: TotpConfig::default(),
         }
     }
 }
@@ -96,6 +98,23 @@ impl Default for MtlsConfig {
     }
 }
 
+/// TOTP two-factor authentication configuration.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(default)]
+pub struct TotpConfig {
+    pub issuer: String,
+    pub max_recovery_codes: usize,
+}
+
+impl Default for TotpConfig {
+    fn default() -> Self {
+        Self {
+            issuer: "PostfixAdmin".to_string(),
+            max_recovery_codes: 10,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -138,5 +157,18 @@ mod tests {
     fn auth_config_default_includes_mtls() {
         let cfg = AuthConfig::default();
         assert!(!cfg.mtls.enabled);
+    }
+
+    #[test]
+    fn totp_config_defaults() {
+        let cfg = TotpConfig::default();
+        assert_eq!(cfg.issuer, "PostfixAdmin");
+        assert_eq!(cfg.max_recovery_codes, 10);
+    }
+
+    #[test]
+    fn auth_config_default_includes_totp() {
+        let cfg = AuthConfig::default();
+        assert_eq!(cfg.totp.issuer, "PostfixAdmin");
     }
 }

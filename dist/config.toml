@@ -44,6 +44,10 @@ parallelism = 1
 access_token_lifetime = 900
 refresh_token_lifetime = 604800
 
+[auth.totp]
+issuer = "PostfixAdmin"
+max_recovery_codes = 10
+
 [auth.mtls]
 enabled = false
 trusted_proxy_header = "X-SSL-Client-Verify"

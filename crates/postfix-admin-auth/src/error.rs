@@ -40,4 +40,24 @@ pub enum AuthError {
     /// Unsupported password scheme.
     #[error("unsupported password scheme: {0}")]
     UnsupportedScheme(String),
+
+    /// Invalid TOTP code.
+    #[error("invalid TOTP code")]
+    InvalidTotpCode,
+
+    /// TOTP code replay detected (same time step used twice).
+    #[error("TOTP code replay detected")]
+    TotpReplay,
+
+    /// TOTP setup error.
+    #[error("TOTP setup error: {0}")]
+    TotpSetupError(String),
+
+    /// CSRF token mismatch.
+    #[error("CSRF token validation failed")]
+    CsrfError,
+
+    /// Rate limited — contains seconds until retry is allowed.
+    #[error("rate limited, retry after {0} seconds")]
+    RateLimited(u64),
 }
