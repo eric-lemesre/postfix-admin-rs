@@ -7,12 +7,12 @@
 
 | Component                    | Crate               | Status  | Milestone |
 |------------------------------|---------------------|---------|-----------|
-| Askama template base layout  | `postfix-admin-web` | Pending | M5        |
-| Tailwind CSS build pipeline  | `postfix-admin-web` | Pending | M5        |
-| HTMX + Alpine.js integration | `postfix-admin-web` | Pending | M5        |
-| i18n system (EN + FR)        | `postfix-admin-web` | Pending | M5        |
-| All CRUD pages               | `postfix-admin-web` | Pending | M5        |
-| Security headers middleware  | `postfix-admin-web` | Pending | M5        |
+| Askama template base layout  | `postfix-admin-web` | Done    | M6        |
+| Tailwind CSS build pipeline  | `postfix-admin-web` | Pending | M6        |
+| HTMX + Alpine.js integration | `postfix-admin-web` | Partial | M6        |
+| i18n system (EN + FR)        | `postfix-admin-web` | Pending | M6        |
+| All CRUD pages               | `postfix-admin-web` | Partial | M6        |
+| Security headers middleware  | `postfix-admin-web` | Pending | M6        |
 
 ## Summary
 

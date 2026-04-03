@@ -125,19 +125,19 @@
 ### M4: postfix-admin-auth `v0.5.0` [XL]
 > Specs: [SPEC-04.1](docs/en/features/04-authentication/admin-authentication.md) · [SPEC-04.2](docs/en/features/04-authentication/user-authentication.md) · [SPEC-04.3](docs/en/features/04-authentication/totp-2fa.md) · [SPEC-04.4](docs/en/features/04-authentication/app-passwords.md) · [SPEC-04.5](docs/en/features/04-authentication/password-schemes.md) · [SPEC-05.1](docs/en/features/05-authorization/rbac.md)
 
-- [ ] Password scheme detection (prefix matching per SPEC-04.5)
-- [ ] Argon2id hashing and verification (OWASP 2024 parameters)
-- [ ] Bcrypt hashing and verification
-- [ ] SHA-512 crypt and SHA-256 crypt support
+- [x] Password scheme detection (prefix matching per SPEC-04.5)
+- [x] Argon2id hashing and verification (OWASP 2024 parameters)
+- [x] Bcrypt hashing and verification
+- [x] SHA-512 crypt and SHA-256 crypt support
 - [ ] MD5 crypt and legacy DES crypt support (read-only)
-- [ ] Cleartext detection (dev mode only)
-- [ ] Transparent rehashing on successful auth
+- [x] Cleartext detection (dev mode only)
+- [x] Transparent rehashing on successful auth
 - [ ] Constant-time password comparison
 - [ ] Session management (server-side, configurable lifetime)
 - [ ] Session cookie: HttpOnly, Secure, SameSite=Strict
 - [ ] Session regeneration after authentication
-- [ ] JWT generation (access + refresh tokens, configurable lifetimes)
-- [ ] JWT verification and refresh flow
+- [x] JWT generation (access + refresh tokens, configurable lifetimes)
+- [x] JWT verification and refresh flow
 - [ ] TOTP secret generation (160 bits, base32)
 - [ ] TOTP QR code generation (otpauth:// URI)
 - [ ] TOTP verification (SHA-1, 6 digits, 30s, tolerance +/-1)
@@ -156,7 +156,7 @@
 - [x] mTLS DN parsing (RFC 2253 and OpenSSL formats)
 - [ ] mTLS middleware integration (extract cert info from request headers)
 - [ ] mTLS enforcement per role (require cert for superadmin/domain admin)
-- [ ] Unit tests for all password schemes
+- [x] Unit tests for all password schemes
 - [ ] Unit tests for JWT, TOTP, RBAC, rate limiting
 
 ---
@@ -166,23 +166,23 @@
 ### M5: REST API `v0.6.0` [XL]
 > Specs: [SPEC-10.1](docs/en/features/10-api/rest-api.md)
 
-- [ ] API router setup (`/api/v1/`)
-- [ ] Authentication middleware (JWT Bearer + API Key)
-- [ ] Error handling: RFC 7807 (Problem Details for HTTP APIs)
-- [ ] Pagination: offset-based with meta headers
+- [x] API router setup (`/api/v1/`)
+- [x] Authentication middleware (JWT Bearer + API Key)
+- [x] Error handling: RFC 7807 (Problem Details for HTTP APIs)
+- [x] Pagination: offset-based with meta headers
 - [ ] Response format: `{ "data": ..., "meta": ... }`
 - [ ] OpenAPI 3.1 generation (utoipa)
 - [ ] Swagger UI at `/api/docs`
-- [ ] Auth endpoints: login, refresh, logout, totp/verify
-- [ ] Domain endpoints: list, get, create, update, delete, toggle
-- [ ] Alias domain endpoints: list, create, delete
-- [ ] Mailbox endpoints: list, get, create, update, delete, change password
-- [ ] Alias endpoints: list, get, create, update, delete
-- [ ] Admin endpoints: list, get, create, update, delete
-- [ ] Vacation endpoints: get, update, delete (per mailbox)
-- [ ] Fetchmail endpoints: list, get, create, update, delete, test
-- [ ] DKIM endpoints: keys (list, create, delete), signing (list, create, delete), dns-check
-- [ ] Log endpoints: list (global + per domain)
+- [x] Auth endpoints: login, refresh, logout, totp/verify
+- [x] Domain endpoints: list, get, create, update, delete, toggle
+- [x] Alias domain endpoints: list, create, delete
+- [x] Mailbox endpoints: list, get, create, update, delete, change password
+- [x] Alias endpoints: list, get, create, update, delete
+- [x] Admin endpoints: list, get, create, update, delete
+- [x] Vacation endpoints: get, update, delete (per mailbox)
+- [x] Fetchmail endpoints: list, get, create, update, delete, test
+- [x] DKIM endpoints: keys (list, create, delete), signing (list, create, delete), dns-check
+- [x] Log endpoints: list (global + per domain)
 - [ ] Rate limiting middleware (100 req/min default, X-RateLimit-* headers)
 - [ ] CORS middleware (configurable origins per config.toml)
 - [ ] Newman test collection: auth endpoints
@@ -200,18 +200,18 @@
 ### M6: postfix-admin-web `v0.7.0` [XL]
 > Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
 
-- [ ] Askama template base layout (header, sidebar, main, footer)
+- [x] Askama template base layout (header, sidebar, main, footer)
 - [ ] Tailwind CSS build pipeline (standalone CLI or npm)
 - [ ] Dark mode support (class="dark", localStorage, prefers-color-scheme)
 - [ ] Responsive design (mobile-first, collapsible sidebar)
-- [ ] HTMX integration (CDN or vendored)
+- [x] HTMX integration (CDN or vendored)
 - [ ] Alpine.js integration (dropdowns, modals, confirmations)
 - [ ] i18n system (TOML language files, EN + FR)
 - [ ] Language detection (Accept-Language, cookie, config)
-- [ ] Login page (admin + user)
+- [x] Login page (admin + user)
 - [ ] Dashboard (stats, quota charts, recent logs, alerts)
 - [ ] Domain list (pagination, sorting, search, bulk actions, inline toggle)
-- [ ] Domain create/edit form (validation, error display)
+- [x] Domain create/edit form (validation, error display)
 - [ ] Mailbox list + create/edit forms
 - [ ] Alias list + create/edit forms
 - [ ] Admin list + create/edit forms
@@ -221,7 +221,7 @@
 - [ ] Fetchmail configuration pages
 - [ ] Audit log viewer (filterable, paginated, export CSV/JSON)
 - [ ] User pages: password change, vacation, app passwords, TOTP setup
-- [ ] Flash messages (success, error, warning)
+- [x] Flash messages (success, error, warning)
 - [ ] Breadcrumb navigation
 - [ ] CSRF token on all POST forms
 - [ ] Security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
@@ -266,16 +266,16 @@
 ## Phase 4 — Server & Feature modules
 
 ### M9: postfix-admin-server `v0.8.0` [M]
-- [ ] Main entry point (`main.rs`)
-- [ ] Config loading and validation
-- [ ] Database pool initialization
-- [ ] Axum router construction (mount web + API routes)
+- [x] Main entry point (`main.rs`)
+- [x] Config loading and validation
+- [x] Database pool initialization
+- [x] Axum router construction (mount web + API routes)
 - [ ] Optional gRPC server startup (separate port)
 - [ ] Health check endpoint (`GET /health`)
 - [ ] Prometheus metrics endpoint (`GET /metrics`, optional)
-- [ ] Graceful shutdown (SIGTERM, SIGINT)
+- [x] Graceful shutdown (SIGTERM, SIGINT)
 - [ ] Signal handling (SIGHUP for config reload)
-- [ ] Structured logging setup (tracing, JSON/pretty)
+- [x] Structured logging setup (tracing, JSON/pretty)
 - [ ] Syslog output (optional)
 - [ ] Static assets serving (include_dir)
 - [ ] Smoke tests (server starts and responds)

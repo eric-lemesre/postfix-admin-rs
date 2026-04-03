@@ -12,11 +12,12 @@
 | Repository trait (`AdminRepository`)                 | `postfix-admin-core` | Done    | M1        |
 | PostgreSQL repository                                | `postfix-admin-db`   | Done    | M2        |
 | MySQL repository                                     | `postfix-admin-db`   | Done    | M2        |
-| Password hashing and verification                    | `postfix-admin-auth` | Pending | M4        |
+| Password hashing and verification                    | `postfix-admin-auth` | Done    | M4        |
+| JWT generation and verification                      | `postfix-admin-auth` | Done    | M4        |
 | Session management                                   | `postfix-admin-auth` | Pending | M4        |
 | TOTP verification                                    | `postfix-admin-auth` | Pending | M4        |
 | mTLS client certificate extraction                   | `postfix-admin-auth` | Done    | M4        |
-| Web UI login page                                    | `postfix-admin-web`  | Pending | M5        |
+| Web UI login page                                    | `postfix-admin-web`  | Done    | M6        |
 
 ## Summary
 

@@ -8,11 +8,11 @@
 | Component                              | Crate                | Status  | Milestone |
 |----------------------------------------|----------------------|---------|-----------|
 | Password newtype (`Password`, zeroize) | `postfix-admin-core` | Done    | M1        |
-| Argon2id hashing                       | `postfix-admin-auth` | Pending | M4        |
-| Bcrypt hashing                         | `postfix-admin-auth` | Pending | M4        |
-| SHA-512/256 crypt                      | `postfix-admin-auth` | Pending | M4        |
-| Legacy scheme detection                | `postfix-admin-auth` | Pending | M4        |
-| Transparent rehashing                  | `postfix-admin-auth` | Pending | M4        |
+| Argon2id hashing                       | `postfix-admin-auth` | Done    | M4        |
+| Bcrypt hashing                         | `postfix-admin-auth` | Done    | M4        |
+| SHA-512/256 crypt                      | `postfix-admin-auth` | Done    | M4        |
+| Legacy scheme detection                | `postfix-admin-auth` | Done    | M4        |
+| Transparent rehashing                  | `postfix-admin-auth` | Done    | M4        |
 
 ## Summary
 

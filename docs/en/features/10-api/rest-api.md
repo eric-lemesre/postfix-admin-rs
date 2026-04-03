@@ -9,11 +9,11 @@
 |---------------------------------|----------------------|---------|-----------|
 | Pagination types                | `postfix-admin-core` | Done    | M1        |
 | Error types (for API responses) | `postfix-admin-core` | Done    | M1        |
-| API router setup                | `postfix-admin-api`  | Pending | M6        |
-| JWT authentication middleware   | `postfix-admin-auth` | Pending | M4        |
-| RFC 7807 error handling         | `postfix-admin-api`  | Pending | M6        |
-| OpenAPI generation (utoipa)     | `postfix-admin-api`  | Pending | M6        |
-| All CRUD endpoints              | `postfix-admin-api`  | Pending | M6        |
+| API router setup                | `postfix-admin-api`  | Done    | M5        |
+| JWT authentication middleware   | `postfix-admin-auth` | Done    | M4        |
+| RFC 7807 error handling         | `postfix-admin-api`  | Done    | M5        |
+| OpenAPI generation (utoipa)     | `postfix-admin-api`  | Pending | M5        |
+| All CRUD endpoints              | `postfix-admin-api`  | Done    | M5        |
 | Newman test collections         | `tests/newman/`      | Pending | M14       |
 
 ## Summary
