@@ -39,6 +39,8 @@ port = 50051
 tls_enabled = false
 tls_cert_path = ""
 tls_key_path = ""
+# tls_ca_cert_path = ""                            # CA cert for client cert verification
+# require_client_cert = false                      # Require client certificates
 
 # --------------------------------------------------------------------------
 # Authentication
@@ -58,6 +60,19 @@ parallelism = 1
 [auth.jwt]
 access_token_lifetime = 900         # 15 minutes
 refresh_token_lifetime = 604800     # 7 days
+
+# Client certificate (mTLS) authentication for admin accounts.
+# When enabled, a reverse proxy (Nginx/Apache) verifies client certificates
+# and forwards identity information via HTTP headers. This provides a strong
+# additional MFA factor for privileged accounts.
+# [auth.mtls]
+# enabled = false
+# trusted_proxy_header = "X-SSL-Client-Verify"   # Header set by reverse proxy
+# subject_header = "X-SSL-Client-S-DN"            # DN of the client certificate
+# serial_header = "X-SSL-Client-Serial"           # Serial number of the cert
+# require_for_superadmin = false                   # Require cert for superadmins
+# require_for_domain_admin = false                 # Require cert for domain admins
+# cn_field = "emailAddress"                        # DN field to extract identity from
 
 # --------------------------------------------------------------------------
 # Password policy

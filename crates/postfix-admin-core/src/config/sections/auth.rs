@@ -11,6 +11,7 @@ pub struct AuthConfig {
     pub allow_cleartext: bool,
     pub argon2: Argon2Config,
     pub jwt: JwtConfig,
+    pub mtls: MtlsConfig,
 }
 
 impl Default for AuthConfig {
@@ -23,6 +24,7 @@ impl Default for AuthConfig {
             allow_cleartext: false,
             argon2: Argon2Config::default(),
             jwt: JwtConfig::default(),
+            mtls: MtlsConfig::default(),
         }
     }
 }
@@ -63,6 +65,37 @@ impl Default for JwtConfig {
     }
 }
 
+/// Mutual TLS (client certificate) configuration for administrator authentication.
+///
+/// When enabled, the reverse proxy (Nginx/Apache) verifies client certificates
+/// and forwards identity information via HTTP headers. This provides a strong
+/// additional MFA factor for privileged accounts.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(default)]
+pub struct MtlsConfig {
+    pub enabled: bool,
+    pub trusted_proxy_header: String,
+    pub subject_header: String,
+    pub serial_header: String,
+    pub require_for_superadmin: bool,
+    pub require_for_domain_admin: bool,
+    pub cn_field: String,
+}
+
+impl Default for MtlsConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            trusted_proxy_header: "X-SSL-Client-Verify".to_string(),
+            subject_header: "X-SSL-Client-S-DN".to_string(),
+            serial_header: "X-SSL-Client-Serial".to_string(),
+            require_for_superadmin: false,
+            require_for_domain_admin: false,
+            cn_field: "emailAddress".to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -87,5 +120,23 @@ mod tests {
         let cfg = JwtConfig::default();
         assert_eq!(cfg.access_token_lifetime, 900);
         assert_eq!(cfg.refresh_token_lifetime, 604_800);
+    }
+
+    #[test]
+    fn mtls_config_default_disabled() {
+        let cfg = MtlsConfig::default();
+        assert!(!cfg.enabled);
+        assert_eq!(cfg.trusted_proxy_header, "X-SSL-Client-Verify");
+        assert_eq!(cfg.subject_header, "X-SSL-Client-S-DN");
+        assert_eq!(cfg.serial_header, "X-SSL-Client-Serial");
+        assert!(!cfg.require_for_superadmin);
+        assert!(!cfg.require_for_domain_admin);
+        assert_eq!(cfg.cn_field, "emailAddress");
+    }
+
+    #[test]
+    fn auth_config_default_includes_mtls() {
+        let cfg = AuthConfig::default();
+        assert!(!cfg.mtls.enabled);
     }
 }

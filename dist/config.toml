@@ -25,6 +25,8 @@ table_prefix = ""
 enabled = false
 bind_address = "0.0.0.0"
 port = 50051
+tls_ca_cert_path = ""
+require_client_cert = false
 
 [auth]
 session_lifetime = 3600
@@ -41,6 +43,15 @@ parallelism = 1
 [auth.jwt]
 access_token_lifetime = 900
 refresh_token_lifetime = 604800
+
+[auth.mtls]
+enabled = false
+trusted_proxy_header = "X-SSL-Client-Verify"
+subject_header = "X-SSL-Client-S-DN"
+serial_header = "X-SSL-Client-Serial"
+require_for_superadmin = false
+require_for_domain_admin = false
+cn_field = "emailAddress"
 
 [password_policy]
 min_length = 8

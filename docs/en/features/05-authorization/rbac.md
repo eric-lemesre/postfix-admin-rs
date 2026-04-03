@@ -118,4 +118,21 @@ Domain fields modifiable by a domain admin:
 - No need to create entries in `domain_admins` for a superadmin
 - An admin can be both an admin and have a mailbox (double session possible)
 
+## Authentication Assurance Levels
+
+Administrative actions may require different authentication assurance levels depending on the role and the sensitivity of the operation.
+
+| Level | Name | Factors                          | Required for                |
+|-------|------|----------------------------------|-----------------------------|
+| AAL1  | Low  | Password only                    | User (mailbox) operations   |
+| AAL2  | Medium | Password + TOTP                | Domain admin operations     |
+| AAL3  | High | Password + TOTP + Client cert    | Superadmin operations       |
+
+### Enforcement rules
+
+- When `auth.mtls.require_for_superadmin = true`, superadmin actions require AAL3
+- When `auth.mtls.require_for_domain_admin = true`, domain admin actions require AAL3
+- TOTP enforcement is independent of mTLS and configured per account
+- An admin who has not presented a client certificate is downgraded to the highest level their authentication factors allow
+
 ---

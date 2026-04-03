@@ -18,8 +18,8 @@ pub use profile::{OperatingMode, Profile};
 pub use sections::{
     Argon2Config, AuthConfig, DatabaseConfig, DkimConfig, DomainDefaultsConfig, EncryptionConfig,
     FetchmailConfig, GrpcConfig, JwtConfig, LogFormat, LogLevel, LoggingConfig, MailConfig,
-    PasswordPolicyConfig, SecretString, SecurityConfig, ServerConfig, TlsConfig, UiConfig,
-    VacationConfig,
+    MtlsConfig, PasswordPolicyConfig, SecretString, SecurityConfig, ServerConfig, TlsConfig,
+    UiConfig, VacationConfig,
 };
 
 /// Root application configuration.

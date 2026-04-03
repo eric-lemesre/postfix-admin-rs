@@ -44,6 +44,7 @@ Pour signaler une vulnerabilite :
 - Garder postfix-admin-rs a jour
 - Utiliser des mots de passe forts pour les comptes admin
 - Activer le TOTP 2FA pour tous les comptes admin
+- Utiliser des certificats clients (mTLS) pour les comptes superadmin si possible
 - Restreindre l'acces reseau a l'interface d'administration
 - Sauvegarder regulierement la base de donnees
 - Surveiller les logs d'audit
