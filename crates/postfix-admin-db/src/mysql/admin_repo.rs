@@ -7,7 +7,9 @@ use postfix_admin_core::pagination::{PageRequest, PageResponse};
 use postfix_admin_core::repository::AdminRepository;
 use postfix_admin_core::EmailAddress;
 
-use crate::rows::{AdminRow, CountRow};
+use postfix_admin_core::DomainName;
+
+use crate::rows::{AdminRow, CountRow, DomainNameRow, PasswordRow};
 
 const ADMIN_SELECT: &str = "SELECT username, superadmin, \
     (totp_secret IS NOT NULL) AS totp_enabled, \
@@ -124,5 +126,36 @@ impl AdminRepository for MysqlAdminRepository {
             return Err(CoreError::not_found("admin", username.as_str()));
         }
         Ok(())
+    }
+
+    async fn find_password_hash(
+        &self,
+        username: &EmailAddress,
+    ) -> Result<Option<String>, CoreError> {
+        let row = sqlx::query_as::<_, PasswordRow>("SELECT password FROM admin WHERE username = ?")
+            .bind(username.as_str())
+            .fetch_optional(&self.pool)
+            .await
+            .map_err(|e| CoreError::repository(e.to_string()))?;
+
+        Ok(row.map(|r| r.password))
+    }
+
+    async fn find_admin_domains(
+        &self,
+        username: &EmailAddress,
+    ) -> Result<Vec<DomainName>, CoreError> {
+        let rows = sqlx::query_as::<_, DomainNameRow>(
+            "SELECT domain FROM domain_admins WHERE username = ?",
+        )
+        .bind(username.as_str())
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|e| CoreError::repository(e.to_string()))?;
+
+        Ok(rows
+            .into_iter()
+            .map(|r| DomainName::from_trusted(r.domain))
+            .collect())
     }
 }

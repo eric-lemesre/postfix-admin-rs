@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use crate::dto::{AdminResponse, CreateAdmin, UpdateAdmin};
 use crate::error::CoreError;
 use crate::pagination::{PageRequest, PageResponse};
-use crate::types::EmailAddress;
+use crate::types::{DomainName, EmailAddress};
 
 #[async_trait]
 pub trait AdminRepository: Send + Sync {
@@ -19,4 +19,16 @@ pub trait AdminRepository: Send + Sync {
         dto: &UpdateAdmin,
     ) -> Result<AdminResponse, CoreError>;
     async fn delete(&self, username: &EmailAddress) -> Result<(), CoreError>;
+
+    /// Fetch the password hash for an admin (for authentication).
+    async fn find_password_hash(
+        &self,
+        username: &EmailAddress,
+    ) -> Result<Option<String>, CoreError>;
+
+    /// Fetch the list of domains an admin manages.
+    async fn find_admin_domains(
+        &self,
+        username: &EmailAddress,
+    ) -> Result<Vec<DomainName>, CoreError>;
 }

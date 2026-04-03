@@ -51,6 +51,7 @@ rand = "0.9"
 subtle = "2"
 data-encoding = "2"
 totp-rs = { version = "5", features = ["qr", "gen_secret"] }
+dashmap = "6"
 
 # JWT
 jsonwebtoken = "9"
