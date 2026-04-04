@@ -1,0 +1,556 @@
+{
+	"info": {
+		"_postman_id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+		"name": "11 - Error Cases",
+		"description": "Common error scenario tests across endpoints for postfix-admin-rs REST API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET domain without auth returns 401",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/nonexistent.invalid",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "nonexistent.invalid"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field matches HTTP status\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(401);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Authenticate for subsequent tests",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"{{admin_username}}\",\"password\":\"{{admin_password}}\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/auth/login",
+					"host": ["{{api_base}}"],
+					"path": ["auth", "login"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has access_token\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"access_token\");",
+							"    pm.environment.set(\"access_token\", json.access_token);",
+							"});",
+							"",
+							"pm.test(\"Response has refresh_token\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"refresh_token\");",
+							"    pm.environment.set(\"refresh_token\", json.refresh_token);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "GET nonexistent domain with auth returns 404",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/nonexistent.invalid",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "nonexistent.invalid"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 404\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(404);",
+							"});",
+							"",
+							"pm.test(\"Title indicates not found\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.title).to.eql(\"Not Found\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST domain with empty body returns 422",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "{{api_base}}/domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 422\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(422);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Setup: Create domain for duplicate test",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"domain\":\"newman-error-test.example.com\",\"description\":\"Domain for error case testing\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Domain created for duplicate test\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST duplicate domain returns 409",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"domain\":\"newman-error-test.example.com\",\"description\":\"Duplicate domain attempt\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 409\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(409);",
+							"});",
+							"",
+							"pm.test(\"Title indicates conflict\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.title).to.eql(\"Conflict\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST login with wrong password returns 401",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"{{admin_username}}\",\"password\":\"completely-wrong-password-12345\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/auth/login",
+					"host": ["{{api_base}}"],
+					"path": ["auth", "login"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 401\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(401);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST refresh with garbage token returns 401",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"refresh_token\":\"not-a-valid-jwt-token-at-all\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/auth/refresh",
+					"host": ["{{api_base}}"],
+					"path": ["auth", "refresh"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 401\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(401);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "GET admins without auth returns 401",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/admins",
+					"host": ["{{api_base}}"],
+					"path": ["admins"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 401\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(401);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "DELETE nonexistent domain returns 404",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/nonexistent.invalid",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "nonexistent.invalid"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response is RFC 7807 Problem Details\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"type\");",
+							"    pm.expect(json).to.have.property(\"title\");",
+							"    pm.expect(json).to.have.property(\"status\");",
+							"    pm.expect(json).to.have.property(\"detail\");",
+							"});",
+							"",
+							"pm.test(\"Status field is 404\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.status).to.eql(404);",
+							"});",
+							"",
+							"pm.test(\"Title indicates not found\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.title).to.eql(\"Not Found\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cleanup: Delete test domain",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/newman-error-test.example.com",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "newman-error-test.example.com"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Test domain cleaned up\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+							"});"
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,211 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "09 - Logs",
+		"description": "Audit log endpoint tests for postfix-admin-rs REST API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const loginRequest = {",
+					"    url: pm.environment.get(\"api_base\") + \"/auth/login\",",
+					"    method: \"POST\",",
+					"    header: {\"Content-Type\": \"application/json\"},",
+					"    body: {mode: \"raw\", raw: JSON.stringify({username: pm.environment.get(\"admin_username\"), password: pm.environment.get(\"admin_password\")})}",
+					"};",
+					"pm.sendRequest(loginRequest, function(err, res) {",
+					"    if (!err && res.code === 200) {",
+					"        const json = res.json();",
+					"        pm.environment.set(\"access_token\", json.access_token);",
+					"        pm.environment.set(\"refresh_token\", json.refresh_token);",
+					"    }",
+					"});"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "List all logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/logs",
+					"host": ["{{api_base}}"],
+					"path": ["logs"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has data array\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Response has meta object with pagination fields\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"meta\");",
+							"    pm.expect(json.meta).to.have.property(\"total\");",
+							"    pm.expect(json.meta).to.have.property(\"page\");",
+							"    pm.expect(json.meta).to.have.property(\"per_page\");",
+							"    pm.expect(json.meta).to.have.property(\"total_pages\");",
+							"});",
+							"",
+							"pm.test(\"Meta total is a number\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.meta.total).to.be.a(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Meta page is a number\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.meta.page).to.be.a(\"number\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "List logs with pagination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/logs?page=1&per_page=5",
+					"host": ["{{api_base}}"],
+					"path": ["logs"],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "per_page",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has data array\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Meta per_page matches requested value\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.meta.per_page).to.eql(5);",
+							"});",
+							"",
+							"pm.test(\"Meta page is 1\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.meta.page).to.eql(1);",
+							"});",
+							"",
+							"pm.test(\"Data array length does not exceed per_page\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.length).to.be.at.most(5);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "List logs filtered by domain",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/logs?domain=example.com&page=1&per_page=20",
+					"host": ["{{api_base}}"],
+					"path": ["logs"],
+					"query": [
+						{
+							"key": "domain",
+							"value": "example.com"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "per_page",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has data array\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Response has meta object\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"meta\");",
+							"    pm.expect(json.meta).to.have.property(\"total\");",
+							"    pm.expect(json.meta).to.have.property(\"page\");",
+							"    pm.expect(json.meta).to.have.property(\"per_page\");",
+							"    pm.expect(json.meta).to.have.property(\"total_pages\");",
+							"});",
+							"",
+							"pm.test(\"Meta per_page matches requested value\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.meta.per_page).to.eql(20);",
+							"});"
+						]
+					}
+				}
+			]
+		}
+	]
+}
