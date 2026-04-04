@@ -19,6 +19,10 @@ Thumbs.db
 config/local.toml
 config/secrets.toml
 
+# Node (Newman tests)
+tests/newman/node_modules/
+tests/newman/results.xml
+
 # Logs
 *.log
 /.claude/
