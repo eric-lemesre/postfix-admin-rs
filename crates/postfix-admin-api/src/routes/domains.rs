@@ -6,20 +6,20 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::RequireSuperAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{CreateDomain, DomainResponse, UpdateDomain};
 use postfix_admin_core::pagination::PageRequest;
 use postfix_admin_core::types::DomainName;
-use postfix_admin_core::PageResponse;
 
 /// GET /api/v1/domains
 pub async fn list(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Query(page): Query<PageRequest>,
-) -> Result<Json<PageResponse<DomainResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<DomainResponse>>, ApiError> {
     let result = state.domains.find_all(&page).await?;
-    Ok(Json(result))
+    Ok(Json(result.into()))
 }
 
 /// GET /api/v1/domains/:name
@@ -27,7 +27,7 @@ pub async fn get(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(name): Path<String>,
-) -> Result<Json<DomainResponse>, ApiError> {
+) -> Result<Json<ApiResponse<DomainResponse>>, ApiError> {
     let domain_name = DomainName::try_from(name)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let domain = state
@@ -35,7 +35,7 @@ pub async fn get(
         .find_by_name(&domain_name)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("domain '{domain_name}'")))?;
-    Ok(Json(domain))
+    Ok(Json(ApiResponse::new(domain)))
 }
 
 /// POST /api/v1/domains
@@ -43,9 +43,9 @@ pub async fn create(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateDomain>,
-) -> Result<(StatusCode, Json<DomainResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<DomainResponse>>), ApiError> {
     let domain = state.domains.create(&body).await?;
-    Ok((StatusCode::CREATED, Json(domain)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(domain))))
 }
 
 /// PUT /api/v1/domains/:name
@@ -54,11 +54,11 @@ pub async fn update(
     State(state): State<AppState>,
     Path(name): Path<String>,
     Json(body): Json<UpdateDomain>,
-) -> Result<Json<DomainResponse>, ApiError> {
+) -> Result<Json<ApiResponse<DomainResponse>>, ApiError> {
     let domain_name = DomainName::try_from(name)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let domain = state.domains.update(&domain_name, &body).await?;
-    Ok(Json(domain))
+    Ok(Json(ApiResponse::new(domain)))
 }
 
 /// DELETE /api/v1/domains/:name

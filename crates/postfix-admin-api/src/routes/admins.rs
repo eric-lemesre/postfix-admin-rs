@@ -6,20 +6,20 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::RequireSuperAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{AdminResponse, CreateAdmin, UpdateAdmin};
 use postfix_admin_core::pagination::PageRequest;
 use postfix_admin_core::types::EmailAddress;
-use postfix_admin_core::PageResponse;
 
 /// GET /api/v1/admins
 pub async fn list(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Query(page): Query<PageRequest>,
-) -> Result<Json<PageResponse<AdminResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<AdminResponse>>, ApiError> {
     let result = state.admins.find_all(&page).await?;
-    Ok(Json(result))
+    Ok(Json(result.into()))
 }
 
 /// GET /api/v1/admins/:username
@@ -27,7 +27,7 @@ pub async fn get(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(username): Path<String>,
-) -> Result<Json<AdminResponse>, ApiError> {
+) -> Result<Json<ApiResponse<AdminResponse>>, ApiError> {
     let email = EmailAddress::try_from(username)
         .map_err(|e| ApiError::Validation(format!("invalid email: {e}")))?;
     let admin = state
@@ -35,7 +35,7 @@ pub async fn get(
         .find_by_username(&email)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("admin '{email}'")))?;
-    Ok(Json(admin))
+    Ok(Json(ApiResponse::new(admin)))
 }
 
 /// POST /api/v1/admins
@@ -43,9 +43,9 @@ pub async fn create(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateAdmin>,
-) -> Result<(StatusCode, Json<AdminResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<AdminResponse>>), ApiError> {
     let admin = state.admins.create(&body).await?;
-    Ok((StatusCode::CREATED, Json(admin)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(admin))))
 }
 
 /// PUT /api/v1/admins/:username
@@ -54,11 +54,11 @@ pub async fn update(
     State(state): State<AppState>,
     Path(username): Path<String>,
     Json(body): Json<UpdateAdmin>,
-) -> Result<Json<AdminResponse>, ApiError> {
+) -> Result<Json<ApiResponse<AdminResponse>>, ApiError> {
     let email = EmailAddress::try_from(username)
         .map_err(|e| ApiError::Validation(format!("invalid email: {e}")))?;
     let admin = state.admins.update(&email, &body).await?;
-    Ok(Json(admin))
+    Ok(Json(ApiResponse::new(admin)))
 }
 
 /// DELETE /api/v1/admins/:username

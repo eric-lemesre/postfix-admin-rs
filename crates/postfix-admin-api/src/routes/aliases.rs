@@ -6,11 +6,11 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::AuthAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{AliasResponse, CreateAlias, UpdateAlias};
 use postfix_admin_core::pagination::PageRequest;
 use postfix_admin_core::types::{DomainName, EmailAddress};
-use postfix_admin_core::PageResponse;
 
 /// GET /api/v1/domains/:domain/aliases
 pub async fn list(
@@ -18,11 +18,11 @@ pub async fn list(
     State(state): State<AppState>,
     Path(domain): Path<String>,
     Query(page): Query<PageRequest>,
-) -> Result<Json<PageResponse<AliasResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<AliasResponse>>, ApiError> {
     let domain_name = DomainName::try_from(domain)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let result = state.aliases.find_by_domain(&domain_name, &page).await?;
-    Ok(Json(result))
+    Ok(Json(result.into()))
 }
 
 /// GET /api/v1/aliases/:address
@@ -30,7 +30,7 @@ pub async fn get(
     _admin: AuthAdmin,
     State(state): State<AppState>,
     Path(address): Path<String>,
-) -> Result<Json<AliasResponse>, ApiError> {
+) -> Result<Json<ApiResponse<AliasResponse>>, ApiError> {
     let email = EmailAddress::try_from(address)
         .map_err(|e| ApiError::Validation(format!("invalid address: {e}")))?;
     let alias = state
@@ -38,7 +38,7 @@ pub async fn get(
         .find_by_address(&email)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("alias '{email}'")))?;
-    Ok(Json(alias))
+    Ok(Json(ApiResponse::new(alias)))
 }
 
 /// POST /api/v1/aliases
@@ -46,9 +46,9 @@ pub async fn create(
     _admin: AuthAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateAlias>,
-) -> Result<(StatusCode, Json<AliasResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<AliasResponse>>), ApiError> {
     let alias = state.aliases.create(&body).await?;
-    Ok((StatusCode::CREATED, Json(alias)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(alias))))
 }
 
 /// PUT /api/v1/aliases/:address
@@ -57,11 +57,11 @@ pub async fn update(
     State(state): State<AppState>,
     Path(address): Path<String>,
     Json(body): Json<UpdateAlias>,
-) -> Result<Json<AliasResponse>, ApiError> {
+) -> Result<Json<ApiResponse<AliasResponse>>, ApiError> {
     let email = EmailAddress::try_from(address)
         .map_err(|e| ApiError::Validation(format!("invalid address: {e}")))?;
     let alias = state.aliases.update(&email, &body).await?;
-    Ok(Json(alias))
+    Ok(Json(ApiResponse::new(alias)))
 }
 
 /// DELETE /api/v1/aliases/:address

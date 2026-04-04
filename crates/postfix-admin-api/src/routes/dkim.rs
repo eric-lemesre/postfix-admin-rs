@@ -7,6 +7,7 @@ use uuid::Uuid;
 
 use crate::error::ApiError;
 use crate::extractors::RequireSuperAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{
     CreateDkimKey, CreateDkimSigning, DkimKeyResponse, DkimSigningResponse,
@@ -18,11 +19,11 @@ pub async fn list_keys(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(domain): Path<String>,
-) -> Result<Json<Vec<DkimKeyResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<DkimKeyResponse>>, ApiError> {
     let domain_name = DomainName::try_from(domain)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let keys = state.dkim.find_keys_by_domain(&domain_name).await?;
-    Ok(Json(keys))
+    Ok(Json(ApiListResponse::from_vec(keys)))
 }
 
 /// POST /api/v1/dkim/keys
@@ -30,9 +31,9 @@ pub async fn create_key(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateDkimKey>,
-) -> Result<(StatusCode, Json<DkimKeyResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<DkimKeyResponse>>), ApiError> {
     let key = state.dkim.create_key(&body).await?;
-    Ok((StatusCode::CREATED, Json(key)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(key))))
 }
 
 /// DELETE /api/v1/dkim/keys/:id
@@ -50,9 +51,9 @@ pub async fn list_signings(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
-) -> Result<Json<Vec<DkimSigningResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<DkimSigningResponse>>, ApiError> {
     let signings = state.dkim.find_signings_by_key_id(id).await?;
-    Ok(Json(signings))
+    Ok(Json(ApiListResponse::from_vec(signings)))
 }
 
 /// POST /api/v1/dkim/signings
@@ -60,9 +61,9 @@ pub async fn create_signing(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateDkimSigning>,
-) -> Result<(StatusCode, Json<DkimSigningResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<DkimSigningResponse>>), ApiError> {
     let signing = state.dkim.create_signing(&body).await?;
-    Ok((StatusCode::CREATED, Json(signing)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(signing))))
 }
 
 /// DELETE /api/v1/dkim/signings/:id

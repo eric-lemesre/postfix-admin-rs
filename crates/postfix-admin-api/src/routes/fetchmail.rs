@@ -7,11 +7,11 @@ use uuid::Uuid;
 
 use crate::error::ApiError;
 use crate::extractors::AuthAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{CreateFetchmail, FetchmailResponse, UpdateFetchmail};
 use postfix_admin_core::pagination::PageRequest;
 use postfix_admin_core::types::EmailAddress;
-use postfix_admin_core::PageResponse;
 
 /// GET /api/v1/mailboxes/:username/fetchmail
 pub async fn list(
@@ -19,11 +19,11 @@ pub async fn list(
     State(state): State<AppState>,
     Path(username): Path<String>,
     Query(page): Query<PageRequest>,
-) -> Result<Json<PageResponse<FetchmailResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<FetchmailResponse>>, ApiError> {
     let email = EmailAddress::try_from(username)
         .map_err(|e| ApiError::Validation(format!("invalid email: {e}")))?;
     let result = state.fetchmail.find_by_mailbox(&email, &page).await?;
-    Ok(Json(result))
+    Ok(Json(result.into()))
 }
 
 /// GET /api/v1/fetchmail/:id
@@ -31,13 +31,13 @@ pub async fn get(
     _admin: AuthAdmin,
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
-) -> Result<Json<FetchmailResponse>, ApiError> {
+) -> Result<Json<ApiResponse<FetchmailResponse>>, ApiError> {
     let entry = state
         .fetchmail
         .find_by_id(id)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("fetchmail entry '{id}'")))?;
-    Ok(Json(entry))
+    Ok(Json(ApiResponse::new(entry)))
 }
 
 /// POST /api/v1/fetchmail
@@ -45,9 +45,9 @@ pub async fn create(
     _admin: AuthAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateFetchmail>,
-) -> Result<(StatusCode, Json<FetchmailResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<FetchmailResponse>>), ApiError> {
     let entry = state.fetchmail.create(&body).await?;
-    Ok((StatusCode::CREATED, Json(entry)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(entry))))
 }
 
 /// PUT /api/v1/fetchmail/:id
@@ -56,9 +56,9 @@ pub async fn update(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
     Json(body): Json<UpdateFetchmail>,
-) -> Result<Json<FetchmailResponse>, ApiError> {
+) -> Result<Json<ApiResponse<FetchmailResponse>>, ApiError> {
     let entry = state.fetchmail.update(id, &body).await?;
-    Ok(Json(entry))
+    Ok(Json(ApiResponse::new(entry)))
 }
 
 /// DELETE /api/v1/fetchmail/:id

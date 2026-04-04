@@ -6,6 +6,7 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::AuthAdmin;
+use crate::response::ApiResponse;
 use crate::state::AppState;
 use postfix_admin_core::dto::{UpdateVacation, VacationResponse};
 use postfix_admin_core::types::EmailAddress;
@@ -15,7 +16,7 @@ pub async fn get(
     _admin: AuthAdmin,
     State(state): State<AppState>,
     Path(username): Path<String>,
-) -> Result<Json<VacationResponse>, ApiError> {
+) -> Result<Json<ApiResponse<VacationResponse>>, ApiError> {
     let email = EmailAddress::try_from(username)
         .map_err(|e| ApiError::Validation(format!("invalid email: {e}")))?;
     let vacation = state
@@ -23,7 +24,7 @@ pub async fn get(
         .find_by_email(&email)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("vacation for '{email}'")))?;
-    Ok(Json(vacation))
+    Ok(Json(ApiResponse::new(vacation)))
 }
 
 /// PUT /api/v1/mailboxes/:username/vacation
@@ -32,11 +33,11 @@ pub async fn upsert(
     State(state): State<AppState>,
     Path(username): Path<String>,
     Json(body): Json<UpdateVacation>,
-) -> Result<Json<VacationResponse>, ApiError> {
+) -> Result<Json<ApiResponse<VacationResponse>>, ApiError> {
     let email = EmailAddress::try_from(username)
         .map_err(|e| ApiError::Validation(format!("invalid email: {e}")))?;
     let vacation = state.vacations.upsert(&email, &body).await?;
-    Ok(Json(vacation))
+    Ok(Json(ApiResponse::new(vacation)))
 }
 
 /// DELETE /api/v1/mailboxes/:username/vacation

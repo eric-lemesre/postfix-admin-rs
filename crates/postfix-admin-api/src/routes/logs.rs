@@ -5,10 +5,10 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::RequireSuperAdmin;
+use crate::response::ApiListResponse;
 use crate::state::AppState;
 use postfix_admin_core::dto::{LogFilter, LogResponse};
 use postfix_admin_core::pagination::PageRequest;
-use postfix_admin_core::PageResponse;
 
 /// Query parameters combining log filter and pagination.
 #[derive(Debug, serde::Deserialize)]
@@ -37,7 +37,7 @@ pub async fn list(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Query(query): Query<LogQuery>,
-) -> Result<Json<PageResponse<LogResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<LogResponse>>, ApiError> {
     let filter = LogFilter {
         domain: query.domain,
         username: query.username,
@@ -47,5 +47,5 @@ pub async fn list(
     };
     let page = PageRequest::new(query.page, query.per_page);
     let result = state.logs.find_all(&filter, &page).await?;
-    Ok(Json(result))
+    Ok(Json(result.into()))
 }

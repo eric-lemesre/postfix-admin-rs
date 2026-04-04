@@ -6,6 +6,7 @@ use axum::Json;
 
 use crate::error::ApiError;
 use crate::extractors::RequireSuperAdmin;
+use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
 use postfix_admin_core::dto::{AliasDomainResponse, CreateAliasDomain};
 use postfix_admin_core::types::DomainName;
@@ -15,11 +16,11 @@ pub async fn list_by_target(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(domain): Path<String>,
-) -> Result<Json<Vec<AliasDomainResponse>>, ApiError> {
+) -> Result<Json<ApiListResponse<AliasDomainResponse>>, ApiError> {
     let domain_name = DomainName::try_from(domain)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let result = state.alias_domains.find_by_target(&domain_name).await?;
-    Ok(Json(result))
+    Ok(Json(ApiListResponse::from_vec(result)))
 }
 
 /// GET /api/v1/alias-domains/:alias
@@ -27,7 +28,7 @@ pub async fn get(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Path(alias): Path<String>,
-) -> Result<Json<AliasDomainResponse>, ApiError> {
+) -> Result<Json<ApiResponse<AliasDomainResponse>>, ApiError> {
     let domain_name = DomainName::try_from(alias)
         .map_err(|e| ApiError::Validation(format!("invalid domain: {e}")))?;
     let alias_domain = state
@@ -35,7 +36,7 @@ pub async fn get(
         .find_by_alias(&domain_name)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("alias domain '{domain_name}'")))?;
-    Ok(Json(alias_domain))
+    Ok(Json(ApiResponse::new(alias_domain)))
 }
 
 /// POST /api/v1/alias-domains
@@ -43,9 +44,9 @@ pub async fn create(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
     Json(body): Json<CreateAliasDomain>,
-) -> Result<(StatusCode, Json<AliasDomainResponse>), ApiError> {
+) -> Result<(StatusCode, Json<ApiResponse<AliasDomainResponse>>), ApiError> {
     let alias_domain = state.alias_domains.create(&body).await?;
-    Ok((StatusCode::CREATED, Json(alias_domain)))
+    Ok((StatusCode::CREATED, Json(ApiResponse::new(alias_domain))))
 }
 
 /// DELETE /api/v1/alias-domains/:alias
