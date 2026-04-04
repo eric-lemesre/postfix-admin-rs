@@ -4,7 +4,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::Json;
 
-use crate::error::ApiError;
+use crate::error::{ApiError, ProblemDetails};
 use crate::extractors::RequireSuperAdmin;
 use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
@@ -12,6 +12,19 @@ use postfix_admin_core::dto::{AliasDomainResponse, CreateAliasDomain};
 use postfix_admin_core::types::DomainName;
 
 /// GET /api/v1/domains/:domain/alias-domains
+#[utoipa::path(
+    get,
+    path = "/api/v1/domains/{domain}/alias-domains",
+    tag = "alias-domains",
+    operation_id = "list_alias_domains",
+    params(("domain" = String, Path, description = "Target domain name")),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "List of alias domains", body = ApiListResponse<AliasDomainResponse>),
+        (status = 401, description = "Not authenticated", body = ProblemDetails),
+        (status = 403, description = "Not a superadmin", body = ProblemDetails),
+    )
+)]
 pub async fn list_by_target(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
@@ -24,6 +37,18 @@ pub async fn list_by_target(
 }
 
 /// GET /api/v1/alias-domains/:alias
+#[utoipa::path(
+    get,
+    path = "/api/v1/alias-domains/{alias}",
+    tag = "alias-domains",
+    operation_id = "get_alias_domain",
+    params(("alias" = String, Path, description = "Alias domain name")),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "Alias domain found", body = ApiResponse<AliasDomainResponse>),
+        (status = 404, description = "Alias domain not found", body = ProblemDetails),
+    )
+)]
 pub async fn get(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
@@ -40,6 +65,19 @@ pub async fn get(
 }
 
 /// POST /api/v1/alias-domains
+#[utoipa::path(
+    post,
+    path = "/api/v1/alias-domains",
+    tag = "alias-domains",
+    operation_id = "create_alias_domain",
+    security(("bearer_auth" = [])),
+    request_body = CreateAliasDomain,
+    responses(
+        (status = 201, description = "Alias domain created", body = ApiResponse<AliasDomainResponse>),
+        (status = 409, description = "Alias domain already exists", body = ProblemDetails),
+        (status = 422, description = "Validation error", body = ProblemDetails),
+    )
+)]
 pub async fn create(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
@@ -50,6 +88,18 @@ pub async fn create(
 }
 
 /// DELETE /api/v1/alias-domains/:alias
+#[utoipa::path(
+    delete,
+    path = "/api/v1/alias-domains/{alias}",
+    tag = "alias-domains",
+    operation_id = "delete_alias_domain",
+    params(("alias" = String, Path, description = "Alias domain name")),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 204, description = "Alias domain deleted"),
+        (status = 404, description = "Alias domain not found", body = ProblemDetails),
+    )
+)]
 pub async fn delete(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,

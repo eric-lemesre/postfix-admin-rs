@@ -3,25 +3,39 @@
 use axum::extract::State;
 use axum::Json;
 use serde::Deserialize;
+use utoipa::ToSchema;
 
-use crate::error::ApiError;
+use crate::error::{ApiError, ProblemDetails};
 use crate::extractors::AuthAdmin;
 use crate::state::AppState;
 use postfix_admin_auth::{hash_password, needs_rehash, verify_password, PasswordScheme, TokenPair};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct LoginRequest {
     pub username: String,
+    #[schema(format = Password)]
     pub password: String,
     pub totp_code: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct RefreshRequest {
     pub refresh_token: String,
 }
 
 /// POST /api/v1/auth/login
+#[utoipa::path(
+    post,
+    path = "/api/v1/auth/login",
+    tag = "auth",
+    operation_id = "login",
+    request_body = LoginRequest,
+    responses(
+        (status = 200, description = "Login successful", body = TokenPair),
+        (status = 401, description = "Invalid credentials", body = ProblemDetails),
+        (status = 429, description = "Rate limited", body = ProblemDetails),
+    )
+)]
 pub async fn login(
     State(state): State<AppState>,
     Json(body): Json<LoginRequest>,
@@ -102,6 +116,17 @@ pub async fn login(
 }
 
 /// POST /api/v1/auth/refresh
+#[utoipa::path(
+    post,
+    path = "/api/v1/auth/refresh",
+    tag = "auth",
+    operation_id = "refresh_token",
+    request_body = RefreshRequest,
+    responses(
+        (status = 200, description = "Token refreshed", body = TokenPair),
+        (status = 401, description = "Invalid or expired refresh token", body = ProblemDetails),
+    )
+)]
 pub async fn refresh(
     State(state): State<AppState>,
     Json(body): Json<RefreshRequest>,
@@ -112,6 +137,17 @@ pub async fn refresh(
 }
 
 /// POST /api/v1/auth/logout
+#[utoipa::path(
+    post,
+    path = "/api/v1/auth/logout",
+    tag = "auth",
+    operation_id = "logout",
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "Logged out"),
+        (status = 401, description = "Not authenticated", body = ProblemDetails),
+    )
+)]
 pub async fn logout(_admin: AuthAdmin) -> Result<Json<serde_json::Value>, ApiError> {
     // Server-side token invalidation would require a blocklist.
     // For now, clients simply discard their tokens.

@@ -4,7 +4,7 @@ use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::Json;
 
-use crate::error::ApiError;
+use crate::error::{ApiError, ProblemDetails};
 use crate::extractors::AuthAdmin;
 use crate::response::{ApiListResponse, ApiResponse};
 use crate::state::AppState;
@@ -13,6 +13,21 @@ use postfix_admin_core::pagination::PageRequest;
 use postfix_admin_core::types::{DomainName, EmailAddress};
 
 /// GET /api/v1/domains/:domain/aliases
+#[utoipa::path(
+    get,
+    path = "/api/v1/domains/{domain}/aliases",
+    tag = "aliases",
+    operation_id = "list_aliases",
+    params(
+        ("domain" = String, Path, description = "Domain name"),
+        PageRequest,
+    ),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "List of aliases", body = ApiListResponse<AliasResponse>),
+        (status = 401, description = "Not authenticated", body = ProblemDetails),
+    )
+)]
 pub async fn list(
     _admin: AuthAdmin,
     State(state): State<AppState>,
@@ -26,6 +41,18 @@ pub async fn list(
 }
 
 /// GET /api/v1/aliases/:address
+#[utoipa::path(
+    get,
+    path = "/api/v1/aliases/{address}",
+    tag = "aliases",
+    operation_id = "get_alias",
+    params(("address" = String, Path, description = "Alias email address")),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "Alias found", body = ApiResponse<AliasResponse>),
+        (status = 404, description = "Alias not found", body = ProblemDetails),
+    )
+)]
 pub async fn get(
     _admin: AuthAdmin,
     State(state): State<AppState>,
@@ -42,6 +69,19 @@ pub async fn get(
 }
 
 /// POST /api/v1/aliases
+#[utoipa::path(
+    post,
+    path = "/api/v1/aliases",
+    tag = "aliases",
+    operation_id = "create_alias",
+    security(("bearer_auth" = [])),
+    request_body = CreateAlias,
+    responses(
+        (status = 201, description = "Alias created", body = ApiResponse<AliasResponse>),
+        (status = 409, description = "Alias already exists", body = ProblemDetails),
+        (status = 422, description = "Validation error", body = ProblemDetails),
+    )
+)]
 pub async fn create(
     _admin: AuthAdmin,
     State(state): State<AppState>,
@@ -52,6 +92,20 @@ pub async fn create(
 }
 
 /// PUT /api/v1/aliases/:address
+#[utoipa::path(
+    put,
+    path = "/api/v1/aliases/{address}",
+    tag = "aliases",
+    operation_id = "update_alias",
+    params(("address" = String, Path, description = "Alias email address")),
+    security(("bearer_auth" = [])),
+    request_body = UpdateAlias,
+    responses(
+        (status = 200, description = "Alias updated", body = ApiResponse<AliasResponse>),
+        (status = 404, description = "Alias not found", body = ProblemDetails),
+        (status = 422, description = "Validation error", body = ProblemDetails),
+    )
+)]
 pub async fn update(
     _admin: AuthAdmin,
     State(state): State<AppState>,
@@ -65,6 +119,18 @@ pub async fn update(
 }
 
 /// DELETE /api/v1/aliases/:address
+#[utoipa::path(
+    delete,
+    path = "/api/v1/aliases/{address}",
+    tag = "aliases",
+    operation_id = "delete_alias",
+    params(("address" = String, Path, description = "Alias email address")),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 204, description = "Alias deleted"),
+        (status = 404, description = "Alias not found", body = ProblemDetails),
+    )
+)]
 pub async fn delete(
     _admin: AuthAdmin,
     State(state): State<AppState>,

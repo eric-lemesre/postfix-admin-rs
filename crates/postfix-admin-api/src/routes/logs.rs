@@ -2,8 +2,9 @@
 
 use axum::extract::{Query, State};
 use axum::Json;
+use utoipa::IntoParams;
 
-use crate::error::ApiError;
+use crate::error::{ApiError, ProblemDetails};
 use crate::extractors::RequireSuperAdmin;
 use crate::response::ApiListResponse;
 use crate::state::AppState;
@@ -11,7 +12,7 @@ use postfix_admin_core::dto::{LogFilter, LogResponse};
 use postfix_admin_core::pagination::PageRequest;
 
 /// Query parameters combining log filter and pagination.
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, IntoParams)]
 pub struct LogQuery {
     #[serde(default)]
     pub domain: Option<String>,
@@ -33,6 +34,19 @@ fn default_per_page() -> u32 {
 }
 
 /// GET /api/v1/logs
+#[utoipa::path(
+    get,
+    path = "/api/v1/logs",
+    tag = "logs",
+    operation_id = "list_logs",
+    params(LogQuery),
+    security(("bearer_auth" = [])),
+    responses(
+        (status = 200, description = "List of audit logs", body = ApiListResponse<LogResponse>),
+        (status = 401, description = "Not authenticated", body = ProblemDetails),
+        (status = 403, description = "Not a superadmin", body = ProblemDetails),
+    )
+)]
 pub async fn list(
     _admin: RequireSuperAdmin,
     State(state): State<AppState>,
