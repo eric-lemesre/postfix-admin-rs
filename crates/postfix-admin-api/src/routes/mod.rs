@@ -14,10 +14,14 @@ pub mod vacations;
 use axum::routing::{delete, get, post};
 use axum::Router;
 
+use crate::middleware::rate_limit::rate_limit_middleware;
 use crate::state::AppState;
 
 /// Build the `/api/v1` router with all REST endpoints.
-pub fn api_router() -> Router<AppState> {
+///
+/// The `state` parameter is needed to wire the rate limiting middleware
+/// via `from_fn_with_state`.
+pub fn api_router(state: AppState) -> Router {
     Router::new()
         // Auth
         .route("/auth/login", post(auth::login))
@@ -90,4 +94,10 @@ pub fn api_router() -> Router<AppState> {
         )
         // Logs
         .route("/logs", get(logs::list))
+        // API rate limiting (pass-through if not configured)
+        .route_layer(axum::middleware::from_fn_with_state(
+            state.clone(),
+            rate_limit_middleware,
+        ))
+        .with_state(state)
 }

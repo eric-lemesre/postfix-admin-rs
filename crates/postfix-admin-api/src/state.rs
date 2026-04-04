@@ -8,6 +8,8 @@ use postfix_admin_core::repository::{
     DomainRepository, FetchmailRepository, LogRepository, MailboxRepository, VacationRepository,
 };
 
+use crate::middleware::ApiRateLimiter;
+
 /// Shared application state injected into handlers via axum's `State` extractor.
 #[derive(Clone)]
 pub struct AppState {
@@ -25,4 +27,5 @@ pub struct AppState {
     pub password_scheme: String,
     pub rate_limiter: Arc<LoginRateLimiter>,
     pub mtls_verifier: Arc<MtlsVerifier>,
+    pub api_rate_limiter: Option<Arc<ApiRateLimiter>>,
 }

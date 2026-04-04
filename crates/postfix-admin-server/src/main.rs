@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use postfix_admin_api::{api_router, ApiDoc, AppState};
+use postfix_admin_api::{api_router, ApiDoc, ApiRateLimiter, AppState};
 use postfix_admin_auth::{JwtManager, LoginRateLimiter, MtlsVerifier};
 use postfix_admin_core::config::CliOverrides;
 use postfix_admin_core::AppConfig;
@@ -45,11 +45,23 @@ fn create_shared_services(config: &AppConfig) -> anyhow::Result<SharedServices> 
     ));
     let mtls_verifier = Arc::new(MtlsVerifier::new(config.auth.mtls.clone()));
 
+    let api_rate_limiter = if config.api.rate_limit.enabled {
+        let limiter = Arc::new(ApiRateLimiter::new(
+            config.api.rate_limit.requests_per_minute,
+            config.api.rate_limit.burst_size,
+        ));
+        limiter.spawn_cleanup();
+        Some(limiter)
+    } else {
+        None
+    };
+
     Ok(SharedServices {
         jwt,
         rate_limiter,
         mtls_verifier,
         password_scheme: config.auth.password_scheme.clone(),
+        api_rate_limiter,
     })
 }
 
@@ -58,6 +70,7 @@ struct SharedServices {
     rate_limiter: Arc<LoginRateLimiter>,
     mtls_verifier: Arc<MtlsVerifier>,
     password_scheme: String,
+    api_rate_limiter: Option<Arc<ApiRateLimiter>>,
 }
 
 async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
@@ -86,6 +99,7 @@ async fn run_with_postgres(config: &AppConfig) -> anyhow::Result<()> {
         password_scheme: services.password_scheme.clone(),
         rate_limiter: Arc::clone(&services.rate_limiter),
         mtls_verifier: Arc::clone(&services.mtls_verifier),
+        api_rate_limiter: services.api_rate_limiter.clone(),
     };
 
     let web_state = WebState {
@@ -135,6 +149,7 @@ async fn run_with_mysql(config: &AppConfig) -> anyhow::Result<()> {
         password_scheme: services.password_scheme.clone(),
         rate_limiter: Arc::clone(&services.rate_limiter),
         mtls_verifier: Arc::clone(&services.mtls_verifier),
+        api_rate_limiter: services.api_rate_limiter.clone(),
     };
 
     let web_state = WebState {
@@ -183,7 +198,7 @@ async fn serve(config: &AppConfig, api_state: AppState, web_state: WebState) -> 
     let cors_layer = build_cors_layer(&config.api.cors);
 
     let app = axum::Router::new()
-        .nest("/api/v1", api_router().with_state(api_state))
+        .nest("/api/v1", api_router(api_state))
         .merge(SwaggerUi::new("/api/docs").url("/api/v1/openapi.json", ApiDoc::openapi()))
         .merge(web_router().with_state(web_state))
         .layer(cors_layer)

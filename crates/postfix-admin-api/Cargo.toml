@@ -22,11 +22,9 @@ tower-http = { workspace = true }
 tracing = { workspace = true }
 utoipa = { workspace = true }
 utoipa-swagger-ui = { workspace = true }
+tokio = { workspace = true }
 async-trait = { workspace = true }
 validator = { workspace = true }
-
-[dev-dependencies]
-tokio = { workspace = true }
 
 [lints]
 workspace = true
