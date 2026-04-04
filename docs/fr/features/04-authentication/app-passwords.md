@@ -2,6 +2,19 @@
 
 # SPEC-04.4 — Mots de passe applicatifs (App Passwords)
 
+## Statut d'implémentation
+
+| Composant                                         | Crate                | Statut   | Milestone |
+|---------------------------------------------------|----------------------|----------|-----------|
+| Modèle (`MailboxAppPassword`)                     | `postfix-admin-core` | Fait     | M1        |
+| DTOs (`CreateAppPassword`, `AppPasswordResponse`) | `postfix-admin-core` | Fait     | M1        |
+| Trait repository (`AppPasswordRepository`)        | `postfix-admin-core` | Fait     | M1        |
+| Repository PostgreSQL                             | `postfix-admin-db`   | Fait     | M2        |
+| Repository MySQL                                  | `postfix-admin-db`   | Fait     | M2        |
+| Génération de mot de passe (24 chars, sans ambigus)| `postfix-admin-auth` | Fait     | M4        |
+| Hashage (argon2id) et vérification                | `postfix-admin-auth` | Fait     | M4        |
+| Page de gestion Web UI                            | `postfix-admin-web`  | En cours | M6        |
+
 ## Résumé
 
 Les mots de passe applicatifs permettent aux utilisateurs de générer des mots de passe

@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use validator::Validate;
 
 use crate::types::DomainName;
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateDomain {
     pub domain: DomainName,
     #[validate(length(max = 255))]
@@ -24,7 +25,7 @@ pub struct CreateDomain {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateDomain {
     #[validate(length(max = 255))]
     pub description: Option<String>,
@@ -43,7 +44,7 @@ pub struct UpdateDomain {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct DomainResponse {
     pub domain: DomainName,
     pub description: String,

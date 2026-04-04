@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+		"name": "10 - Alias Domains",
+		"description": "Alias domain CRUD endpoint tests for postfix-admin-rs REST API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const loginRequest = {",
+					"    url: pm.environment.get(\"api_base\") + \"/auth/login\",",
+					"    method: \"POST\",",
+					"    header: {\"Content-Type\": \"application/json\"},",
+					"    body: {mode: \"raw\", raw: JSON.stringify({username: pm.environment.get(\"admin_username\"), password: pm.environment.get(\"admin_password\")})}",
+					"};",
+					"pm.sendRequest(loginRequest, function(err, res) {",
+					"    if (!err && res.code === 200) {",
+					"        const json = res.json();",
+					"        pm.environment.set(\"access_token\", json.access_token);",
+					"        pm.environment.set(\"refresh_token\", json.refresh_token);",
+					"    }",
+					"});"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "Setup: Create target domain",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"domain\":\"newman-test.example.com\",\"description\":\"Target domain for alias domain tests\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Target domain created successfully\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Setup: Create alias source domain",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"domain\":\"newman-alias.example.com\",\"description\":\"Alias source domain for alias domain tests\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Alias source domain created successfully\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Create alias domain",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"alias_domain\":\"newman-alias.example.com\",\"target_domain\":\"newman-test.example.com\"}"
+				},
+				"url": {
+					"raw": "{{api_base}}/alias-domains",
+					"host": ["{{api_base}}"],
+					"path": ["alias-domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has data object\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"object\");",
+							"});",
+							"",
+							"pm.test(\"Alias domain matches request\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.alias_domain).to.eql(\"newman-alias.example.com\");",
+							"});",
+							"",
+							"pm.test(\"Target domain matches request\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.target_domain).to.eql(\"newman-test.example.com\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "List alias domains for target domain",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/newman-test.example.com/alias-domains",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "newman-test.example.com", "alias-domains"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has data array\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Data array contains at least one entry\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.length).to.be.at.least(1);",
+							"});",
+							"",
+							"pm.test(\"Data contains the created alias domain\", function () {",
+							"    const json = pm.response.json();",
+							"    const found = json.data.some(function(item) {",
+							"        return item.alias_domain === \"newman-alias.example.com\";",
+							"    });",
+							"    pm.expect(found).to.be.true;",
+							"});",
+							"",
+							"pm.test(\"Response has meta object\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"meta\");",
+							"    pm.expect(json.meta).to.have.property(\"total\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Get alias domain",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/alias-domains/newman-alias.example.com",
+					"host": ["{{api_base}}"],
+					"path": ["alias-domains", "newman-alias.example.com"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has data object\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json).to.have.property(\"data\");",
+							"    pm.expect(json.data).to.be.an(\"object\");",
+							"});",
+							"",
+							"pm.test(\"Alias domain field matches\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.alias_domain).to.eql(\"newman-alias.example.com\");",
+							"});",
+							"",
+							"pm.test(\"Target domain field matches\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data.target_domain).to.eql(\"newman-test.example.com\");",
+							"});",
+							"",
+							"pm.test(\"Response has created_at timestamp\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data).to.have.property(\"created_at\");",
+							"});",
+							"",
+							"pm.test(\"Response has updated_at timestamp\", function () {",
+							"    const json = pm.response.json();",
+							"    pm.expect(json.data).to.have.property(\"updated_at\");",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Delete alias domain",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/alias-domains/newman-alias.example.com",
+					"host": ["{{api_base}}"],
+					"path": ["alias-domains", "newman-alias.example.com"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Response body is empty\", function () {",
+							"    pm.expect(pm.response.text()).to.be.oneOf([\"\", undefined]);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cleanup: Delete alias source domain",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/newman-alias.example.com",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "newman-alias.example.com"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Alias source domain deleted\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cleanup: Delete target domain",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_base}}/domains/newman-test.example.com",
+					"host": ["{{api_base}}"],
+					"path": ["domains", "newman-test.example.com"]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Target domain deleted\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+							"});"
+						]
+					}
+				}
+			]
+		}
+	]
+}

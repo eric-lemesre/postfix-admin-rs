@@ -1,9 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 use validator::Validate;
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateLog {
     #[validate(length(min = 1, max = 255))]
     pub username: String,
@@ -16,7 +17,7 @@ pub struct CreateLog {
     pub user_agent: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct LogResponse {
     pub id: Uuid,
     pub timestamp: DateTime<Utc>,
@@ -43,7 +44,7 @@ impl From<crate::models::Log> for LogResponse {
     }
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 pub struct LogFilter {
     pub domain: Option<String>,
     pub username: Option<String>,

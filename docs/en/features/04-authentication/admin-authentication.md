@@ -14,9 +14,12 @@
 | MySQL repository                                     | `postfix-admin-db`   | Done    | M2        |
 | Password hashing and verification                    | `postfix-admin-auth` | Done    | M4        |
 | JWT generation and verification                      | `postfix-admin-auth` | Done    | M4        |
-| Session management                                   | `postfix-admin-auth` | Pending | M4        |
-| TOTP verification                                    | `postfix-admin-auth` | Pending | M4        |
+| Session management (HttpOnly, Secure, SameSite)      | `postfix-admin-auth` | Done    | M4        |
+| CSRF token generation and validation                 | `postfix-admin-auth` | Done    | M4        |
+| Rate limiting and brute-force protection             | `postfix-admin-auth` | Done    | M4        |
+| TOTP generation, verification, recovery codes        | `postfix-admin-auth` | Done    | M4        |
 | mTLS client certificate extraction                   | `postfix-admin-auth` | Done    | M4        |
+| mTLS middleware integration (per-role enforcement)    | `postfix-admin-api`  | Done    | M4        |
 | Web UI login page                                    | `postfix-admin-web`  | Done    | M6        |
 
 ## Summary

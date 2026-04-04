@@ -2,6 +2,17 @@
 
 # SPEC-05.1 — Contrôle d'accès basé sur les rôles (RBAC)
 
+## Statut d'implémentation
+
+| Composant                                           | Crate                | Statut   | Milestone |
+|-----------------------------------------------------|----------------------|----------|-----------|
+| Rôles et identité RBAC (`Role`, `AuthIdentity`)     | `postfix-admin-auth` | Fait     | M4        |
+| Vérification d'accès domaine (`check_domain_access`)| `postfix-admin-auth` | Fait     | M4        |
+| Niveaux d'assurance (`check_assurance_level`)       | `postfix-admin-auth` | Fait     | M4        |
+| Extracteur `RequireSuperAdmin` (+ mTLS)             | `postfix-admin-api`  | Fait     | M4        |
+| Extracteur `RequireDomainAdmin`                     | `postfix-admin-api`  | Fait     | M4        |
+| Extracteur `RequireUser`                            | `postfix-admin-api`  | En cours | M6        |
+
 ## Résumé
 
 Système d'autorisation à trois niveaux de rôles avec un modèle de permissions

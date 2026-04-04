@@ -17,7 +17,13 @@ argon2 = { workspace = true }
 bcrypt = { workspace = true }
 sha-crypt = { workspace = true }
 jsonwebtoken = { workspace = true }
+utoipa = { workspace = true }
+getrandom = { workspace = true }
 rand = { workspace = true }
+subtle = { workspace = true }
+dashmap = { workspace = true }
+data-encoding = { workspace = true }
+totp-rs = { workspace = true }
 tracing = { workspace = true }
 
 [lints]

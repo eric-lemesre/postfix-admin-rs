@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use validator::Validate;
 
 use crate::types::{EmailAddress, Password};
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateAdmin {
     pub username: EmailAddress,
     pub password: Password,
@@ -12,7 +13,7 @@ pub struct CreateAdmin {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateAdmin {
     pub password: Option<Password>,
     pub superadmin: Option<bool>,
@@ -20,7 +21,7 @@ pub struct UpdateAdmin {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct AdminResponse {
     pub username: EmailAddress,
     pub superadmin: bool,

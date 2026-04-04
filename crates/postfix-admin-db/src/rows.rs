@@ -325,6 +325,18 @@ pub struct CountRow {
     pub count: i64,
 }
 
+/// Row for fetching only the password hash.
+#[derive(Debug, sqlx::FromRow)]
+pub struct PasswordRow {
+    pub password: String,
+}
+
+/// Row for fetching domain names from `domain_admins`.
+#[derive(Debug, sqlx::FromRow)]
+pub struct DomainNameRow {
+    pub domain: String,
+}
+
 #[cfg(test)]
 mod tests {
     use uuid::Uuid;

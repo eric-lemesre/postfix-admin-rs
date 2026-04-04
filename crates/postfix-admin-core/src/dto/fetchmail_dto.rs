@@ -1,11 +1,12 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 use validator::Validate;
 
 use crate::types::{DomainName, EmailAddress};
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateFetchmail {
     pub mailbox: EmailAddress,
     #[validate(length(min = 1, max = 255))]
@@ -28,7 +29,7 @@ pub struct CreateFetchmail {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateFetchmail {
     #[validate(length(min = 1, max = 255))]
     pub src_server: Option<String>,
@@ -50,7 +51,7 @@ pub struct UpdateFetchmail {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 #[allow(clippy::struct_excessive_bools)]
 pub struct FetchmailResponse {
     pub id: Uuid,

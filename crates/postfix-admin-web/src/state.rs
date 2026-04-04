@@ -2,6 +2,7 @@
 
 use std::sync::Arc;
 
+use postfix_admin_auth::LoginRateLimiter;
 use postfix_admin_core::repository::{
     AdminRepository, AliasDomainRepository, AliasRepository, DkimRepository, DomainRepository,
     FetchmailRepository, LogRepository, MailboxRepository, VacationRepository,
@@ -20,4 +21,5 @@ pub struct WebState {
     pub fetchmail: Arc<dyn FetchmailRepository>,
     pub logs: Arc<dyn LogRepository>,
     pub password_scheme: String,
+    pub rate_limiter: Arc<LoginRateLimiter>,
 }

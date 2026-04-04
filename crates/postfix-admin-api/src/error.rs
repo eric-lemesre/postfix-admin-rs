@@ -4,12 +4,13 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use serde::Serialize;
+use utoipa::ToSchema;
 
 use postfix_admin_auth::AuthError;
 use postfix_admin_core::error::{CoreError, DomainError, ValidationError};
 
 /// RFC 7807 Problem Details response body.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, ToSchema)]
 pub struct ProblemDetails {
     #[serde(rename = "type")]
     pub problem_type: &'static str,
@@ -127,6 +128,11 @@ impl IntoResponse for ApiError {
                     AuthError::InsufficientPermissions(_) => {
                         (StatusCode::FORBIDDEN, "Insufficient Permissions")
                     }
+                    AuthError::InvalidTotpCode | AuthError::TotpReplay => {
+                        (StatusCode::UNAUTHORIZED, "Invalid TOTP Code")
+                    }
+                    AuthError::CsrfError => (StatusCode::FORBIDDEN, "CSRF Validation Failed"),
+                    AuthError::RateLimited(_) => (StatusCode::TOO_MANY_REQUESTS, "Rate Limited"),
                     _ => (StatusCode::INTERNAL_SERVER_ERROR, "Authentication Error"),
                 };
                 (

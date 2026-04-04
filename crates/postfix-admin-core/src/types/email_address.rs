@@ -3,6 +3,7 @@ use std::{fmt, str::FromStr};
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 use crate::error::ValidationError;
 use crate::types::DomainName;
@@ -14,8 +15,9 @@ static EMAIL_REGEX: LazyLock<Regex> = LazyLock::new(|| {
 
 const MAX_EMAIL_LENGTH: usize = 255;
 
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize, ToSchema)]
 #[serde(try_from = "String", into = "String")]
+#[schema(value_type = String, example = "user@example.com")]
 pub struct EmailAddress(String);
 
 impl EmailAddress {

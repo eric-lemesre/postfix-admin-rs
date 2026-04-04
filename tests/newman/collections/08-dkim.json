@@ -1,0 +1,369 @@
+{
+  "info": {
+    "_postman_id": "d8e9f0a1-b2c3-4d4e-bf5a-6b7c8d9e0f1a",
+    "name": "08 - DKIM",
+    "description": "CRUD tests for DKIM key and signing management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const loginRequest = {",
+          "    url: pm.environment.get(\"api_base\") + \"/auth/login\",",
+          "    method: \"POST\",",
+          "    header: {\"Content-Type\": \"application/json\"},",
+          "    body: {mode: \"raw\", raw: JSON.stringify({username: pm.environment.get(\"admin_username\"), password: pm.environment.get(\"admin_password\")})}",
+          "};",
+          "pm.sendRequest(loginRequest, function(err, res) {",
+          "    if (!err && res.code === 200) {",
+          "        const json = res.json();",
+          "        pm.environment.set(\"access_token\", json.access_token);",
+          "        pm.environment.set(\"refresh_token\", json.refresh_token);",
+          "    }",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Setup: Create test domain",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"domain\":\"newman-test.example.com\",\"description\":\"Newman DKIM test domain\",\"aliases\":100,\"mailboxes\":100,\"maxquota\":10240}"
+        },
+        "url": {
+          "raw": "{{api_base}}/domains",
+          "host": ["{{api_base}}"],
+          "path": ["domains"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Setup: domain created (201) or already exists (409)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create DKIM key",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"domain_name\":\"newman-test.example.com\",\"selector\":\"default\",\"private_key\":\"-----BEGIN RSA PRIVATE KEY-----\\nMIIEpAIBAAKCAQEA04up8hoqzS1+APIB0RhjXyObwHQBMsNOjGMh1cPkq1M3FN8O\\nI2F/0xmHbXEOGSNxAMogSZOlSYMTjCi8xSdYnCBRz6BEqFUEElsD3jDAW10FBAL\\nGDuBEb5UpRBcsTScYMjP8gfnPK3oXYUMGGELFQTWPiGLU8LaFkMEFQRpIj2L3X2M\\nYz5JYqzAFGCvEACkmpBsAjBjflmEoJkgpXBNEEb4SM2HmyasF3DCJ9BPMLBBLPGB\\nOOivcyhLEZHDMWxaZgaSlkBBLiM+JjJbNDGrkiRkh3UMYwhFJe7DsK7D1roW1sSI\\nmAGKfq5FMq3NlEfR3pSAdrinTjPXdME7eeq9TQIDAQABAoIBAC+g6P2SY8OE0WMm\\n-----END RSA PRIVATE KEY-----\",\"public_key\":\"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA04up8hoqzS1+APIB0Rhj\\nXyObwHQBMsNOjGMh1cPkq1M3FN8OI2F/0xmHbXEOGSNxAMogSZOlSYMTjCi8xSdY\\nnCBRz6BEqFUEElsD3jDAW10FBALGDuBEb5UpRBcsTScYMjP8gfnPK3oXYUMGGELF\\nQTWPiGLU8LaFkMEFQRpIj2L3X2MYz5JYqzAFGCvEACkmpBsAjBjflmEoJkgpXBNE\\nEb4SM2HmyasF3DCJ9BPMLBBLPGBOOO+ivcyhLEZHDMWxaZgaSlkBBLiM+JjJbNDG\\nrkiRkh3UMYwhFJe7DsK7D1roW1sSImAGKfq5FMq3NlEfR3pSAdrinTjPXdME7eeq\\n9TQIDAQAB\\n-----END PUBLIC KEY-----\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/dkim/keys",
+          "host": ["{{api_base}}"],
+          "path": ["dkim", "keys"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains DKIM key data with id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"id\");",
+              "    pm.expect(json.data).to.have.property(\"domain_name\", \"newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"selector\", \"default\");",
+              "    pm.expect(json.data).to.have.property(\"public_key\");",
+              "    pm.expect(json.data).to.have.property(\"description\");",
+              "    pm.expect(json.data).to.have.property(\"created_at\");",
+              "    pm.expect(json.data).to.have.property(\"updated_at\");",
+              "});",
+              "",
+              "pm.test(\"Store DKIM key id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.environment.set(\"dkim_key_id\", json.data.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List DKIM keys for domain",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com/dkim/keys",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com", "dkim", "keys"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data array with at least one key\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.be.an(\"array\");",
+              "    pm.expect(json.data.length).to.be.at.least(1);",
+              "});",
+              "",
+              "pm.test(\"Response has pagination meta\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"meta\");",
+              "    pm.expect(json.meta).to.have.property(\"total\");",
+              "    pm.expect(json.meta).to.have.property(\"page\");",
+              "    pm.expect(json.meta).to.have.property(\"per_page\");",
+              "    pm.expect(json.meta).to.have.property(\"total_pages\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create DKIM signing for key",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"author\":\"newman-test.example.com\",\"dkim_id\":\"{{dkim_key_id}}\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/dkim/signings",
+          "host": ["{{api_base}}"],
+          "path": ["dkim", "signings"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains DKIM signing data with id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"id\");",
+              "    pm.expect(json.data).to.have.property(\"author\", \"newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"dkim_id\", pm.environment.get(\"dkim_key_id\"));",
+              "    pm.expect(json.data).to.have.property(\"created_at\");",
+              "    pm.expect(json.data).to.have.property(\"updated_at\");",
+              "});",
+              "",
+              "pm.test(\"Store DKIM signing id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.environment.set(\"dkim_signing_id\", json.data.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List signings for key",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/dkim/keys/{{dkim_key_id}}/signings",
+          "host": ["{{api_base}}"],
+          "path": ["dkim", "keys", "{{dkim_key_id}}", "signings"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data array with at least one signing\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.be.an(\"array\");",
+              "    pm.expect(json.data.length).to.be.at.least(1);",
+              "});",
+              "",
+              "pm.test(\"Response has pagination meta\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"meta\");",
+              "    pm.expect(json.meta).to.have.property(\"total\");",
+              "    pm.expect(json.meta).to.have.property(\"page\");",
+              "    pm.expect(json.meta).to.have.property(\"per_page\");",
+              "    pm.expect(json.meta).to.have.property(\"total_pages\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete DKIM signing",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/dkim/signings/{{dkim_signing_id}}",
+          "host": ["{{api_base}}"],
+          "path": ["dkim", "signings", "{{dkim_signing_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test(\"Response body is empty\", function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf([\"\", undefined]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete DKIM key",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/dkim/keys/{{dkim_key_id}}",
+          "host": ["{{api_base}}"],
+          "path": ["dkim", "keys", "{{dkim_key_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test(\"Response body is empty\", function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf([\"\", undefined]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cleanup: Delete test domain",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Cleanup: domain deleted (204) or not found (404)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

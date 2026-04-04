@@ -6,6 +6,7 @@ const SESSION_KEY_USERNAME: &str = "username";
 const SESSION_KEY_SUPERADMIN: &str = "superadmin";
 const SESSION_KEY_FLASH: &str = "flash_message";
 const SESSION_KEY_FLASH_ERROR: &str = "flash_error";
+const SESSION_KEY_CSRF: &str = "csrf_token";
 
 /// Get the authenticated admin username from the session.
 pub async fn get_admin_username(session: &Session) -> Option<String> {
@@ -65,4 +66,29 @@ pub async fn take_flash_error(session: &Session) -> Option<String> {
         let _ = session.remove::<String>(SESSION_KEY_FLASH_ERROR).await;
     }
     msg
+}
+
+/// Regenerate the session ID to prevent session fixation attacks.
+pub async fn regenerate_session(session: &Session) {
+    session.cycle_id().await.ok();
+}
+
+/// Get or generate a CSRF token stored in the session.
+pub async fn get_csrf_token(session: &Session) -> String {
+    if let Some(token) = session.get::<String>(SESSION_KEY_CSRF).await.ok().flatten() {
+        return token;
+    }
+
+    let token = postfix_admin_auth::generate_csrf_token().unwrap_or_default();
+    let _ = session.insert(SESSION_KEY_CSRF, token.clone()).await;
+    token
+}
+
+/// Verify a submitted CSRF token against the session-stored token.
+pub async fn verify_csrf(session: &Session, submitted: &str) -> bool {
+    let stored = session.get::<String>(SESSION_KEY_CSRF).await.ok().flatten();
+    match stored {
+        Some(ref s) => postfix_admin_auth::verify_csrf_token(submitted, s).is_ok(),
+        None => false,
+    }
 }

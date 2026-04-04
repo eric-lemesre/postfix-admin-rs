@@ -12,6 +12,7 @@ serde = { workspace = true }
 thiserror = { workspace = true }
 chrono = { workspace = true }
 uuid = { workspace = true }
+utoipa = { workspace = true }
 validator = { workspace = true }
 zeroize = { workspace = true }
 regex = { workspace = true }

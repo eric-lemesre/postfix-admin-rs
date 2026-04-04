@@ -1,0 +1,391 @@
+{
+  "info": {
+    "_postman_id": "c7d8e9f0-a1b2-4c3d-ae4f-5a6b7c8d9e0f",
+    "name": "07 - Fetchmail",
+    "description": "CRUD tests for fetchmail integration endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const loginRequest = {",
+          "    url: pm.environment.get(\"api_base\") + \"/auth/login\",",
+          "    method: \"POST\",",
+          "    header: {\"Content-Type\": \"application/json\"},",
+          "    body: {mode: \"raw\", raw: JSON.stringify({username: pm.environment.get(\"admin_username\"), password: pm.environment.get(\"admin_password\")})}",
+          "};",
+          "pm.sendRequest(loginRequest, function(err, res) {",
+          "    if (!err && res.code === 200) {",
+          "        const json = res.json();",
+          "        pm.environment.set(\"access_token\", json.access_token);",
+          "        pm.environment.set(\"refresh_token\", json.refresh_token);",
+          "    }",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Setup: Create test domain",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"domain\":\"newman-test.example.com\",\"description\":\"Newman fetchmail test domain\",\"aliases\":100,\"mailboxes\":100,\"maxquota\":10240}"
+        },
+        "url": {
+          "raw": "{{api_base}}/domains",
+          "host": ["{{api_base}}"],
+          "path": ["domains"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Setup: domain created (201) or already exists (409)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup: Create test mailbox",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"user@newman-test.example.com\",\"password\":\"TestPass123!\",\"name\":\"Newman Test User\",\"quota\":1024,\"active\":true}"
+        },
+        "url": {
+          "raw": "{{api_base}}/mailboxes",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Setup: mailbox created (201) or already exists (409)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create fetchmail entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"mailbox\":\"user@newman-test.example.com\",\"src_server\":\"imap.remote.com\",\"src_user\":\"remoteuser\",\"src_password\":\"remotepw\",\"src_auth\":\"password\",\"protocol\":\"imap\",\"active\":true}"
+        },
+        "url": {
+          "raw": "{{api_base}}/fetchmail",
+          "host": ["{{api_base}}"],
+          "path": ["fetchmail"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains fetchmail data with id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"id\");",
+              "    pm.expect(json.data).to.have.property(\"mailbox\", \"user@newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"src_server\", \"imap.remote.com\");",
+              "    pm.expect(json.data).to.have.property(\"src_user\", \"remoteuser\");",
+              "    pm.expect(json.data).to.have.property(\"src_auth\", \"password\");",
+              "    pm.expect(json.data).to.have.property(\"protocol\", \"imap\");",
+              "    pm.expect(json.data).to.have.property(\"active\", true);",
+              "    pm.expect(json.data).to.have.property(\"domain\");",
+              "    pm.expect(json.data).to.have.property(\"created_at\");",
+              "    pm.expect(json.data).to.have.property(\"updated_at\");",
+              "});",
+              "",
+              "pm.test(\"Store fetchmail id\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.environment.set(\"fetchmail_id\", json.data.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List fetchmail entries for mailbox",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/mailboxes/user@newman-test.example.com/fetchmail",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes", "user@newman-test.example.com", "fetchmail"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data array with at least one entry\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.be.an(\"array\");",
+              "    pm.expect(json.data.length).to.be.at.least(1);",
+              "});",
+              "",
+              "pm.test(\"Response has pagination meta\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"meta\");",
+              "    pm.expect(json.meta).to.have.property(\"total\");",
+              "    pm.expect(json.meta).to.have.property(\"page\");",
+              "    pm.expect(json.meta).to.have.property(\"per_page\");",
+              "    pm.expect(json.meta).to.have.property(\"total_pages\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get fetchmail entry by id",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/fetchmail/{{fetchmail_id}}",
+          "host": ["{{api_base}}"],
+          "path": ["fetchmail", "{{fetchmail_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains correct fetchmail entry\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"id\", pm.environment.get(\"fetchmail_id\"));",
+              "    pm.expect(json.data).to.have.property(\"mailbox\", \"user@newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"src_server\", \"imap.remote.com\");",
+              "    pm.expect(json.data).to.have.property(\"active\", true);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update fetchmail entry (deactivate)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"active\":false}"
+        },
+        "url": {
+          "raw": "{{api_base}}/fetchmail/{{fetchmail_id}}",
+          "host": ["{{api_base}}"],
+          "path": ["fetchmail", "{{fetchmail_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Fetchmail entry is now inactive\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"id\", pm.environment.get(\"fetchmail_id\"));",
+              "    pm.expect(json.data).to.have.property(\"active\", false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete fetchmail entry",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/fetchmail/{{fetchmail_id}}",
+          "host": ["{{api_base}}"],
+          "path": ["fetchmail", "{{fetchmail_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test(\"Response body is empty\", function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf([\"\", undefined]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cleanup: Delete test mailbox",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/mailboxes/user@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes", "user@newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Cleanup: mailbox deleted (204) or not found (404)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cleanup: Delete test domain",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Cleanup: domain deleted (204) or not found (404)\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

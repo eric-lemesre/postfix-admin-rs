@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use validator::Validate;
 
 use crate::types::{DomainName, EmailAddress};
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateAlias {
     pub address: EmailAddress,
     #[validate(length(min = 1))]
@@ -12,14 +13,14 @@ pub struct CreateAlias {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateAlias {
     #[validate(length(min = 1))]
     pub goto: Option<String>,
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct AliasResponse {
     pub address: EmailAddress,
     pub goto: String,

@@ -16,10 +16,10 @@ pub use error::{ConfigError, ConfigWarning};
 pub use loader::{CliOverrides, ConfigLoader};
 pub use profile::{OperatingMode, Profile};
 pub use sections::{
-    Argon2Config, AuthConfig, DatabaseConfig, DkimConfig, DomainDefaultsConfig, EncryptionConfig,
-    FetchmailConfig, GrpcConfig, JwtConfig, LogFormat, LogLevel, LoggingConfig, MailConfig,
-    MtlsConfig, PasswordPolicyConfig, SecretString, SecurityConfig, ServerConfig, TlsConfig,
-    UiConfig, VacationConfig,
+    ApiConfig, ApiRateLimitConfig, Argon2Config, AuthConfig, CorsConfig, DatabaseConfig,
+    DkimConfig, DomainDefaultsConfig, EncryptionConfig, FetchmailConfig, GrpcConfig, JwtConfig,
+    LogFormat, LogLevel, LoggingConfig, MailConfig, MtlsConfig, PasswordPolicyConfig, SecretString,
+    SecurityConfig, ServerConfig, TlsConfig, UiConfig, VacationConfig,
 };
 
 /// Root application configuration.
@@ -40,6 +40,7 @@ pub struct AppConfig {
     pub domain_defaults: DomainDefaultsConfig,
     pub security: SecurityConfig,
     pub encryption: EncryptionConfig,
+    pub api: ApiConfig,
 }
 
 impl AppConfig {

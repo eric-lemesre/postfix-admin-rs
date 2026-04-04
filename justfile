@@ -83,6 +83,14 @@ test-one NAME:
 test-integration:
     cargo test --all -- --ignored
 
+# Run Newman API tests (requires running server)
+test-newman:
+    cd tests/newman && npm test
+
+# Run Newman API tests with CI reporter
+test-newman-ci:
+    cd tests/newman && npm run test:ci
+
 # --------------------------------------------------------------------------
 # Documentation
 # --------------------------------------------------------------------------

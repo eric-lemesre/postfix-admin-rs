@@ -1,0 +1,24 @@
+{
+  "name": "postfix-admin-rs-newman-tests",
+  "version": "0.6.0",
+  "private": true,
+  "description": "Newman API tests for postfix-admin-rs",
+  "scripts": {
+    "test": "npm run test:auth && npm run test:domains && npm run test:mailboxes && npm run test:aliases && npm run test:admins && npm run test:vacations && npm run test:fetchmail && npm run test:dkim && npm run test:logs && npm run test:alias-domains && npm run test:errors",
+    "test:ci": "npm run test -- --reporters cli,junit --reporter-junit-export results.xml",
+    "test:auth": "newman run collections/01-auth.json -e environments/dev.json",
+    "test:domains": "newman run collections/02-domains.json -e environments/dev.json",
+    "test:mailboxes": "newman run collections/03-mailboxes.json -e environments/dev.json",
+    "test:aliases": "newman run collections/04-aliases.json -e environments/dev.json",
+    "test:admins": "newman run collections/05-admins.json -e environments/dev.json",
+    "test:vacations": "newman run collections/06-vacations.json -e environments/dev.json",
+    "test:fetchmail": "newman run collections/07-fetchmail.json -e environments/dev.json",
+    "test:dkim": "newman run collections/08-dkim.json -e environments/dev.json",
+    "test:logs": "newman run collections/09-logs.json -e environments/dev.json",
+    "test:alias-domains": "newman run collections/10-alias-domains.json -e environments/dev.json",
+    "test:errors": "newman run collections/11-error-cases.json -e environments/dev.json"
+  },
+  "devDependencies": {
+    "newman": "^6.0.0"
+  }
+}

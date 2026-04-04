@@ -1,11 +1,12 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 use validator::Validate;
 
 use crate::types::DomainName;
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateDkimKey {
     pub domain_name: DomainName,
     #[validate(length(max = 255))]
@@ -16,7 +17,7 @@ pub struct CreateDkimKey {
     pub public_key: String,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct DkimKeyResponse {
     pub id: Uuid,
     pub domain_name: DomainName,
@@ -41,14 +42,14 @@ impl From<crate::models::DkimKey> for DkimKeyResponse {
     }
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateDkimSigning {
     #[validate(length(min = 1, max = 255))]
     pub author: String,
     pub dkim_id: Uuid,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct DkimSigningResponse {
     pub id: Uuid,
     pub author: String,

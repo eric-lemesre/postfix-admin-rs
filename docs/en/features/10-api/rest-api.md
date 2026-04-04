@@ -12,9 +12,13 @@
 | API router setup                | `postfix-admin-api`  | Done    | M5        |
 | JWT authentication middleware   | `postfix-admin-auth` | Done    | M4        |
 | RFC 7807 error handling         | `postfix-admin-api`  | Done    | M5        |
-| OpenAPI generation (utoipa)     | `postfix-admin-api`  | Pending | M5        |
+| Response format (data/meta)     | `postfix-admin-api`  | Done    | M5        |
+| OpenAPI generation (utoipa)     | `postfix-admin-api`  | Done    | M5        |
+| Swagger UI (`/api/docs`)        | `postfix-admin-api`  | Done    | M5        |
+| CORS middleware                 | `postfix-admin-api`  | Done    | M5        |
+| Rate limiting middleware        | `postfix-admin-api`  | Done    | M5        |
 | All CRUD endpoints              | `postfix-admin-api`  | Done    | M5        |
-| Newman test collections         | `tests/newman/`      | Pending | M14       |
+| Newman test collections (11)    | `tests/newman/`      | Done    | M5        |
 
 ## Summary
 

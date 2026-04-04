@@ -6,38 +6,42 @@
 
 ## Version plan
 
-| Version    | Milestone | Phase       | Scope                                             | Effort |
-|------------|-----------|-------------|---------------------------------------------------|--------|
-| v0.1.0     | M0        | Foundation  | Workspace bootstrap, CI, tooling                  | S      |
-| v0.2.0     | M1        | Foundation  | Core crate (models, traits, DTOs, validation)     | L      |
-| v0.3.0     | M2        | Foundation  | DB crate (PG + MySQL repos, migrations)           | XL     |
-| v0.4.0     | M3        | Foundation  | Configuration system (config-rs)                  | M      |
-| v0.5.0     | M4        | Auth        | Auth crate (passwords, sessions, JWT, TOTP, RBAC) | XL     |
-| v0.6.0     | M5        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     |
-| v0.7.0     | M6        | Interfaces  | Web interface (Askama, HTMX, Tailwind, i18n)      | XL     |
-| v0.7.1     | M7        | Interfaces  | gRPC API (tonic, protobuf)                        | M      |
-| v0.7.2     | M8        | Interfaces  | CLI (clap, formatters)                            | L      |
-| v0.8.0     | M9        | Server      | Server composition (startup, shutdown, routing)   | M      |
-| v0.8.1     | M10       | Features    | Vacation auto-responder                           | M      |
-| v0.8.2     | M11       | Features    | DKIM management                                   | M      |
-| v0.8.3     | M12       | Features    | Fetchmail integration                             | M      |
-| v0.8.4     | M13       | Features    | Alias domains                                     | S      |
-| v0.9.0     | M14       | Quality     | Newman API test suite (100% coverage)             | L      |
-| v0.9.1     | M15       | Quality     | Integration tests (testcontainers)                | L      |
-| v0.9.2     | M16       | Quality     | Security audit                                    | M      |
-| **v1.0.0** | **M17**   | **Release** | **Release, packaging, documentation**             | **M**  |
+| Version    | Milestone | Phase       | Scope                                             | Effort | Status         |
+|------------|-----------|-------------|---------------------------------------------------|--------|----------------|
+| v0.1.0     | M0        | Foundation  | Workspace bootstrap, CI, tooling                  | S      | Done           |
+| v0.2.0     | M1        | Foundation  | Core crate (models, traits, DTOs, validation)     | L      | Done           |
+| v0.3.0     | M2        | Foundation  | DB crate (PG + MySQL repos, migrations)           | XL     | Done           |
+| v0.4.0     | M3        | Foundation  | Configuration system (config-rs)                  | M      | Done           |
+| v0.5.0     | M4        | Auth        | Auth crate (passwords, sessions, JWT, TOTP, RBAC) | XL     | Done           |
+| v0.6.0     | M5        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     | Done (30/30)   |
+| v0.7.0     | M6        | Interfaces  | Web interface (Askama, HTMX, Tailwind, i18n)      | XL     | Partial (5/28) |
+| v0.7.1     | M7        | Interfaces  | gRPC API (tonic, protobuf)                        | M      | Pending        |
+| v0.7.2     | M8        | Interfaces  | CLI (clap, formatters)                            | L      | Pending        |
+| v0.8.0     | M9        | Server      | Server composition (startup, shutdown, routing)   | M      | Partial (6/13) |
+| v0.8.1     | M10       | Features    | Vacation auto-responder                           | M      | Pending        |
+| v0.8.2     | M11       | Features    | DKIM management                                   | M      | Pending        |
+| v0.8.3     | M12       | Features    | Fetchmail integration                             | M      | Pending        |
+| v0.8.4     | M13       | Features    | Alias domains                                     | S      | Pending        |
+| v0.9.0     | M14       | Quality     | Newman API test suite (100% coverage)             | L      | Partial (5/6)  |
+| v0.9.1     | M15       | Quality     | Integration tests (testcontainers)                | L      | Pending        |
+| v0.9.2     | M16       | Quality     | Security audit                                    | M      | Pending        |
+| **v1.0.0** | **M17**   | **Release** | **Release, packaging, documentation**             | **M**  | **Pending**    |
 
 > **Effort scale (solo developer):**
 > S = small, M = medium, L = large, XL = very large.
 > Critical path: M0 → M1 → M2 → M4 → M9 (each blocks the next).
 > M5/M6/M7/M8 can be parallelized after M4 (M5 API before M6 Web recommended).
 > M10-M13 can be done in any order after M9.
+>
+> **Status key:** Done = all items complete, Partial (x/y) = x items done out of y,
+> Pending = not started. M5, M6, and M9 have partial implementations from
+> groundwork done during earlier milestones (API routes, web scaffolding, server wiring).
 
 ---
 
 ## Phase 1 — Foundation
 
-### M0: Project bootstrap `v0.1.0` [S]
+### M0: Project bootstrap `v0.1.0` [S] — Done (10/10)
 - [x] Create workspace `Cargo.toml` with 7 crates
 - [x] Create crate skeletons (`lib.rs` / `main.rs`) for all 7 crates
 - [x] Configure `rustfmt.toml` (max_width = 100)
@@ -49,7 +53,7 @@
 - [x] Set up test infrastructure (testcontainers, fixtures)
 - [x] Create Newman test directory structure (`tests/newman/`)
 
-### M1: postfix-admin-core `v0.2.0` [L]
+### M1: postfix-admin-core `v0.2.0` [L] — Done (16/16)
 > Specs: [SPEC-01.1](docs/en/features/01-domains/domain-management.md) · [SPEC-01.2](docs/en/features/01-domains/alias-domains.md) · [SPEC-02.1](docs/en/features/02-mailboxes/mailbox-management.md) · [SPEC-02.2](docs/en/features/02-mailboxes/quota-management.md) · [SPEC-03.1](docs/en/features/03-aliases/alias-management.md) · [SPEC-04.1](docs/en/features/04-authentication/admin-authentication.md) · [SPEC-04.3](docs/en/features/04-authentication/totp-2fa.md) · [SPEC-04.4](docs/en/features/04-authentication/app-passwords.md) · [SPEC-06.1](docs/en/features/06-vacation/vacation-autoresponder.md) · [SPEC-07.1](docs/en/features/07-fetchmail/fetchmail-integration.md) · [SPEC-08.1](docs/en/features/08-dkim/dkim-management.md) · [SPEC-09.1](docs/en/features/09-logging/audit-logging.md)
 
 - [x] Domain models: `Domain`, `Mailbox`, `Alias`, `Admin`
@@ -69,7 +73,7 @@
 - [x] Pagination types: `PageRequest`, `PageResponse<T>`
 - [x] Unit tests for all models, newtypes, and validation
 
-### M2: postfix-admin-db `v0.3.0` [XL]
+### M2: postfix-admin-db `v0.3.0` [XL] — Done (24/24)
 > Specs: same as M1
 
 - [x] Connection pool management (sqlx, multi-backend)
@@ -101,7 +105,7 @@
 - [x] Integration tests with testcontainers (PostgreSQL)
 - [x] Integration tests with testcontainers (MySQL)
 
-### M3: Configuration system `v0.4.0` [M]
+### M3: Configuration system `v0.4.0` [M] — Done (13/13)
 > Specs: [SPEC-13.1](docs/en/features/13-configuration/configuration.md)
 
 - [x] Config struct definitions matching `config.toml` structure
@@ -122,57 +126,57 @@
 
 ## Phase 2 — Authentication & Security
 
-### M4: postfix-admin-auth `v0.5.0` [XL]
+### M4: postfix-admin-auth `v0.5.0` [XL] — Done (30/30)
 > Specs: [SPEC-04.1](docs/en/features/04-authentication/admin-authentication.md) · [SPEC-04.2](docs/en/features/04-authentication/user-authentication.md) · [SPEC-04.3](docs/en/features/04-authentication/totp-2fa.md) · [SPEC-04.4](docs/en/features/04-authentication/app-passwords.md) · [SPEC-04.5](docs/en/features/04-authentication/password-schemes.md) · [SPEC-05.1](docs/en/features/05-authorization/rbac.md)
 
 - [x] Password scheme detection (prefix matching per SPEC-04.5)
 - [x] Argon2id hashing and verification (OWASP 2024 parameters)
 - [x] Bcrypt hashing and verification
 - [x] SHA-512 crypt and SHA-256 crypt support
-- [ ] MD5 crypt and legacy DES crypt support (read-only)
+- [x] MD5 crypt and legacy DES crypt support (read-only, warn + reject)
 - [x] Cleartext detection (dev mode only)
 - [x] Transparent rehashing on successful auth
-- [ ] Constant-time password comparison
-- [ ] Session management (server-side, configurable lifetime)
-- [ ] Session cookie: HttpOnly, Secure, SameSite=Strict
-- [ ] Session regeneration after authentication
+- [x] Constant-time password comparison (subtle)
+- [x] Session management (server-side, configurable lifetime, MemoryStore)
+- [x] Session cookie: HttpOnly, Secure, SameSite=Strict
+- [x] Session regeneration after authentication (cycle_id)
 - [x] JWT generation (access + refresh tokens, configurable lifetimes)
 - [x] JWT verification and refresh flow
-- [ ] TOTP secret generation (160 bits, base32)
-- [ ] TOTP QR code generation (otpauth:// URI)
-- [ ] TOTP verification (SHA-1, 6 digits, 30s, tolerance +/-1)
-- [ ] TOTP replay protection (last timestamp tracking)
-- [ ] TOTP recovery codes (10, one-time use)
-- [ ] TOTP IP exceptions (global + per-user)
-- [ ] App password generation (24 chars alphanumeric)
-- [ ] App password hashing (argon2id) and verification
-- [ ] RBAC extractors: `RequireSuperAdmin`, `RequireDomainAdmin`, `RequireUser`
-- [ ] Scope verification: role + domain access + resource ownership
-- [ ] CSRF token generation and validation
-- [ ] Rate limiting (login attempts, configurable per SPEC-04.1)
-- [ ] Brute-force protection (progressive delays, IP lockout)
+- [x] TOTP secret generation (160 bits, base32, totp-rs)
+- [x] TOTP QR code generation (otpauth:// URI, PNG base64)
+- [x] TOTP verification (SHA-1, 6 digits, 30s, tolerance +/-1)
+- [x] TOTP replay protection (last timestamp tracking)
+- [x] TOTP recovery codes (10, one-time use, XXXX-XXXX format)
+- [x] TOTP IP exceptions (global + per-user)
+- [x] App password generation (24 chars alphanumeric, no ambiguous)
+- [x] App password hashing (argon2id) and verification
+- [x] RBAC extractors: `RequireSuperAdmin`, `RequireDomainAdmin`
+- [x] Scope verification: role + domain access + assurance levels
+- [x] CSRF token generation and validation (base64url, constant-time)
+- [x] Rate limiting (login attempts, configurable, DashMap)
+- [x] Brute-force protection (progressive delays 2^n, IP lockout)
 - [x] mTLS configuration (`MtlsConfig` struct, validation rules)
 - [x] mTLS certificate info extraction (`CertificateInfo`, `MtlsVerifier`)
 - [x] mTLS DN parsing (RFC 2253 and OpenSSL formats)
-- [ ] mTLS middleware integration (extract cert info from request headers)
-- [ ] mTLS enforcement per role (require cert for superadmin/domain admin)
+- [x] mTLS middleware integration (extract cert info from request headers)
+- [x] mTLS enforcement per role (require cert for superadmin/domain admin)
 - [x] Unit tests for all password schemes
-- [ ] Unit tests for JWT, TOTP, RBAC, rate limiting
+- [x] Unit tests for JWT, TOTP, RBAC, rate limiting (75 tests)
 
 ---
 
 ## Phase 3 — Interfaces
 
-### M5: REST API `v0.6.0` [XL]
+### M5: REST API `v0.6.0` [XL] — Done (30/30)
 > Specs: [SPEC-10.1](docs/en/features/10-api/rest-api.md)
 
 - [x] API router setup (`/api/v1/`)
 - [x] Authentication middleware (JWT Bearer + API Key)
 - [x] Error handling: RFC 7807 (Problem Details for HTTP APIs)
 - [x] Pagination: offset-based with meta headers
-- [ ] Response format: `{ "data": ..., "meta": ... }`
-- [ ] OpenAPI 3.1 generation (utoipa)
-- [ ] Swagger UI at `/api/docs`
+- [x] Response format: `{ "data": ..., "meta": ... }`
+- [x] OpenAPI 3.1 generation (utoipa)
+- [x] Swagger UI at `/api/docs`
 - [x] Auth endpoints: login, refresh, logout, totp/verify
 - [x] Domain endpoints: list, get, create, update, delete, toggle
 - [x] Alias domain endpoints: list, create, delete
@@ -183,21 +187,21 @@
 - [x] Fetchmail endpoints: list, get, create, update, delete, test
 - [x] DKIM endpoints: keys (list, create, delete), signing (list, create, delete), dns-check
 - [x] Log endpoints: list (global + per domain)
-- [ ] Rate limiting middleware (100 req/min default, X-RateLimit-* headers)
-- [ ] CORS middleware (configurable origins per config.toml)
-- [ ] Newman test collection: auth endpoints
-- [ ] Newman test collection: domain endpoints
-- [ ] Newman test collection: mailbox endpoints
-- [ ] Newman test collection: alias endpoints
-- [ ] Newman test collection: admin endpoints
-- [ ] Newman test collection: vacation endpoints
-- [ ] Newman test collection: fetchmail endpoints
-- [ ] Newman test collection: DKIM endpoints
-- [ ] Newman test collection: log endpoints
-- [ ] Newman test collection: alias domain endpoints
-- [ ] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
+- [x] Rate limiting middleware (100 req/min default, X-RateLimit-* headers)
+- [x] CORS middleware (configurable origins per config.toml)
+- [x] Newman test collection: auth endpoints
+- [x] Newman test collection: domain endpoints
+- [x] Newman test collection: mailbox endpoints
+- [x] Newman test collection: alias endpoints
+- [x] Newman test collection: admin endpoints
+- [x] Newman test collection: vacation endpoints
+- [x] Newman test collection: fetchmail endpoints
+- [x] Newman test collection: DKIM endpoints
+- [x] Newman test collection: log endpoints
+- [x] Newman test collection: alias domain endpoints
+- [x] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
 
-### M6: postfix-admin-web `v0.7.0` [XL]
+### M6: postfix-admin-web `v0.7.0` [XL] — Partial (5/28)
 > Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
 
 - [x] Askama template base layout (header, sidebar, main, footer)
@@ -229,7 +233,7 @@
 - [ ] Accessibility: ARIA, keyboard nav, WCAG 2.1 AA contrast
 - [ ] Template unit tests (render without errors)
 
-### M7: gRPC API `v0.7.1` [M]
+### M7: gRPC API `v0.7.1` [M] — Pending (0/7)
 > Specs: [SPEC-10.2](docs/en/features/10-api/grpc-api.md)
 
 - [ ] Protobuf definitions (proto3): DomainService, MailboxService, AliasService, AdminService
@@ -240,7 +244,7 @@
 - [ ] gRPC error mapping
 - [ ] Integration tests for all gRPC services
 
-### M8: CLI `v0.7.2` [L]
+### M8: CLI `v0.7.2` [L] — Pending (0/17)
 > Specs: [SPEC-11.1](docs/en/features/11-cli/cli-administration.md)
 
 - [ ] clap command structure: `postfix-admin-rs <subcommand> <action>`
@@ -265,7 +269,7 @@
 
 ## Phase 4 — Server & Feature modules
 
-### M9: postfix-admin-server `v0.8.0` [M]
+### M9: postfix-admin-server `v0.8.0` [M] — Partial (6/13)
 - [x] Main entry point (`main.rs`)
 - [x] Config loading and validation
 - [x] Database pool initialization
@@ -280,7 +284,7 @@
 - [ ] Static assets serving (include_dir)
 - [ ] Smoke tests (server starts and responds)
 
-### M10: Vacation auto-responder `v0.8.1` [M]
+### M10: Vacation auto-responder `v0.8.1` [M] — Pending (0/7)
 > Specs: [SPEC-06.1](docs/en/features/06-vacation/vacation-autoresponder.md)
 
 - [ ] Vacation CRUD (web + API)
@@ -291,7 +295,7 @@
 - [ ] Configurable deduplication interval
 - [ ] Tests
 
-### M11: DKIM management `v0.8.2` [M]
+### M11: DKIM management `v0.8.2` [M] — Pending (0/9)
 > Specs: [SPEC-08.1](docs/en/features/08-dkim/dkim-management.md)
 
 - [ ] RSA key generation (2048 default, configurable 1024/2048/4096)
@@ -304,7 +308,7 @@
 - [ ] Web UI pages + API endpoints
 - [ ] Tests
 
-### M12: Fetchmail integration `v0.8.3` [M]
+### M12: Fetchmail integration `v0.8.3` [M] — Pending (0/8)
 > Specs: [SPEC-07.1](docs/en/features/07-fetchmail/fetchmail-integration.md)
 
 - [ ] Fetchmail config CRUD (web + API)
@@ -316,7 +320,7 @@
 - [ ] Web UI pages + API endpoints
 - [ ] Tests
 
-### M13: Alias domains `v0.8.4` [S]
+### M13: Alias domains `v0.8.4` [S] — Pending (0/5)
 > Specs: [SPEC-01.2](docs/en/features/01-domains/alias-domains.md)
 
 - [ ] Alias domain CRUD (web + API + CLI)
@@ -329,15 +333,15 @@
 
 ## Phase 5 — Quality & Release
 
-### M14: Newman API test suite `v0.9.0` [L]
-- [ ] Environment files (dev, ci) with base URL and credentials
-- [ ] Pre-request scripts for auth token management
-- [ ] Collection runner configuration for CI
-- [ ] Verify 100% route coverage (every REST endpoint tested)
-- [ ] Success cases + error cases for each endpoint
+### M14: Newman API test suite `v0.9.0` [L] — Partial (5/6)
+- [x] Environment files (dev, ci) with base URL and credentials
+- [x] Pre-request scripts for auth token management
+- [x] Collection runner configuration for CI
+- [x] Verify 100% route coverage (every REST endpoint tested)
+- [x] Success cases + error cases for each endpoint
 - [ ] CI integration: Newman runs after integration tests
 
-### M15: Integration tests `v0.9.1` [L]
+### M15: Integration tests `v0.9.1` [L] — Pending (0/7)
 - [ ] testcontainers setup for PostgreSQL
 - [ ] testcontainers setup for MySQL
 - [ ] End-to-end tests: domain lifecycle (create → mailbox → alias → delete)
@@ -346,7 +350,7 @@
 - [ ] Migration tests (both backends)
 - [ ] Performance benchmarks (optional)
 
-### M16: Security audit `v0.9.2` [M]
+### M16: Security audit `v0.9.2` [M] — Pending (0/10)
 - [ ] `cargo audit` — zero known vulnerabilities
 - [ ] `cargo deny` — license compliance
 - [ ] Review all SQL queries (parameterized, no injection)
@@ -358,7 +362,7 @@
 - [ ] Review input validation and sanitization
 - [ ] Verify TLS configuration guidance in docs
 
-### M17: Release `v1.0.0` [M]
+### M17: Release `v1.0.0` [M] — Pending (0/9)
 - [ ] Version bump to 1.0.0 in all Cargo.toml
 - [ ] CHANGELOG.md
 - [ ] Release binaries (Linux amd64, arm64)

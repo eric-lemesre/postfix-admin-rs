@@ -9,12 +9,13 @@
 |-------------------------------------------------------|----------------------|---------|-----------|
 | Model (`TotpExceptionAddress`)                        | `postfix-admin-core` | Done    | M1        |
 | DTOs (`CreateTotpException`, `TotpExceptionResponse`) | `postfix-admin-core` | Done    | M1        |
-| TOTP secret generation                                | `postfix-admin-auth` | Pending | M4        |
-| TOTP verification                                     | `postfix-admin-auth` | Pending | M4        |
-| QR code generation                                    | `postfix-admin-auth` | Pending | M4        |
-| Recovery codes                                        | `postfix-admin-auth` | Pending | M4        |
-| IP exceptions                                         | `postfix-admin-auth` | Pending | M4        |
-| Web UI setup page                                     | `postfix-admin-web`  | Pending | M5        |
+| TOTP secret generation (160 bits, base32)             | `postfix-admin-auth` | Done    | M4        |
+| TOTP verification (SHA-1, 6 digits, 30s, ±1)         | `postfix-admin-auth` | Done    | M4        |
+| QR code generation (otpauth:// URI, PNG base64)       | `postfix-admin-auth` | Done    | M4        |
+| Recovery codes (10, XXXX-XXXX, argon2id hashed)       | `postfix-admin-auth` | Done    | M4        |
+| IP exceptions (global + per-user)                     | `postfix-admin-auth` | Done    | M4        |
+| TOTP replay protection (last timestamp tracking)      | `postfix-admin-auth` | Done    | M4        |
+| Web UI setup page                                     | `postfix-admin-web`  | Pending | M6        |
 
 ## Summary
 

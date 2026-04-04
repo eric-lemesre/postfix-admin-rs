@@ -1,0 +1,376 @@
+{
+  "info": {
+    "_postman_id": "c3d4e5f6-a7b8-9012-cdef-123456789003",
+    "name": "03 - Mailboxes",
+    "description": "Mailbox CRUD endpoints for the postfix-admin-rs REST API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Authenticate and create test domain before running mailbox tests",
+          "var apiBase = pm.environment.get('api_base');",
+          "",
+          "// Step 1: Login to get access token",
+          "var loginRequest = {",
+          "    url: apiBase + '/auth/login',",
+          "    method: 'POST',",
+          "    header: {",
+          "        'Content-Type': 'application/json'",
+          "    },",
+          "    body: {",
+          "        mode: 'raw',",
+          "        raw: JSON.stringify({",
+          "            username: pm.environment.get('admin_username'),",
+          "            password: pm.environment.get('admin_password')",
+          "        })",
+          "    }",
+          "};",
+          "",
+          "pm.sendRequest(loginRequest, function (err, res) {",
+          "    if (err) {",
+          "        console.error('Login failed:', err);",
+          "        return;",
+          "    }",
+          "    var jsonData = res.json();",
+          "    pm.environment.set('access_token', jsonData.access_token);",
+          "    pm.environment.set('refresh_token', jsonData.refresh_token);",
+          "",
+          "    // Step 2: Create the test domain (ignore 409 if it already exists)",
+          "    var createDomainRequest = {",
+          "        url: apiBase + '/domains',",
+          "        method: 'POST',",
+          "        header: {",
+          "            'Content-Type': 'application/json',",
+          "            'Authorization': 'Bearer ' + jsonData.access_token",
+          "        },",
+          "        body: {",
+          "            mode: 'raw',",
+          "            raw: JSON.stringify({",
+          "                domain: 'newman-test.example.com',",
+          "                description: 'Newman mailbox test domain',",
+          "                aliases: 100,",
+          "                mailboxes: 50,",
+          "                maxquota: 10240,",
+          "                quota: 51200,",
+          "                active: true",
+          "            })",
+          "        }",
+          "    };",
+          "",
+          "    pm.sendRequest(createDomainRequest, function (err, res) {",
+          "        if (err) {",
+          "            console.error('Create domain failed:', err);",
+          "        }",
+          "        // 201 = created, 409 = already exists (both are acceptable)",
+          "    });",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Create mailbox",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Mailbox username matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.username).to.eql('user@newman-test.example.com');",
+              "});",
+              "",
+              "pm.test('Mailbox has expected fields', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('username');",
+              "    pm.expect(jsonData.data).to.have.property('name');",
+              "    pm.expect(jsonData.data).to.have.property('maildir');",
+              "    pm.expect(jsonData.data).to.have.property('quota');",
+              "    pm.expect(jsonData.data).to.have.property('local_part');",
+              "    pm.expect(jsonData.data).to.have.property('domain');",
+              "    pm.expect(jsonData.data).to.have.property('active');",
+              "    pm.expect(jsonData.data).to.have.property('created_at');",
+              "    pm.expect(jsonData.data).to.have.property('updated_at');",
+              "});",
+              "",
+              "pm.test('Mailbox domain matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.domain).to.eql('newman-test.example.com');",
+              "});",
+              "",
+              "pm.test('Mailbox local_part is user', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.local_part).to.eql('user');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"user@newman-test.example.com\",\"password\":\"TestPassword123!\",\"name\":\"Newman Test User\",\"quota\":5120,\"active\":true}"
+        },
+        "url": {
+          "raw": "{{api_base}}/mailboxes",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes"]
+        }
+      }
+    },
+    {
+      "name": "List mailboxes for domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Data array has at least one mailbox', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.length).to.be.at.least(1);",
+              "});",
+              "",
+              "pm.test('Response body has meta object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('meta');",
+              "    pm.expect(jsonData.meta).to.have.property('total');",
+              "    pm.expect(jsonData.meta).to.have.property('page');",
+              "    pm.expect(jsonData.meta).to.have.property('per_page');",
+              "    pm.expect(jsonData.meta).to.have.property('total_pages');",
+              "});",
+              "",
+              "pm.test('At least one mailbox belongs to test domain', function () {",
+              "    var jsonData = pm.response.json();",
+              "    var found = jsonData.data.some(function (mb) {",
+              "        return mb.domain === 'newman-test.example.com';",
+              "    });",
+              "    pm.expect(found).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com/mailboxes",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com", "mailboxes"]
+        }
+      }
+    },
+    {
+      "name": "Get mailbox",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Mailbox username matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.username).to.eql('user@newman-test.example.com');",
+              "});",
+              "",
+              "pm.test('Mailbox name matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.name).to.eql('Newman Test User');",
+              "});",
+              "",
+              "pm.test('Mailbox is active', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.active).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/mailboxes/user@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes", "user@newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "Update mailbox quota",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Mailbox quota was updated', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.quota).to.eql(10240);",
+              "});",
+              "",
+              "pm.test('Mailbox username is unchanged', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.username).to.eql('user@newman-test.example.com');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"quota\":10240}"
+        },
+        "url": {
+          "raw": "{{api_base}}/mailboxes/user@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes", "user@newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "Delete mailbox",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test('Response body is empty', function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf(['', undefined]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/mailboxes/user@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["mailboxes", "user@newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "Cleanup - Delete test domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 204 or 404', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      }
+    }
+  ]
+}

@@ -2,6 +2,23 @@
 
 # SPEC-10.1 — API REST
 
+## Statut d'implémentation
+
+| Composant                        | Crate                | Statut  | Milestone |
+|----------------------------------|----------------------|---------|-----------|
+| Types de pagination              | `postfix-admin-core` | Done    | M1        |
+| Types d'erreur (réponses API)    | `postfix-admin-core` | Done    | M1        |
+| Routeur API                      | `postfix-admin-api`  | Done    | M5        |
+| Middleware JWT                   | `postfix-admin-auth` | Done    | M4        |
+| Gestion d'erreurs RFC 7807      | `postfix-admin-api`  | Done    | M5        |
+| Format de réponse (data/meta)   | `postfix-admin-api`  | Done    | M5        |
+| Génération OpenAPI (utoipa)      | `postfix-admin-api`  | Done    | M5        |
+| Swagger UI (`/api/docs`)         | `postfix-admin-api`  | Done    | M5        |
+| Middleware CORS                  | `postfix-admin-api`  | Done    | M5        |
+| Middleware rate limiting         | `postfix-admin-api`  | Done    | M5        |
+| Tous les endpoints CRUD         | `postfix-admin-api`  | Done    | M5        |
+| Collections de tests Newman (11)| `tests/newman/`      | Done    | M5        |
+
 ## Résumé
 
 API RESTful JSON complète pour l'administration programmatique du serveur mail.

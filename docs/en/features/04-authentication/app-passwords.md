@@ -12,8 +12,9 @@
 | Repository trait (`AppPasswordRepository`)        | `postfix-admin-core` | Done    | M1        |
 | PostgreSQL repository                             | `postfix-admin-db`   | Done    | M2        |
 | MySQL repository                                  | `postfix-admin-db`   | Done    | M2        |
-| Password generation and hashing                   | `postfix-admin-auth` | Pending | M4        |
-| Web UI management page                            | `postfix-admin-web`  | Pending | M5        |
+| Password generation (24 chars, no ambiguous)      | `postfix-admin-auth` | Done    | M4        |
+| Password hashing (argon2id) and verification      | `postfix-admin-auth` | Done    | M4        |
+| Web UI management page                            | `postfix-admin-web`  | Pending | M6        |
 
 ## Summary
 

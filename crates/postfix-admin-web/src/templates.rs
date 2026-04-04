@@ -20,6 +20,7 @@ pub fn render(template: &impl Template) -> Response {
 #[template(path = "login.html")]
 pub struct LoginTemplate {
     pub error: Option<String>,
+    pub csrf_token: String,
 }
 
 #[derive(Template)]

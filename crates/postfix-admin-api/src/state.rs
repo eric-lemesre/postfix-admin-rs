@@ -2,11 +2,13 @@
 
 use std::sync::Arc;
 
-use postfix_admin_auth::JwtManager;
+use postfix_admin_auth::{JwtManager, LoginRateLimiter, MtlsVerifier};
 use postfix_admin_core::repository::{
     AdminRepository, AliasDomainRepository, AliasRepository, AppPasswordRepository, DkimRepository,
     DomainRepository, FetchmailRepository, LogRepository, MailboxRepository, VacationRepository,
 };
+
+use crate::middleware::ApiRateLimiter;
 
 /// Shared application state injected into handlers via axum's `State` extractor.
 #[derive(Clone)]
@@ -23,4 +25,7 @@ pub struct AppState {
     pub app_passwords: Arc<dyn AppPasswordRepository>,
     pub jwt: Arc<JwtManager>,
     pub password_scheme: String,
+    pub rate_limiter: Arc<LoginRateLimiter>,
+    pub mtls_verifier: Arc<MtlsVerifier>,
+    pub api_rate_limiter: Option<Arc<ApiRateLimiter>>,
 }
