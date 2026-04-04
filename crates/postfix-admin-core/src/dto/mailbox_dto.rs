@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use validator::Validate;
 
 use crate::types::{DomainName, EmailAddress, Password};
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct CreateMailbox {
     pub username: EmailAddress,
     pub password: Password,
@@ -15,7 +16,7 @@ pub struct CreateMailbox {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateMailbox {
     pub password: Option<Password>,
     #[validate(length(max = 255))]
@@ -25,7 +26,7 @@ pub struct UpdateMailbox {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct MailboxResponse {
     pub username: EmailAddress,
     pub name: String,

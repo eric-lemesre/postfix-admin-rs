@@ -3,6 +3,7 @@ use std::{fmt, str::FromStr};
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 use crate::error::ValidationError;
 
@@ -13,8 +14,9 @@ static DOMAIN_REGEX: LazyLock<Regex> = LazyLock::new(|| {
 
 const MAX_DOMAIN_LENGTH: usize = 255;
 
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize, ToSchema)]
 #[serde(try_from = "String", into = "String")]
+#[schema(value_type = String, example = "example.com")]
 pub struct DomainName(String);
 
 impl DomainName {

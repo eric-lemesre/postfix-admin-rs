@@ -1,10 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use validator::Validate;
 
 use crate::types::{DomainName, EmailAddress};
 
-#[derive(Debug, Clone, Deserialize, Validate)]
+#[derive(Debug, Clone, Deserialize, Validate, ToSchema)]
 pub struct UpdateVacation {
     #[validate(length(max = 255))]
     pub subject: Option<String>,
@@ -16,7 +17,7 @@ pub struct UpdateVacation {
     pub interval_time: Option<i32>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct VacationResponse {
     pub email: EmailAddress,
     pub subject: String,

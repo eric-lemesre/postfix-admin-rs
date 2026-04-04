@@ -5,6 +5,7 @@
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 use crate::error::AuthError;
 
@@ -24,7 +25,7 @@ pub struct Claims {
 }
 
 /// JWT token pair returned after successful authentication.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct TokenPair {
     pub access_token: String,
     pub refresh_token: String,

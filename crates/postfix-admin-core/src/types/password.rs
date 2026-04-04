@@ -1,6 +1,7 @@
 use std::fmt;
 
 use serde::Deserialize;
+use utoipa::ToSchema;
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 use crate::error::ValidationError;
@@ -8,8 +9,9 @@ use crate::error::ValidationError;
 const MIN_PASSWORD_LENGTH: usize = 8;
 const MAX_PASSWORD_LENGTH: usize = 256;
 
-#[derive(Clone, Deserialize, Zeroize, ZeroizeOnDrop)]
+#[derive(Clone, Deserialize, Zeroize, ZeroizeOnDrop, ToSchema)]
 #[serde(try_from = "String")]
+#[schema(value_type = String, format = Password)]
 pub struct Password(String);
 
 impl Password {

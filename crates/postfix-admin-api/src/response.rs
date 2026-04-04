@@ -4,11 +4,12 @@
 //! entities or `{"data": [...], "meta": {...}}` for paginated lists.
 
 use serde::Serialize;
+use utoipa::ToSchema;
 
 use postfix_admin_core::pagination::PageResponse;
 
 /// Single-entity response: `{"data": T}`.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ApiResponse<T: Serialize> {
     pub data: T,
 }
@@ -26,7 +27,7 @@ impl<T: Serialize> From<T> for ApiResponse<T> {
 }
 
 /// Pagination metadata included in list responses.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct PaginationMeta {
     pub total: u64,
     pub page: u32,
@@ -35,7 +36,7 @@ pub struct PaginationMeta {
 }
 
 /// Paginated list response: `{"data": [...], "meta": {...}}`.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ApiListResponse<T: Serialize> {
     pub data: Vec<T>,
     pub meta: PaginationMeta,
