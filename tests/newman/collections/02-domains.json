@@ -1,0 +1,395 @@
+{
+  "info": {
+    "_postman_id": "b2c3d4e5-f6a7-8901-bcde-f12345678902",
+    "name": "02 - Domains",
+    "description": "Domain CRUD endpoints for the postfix-admin-rs REST API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Authenticate before running domain tests",
+          "if (!pm.environment.get('access_token') || pm.environment.get('access_token') === '') {",
+          "    var loginRequest = {",
+          "        url: pm.environment.get('api_base') + '/auth/login',",
+          "        method: 'POST',",
+          "        header: {",
+          "            'Content-Type': 'application/json'",
+          "        },",
+          "        body: {",
+          "            mode: 'raw',",
+          "            raw: JSON.stringify({",
+          "                username: pm.environment.get('admin_username'),",
+          "                password: pm.environment.get('admin_password')",
+          "            })",
+          "        }",
+          "    };",
+          "",
+          "    pm.sendRequest(loginRequest, function (err, res) {",
+          "        if (err) {",
+          "            console.error('Login failed:', err);",
+          "            return;",
+          "        }",
+          "        var jsonData = res.json();",
+          "        pm.environment.set('access_token', jsonData.access_token);",
+          "        pm.environment.set('refresh_token', jsonData.refresh_token);",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "List domains",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Response body has meta with total', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('meta');",
+              "    pm.expect(jsonData.meta).to.have.property('total');",
+              "    pm.expect(jsonData.meta.total).to.be.at.least(0);",
+              "});",
+              "",
+              "pm.test('Meta has pagination fields', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.meta).to.have.property('page');",
+              "    pm.expect(jsonData.meta).to.have.property('per_page');",
+              "    pm.expect(jsonData.meta).to.have.property('total_pages');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains",
+          "host": ["{{api_base}}"],
+          "path": ["domains"]
+        }
+      }
+    },
+    {
+      "name": "Create domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Domain name matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.domain).to.eql('newman-test.example.com');",
+              "});",
+              "",
+              "pm.test('Domain has expected fields', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('description');",
+              "    pm.expect(jsonData.data).to.have.property('aliases');",
+              "    pm.expect(jsonData.data).to.have.property('mailboxes');",
+              "    pm.expect(jsonData.data).to.have.property('active');",
+              "    pm.expect(jsonData.data).to.have.property('created_at');",
+              "    pm.expect(jsonData.data).to.have.property('updated_at');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"domain\":\"newman-test.example.com\",\"description\":\"Newman test domain\",\"aliases\":100,\"mailboxes\":50,\"maxquota\":10240,\"quota\":51200,\"active\":true}"
+        },
+        "url": {
+          "raw": "{{api_base}}/domains",
+          "host": ["{{api_base}}"],
+          "path": ["domains"]
+        }
+      }
+    },
+    {
+      "name": "Get domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Domain name matches', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.domain).to.eql('newman-test.example.com');",
+              "});",
+              "",
+              "pm.test('Domain has description', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.description).to.eql('Newman test domain');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "Update domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data object', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "pm.test('Description was updated', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.description).to.eql('Updated Newman test domain');",
+              "});",
+              "",
+              "pm.test('Domain name is unchanged', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.domain).to.eql('newman-test.example.com');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"description\":\"Updated Newman test domain\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "List domains with pagination",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response body has data array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Meta per_page matches query parameter', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.meta).to.have.property('per_page');",
+              "    pm.expect(jsonData.meta.per_page).to.eql(5);",
+              "});",
+              "",
+              "pm.test('Meta page is 1', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.meta.page).to.eql(1);",
+              "});",
+              "",
+              "pm.test('Data array length does not exceed per_page', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.length).to.be.at.most(5);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains?page=1&per_page=5",
+          "host": ["{{api_base}}"],
+          "path": ["domains"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "per_page",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete domain",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test('Response body is empty', function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf(['', undefined]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      }
+    },
+    {
+      "name": "Get deleted domain returns 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test('Response is RFC 7807 problem details', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('type');",
+              "    pm.expect(jsonData).to.have.property('title');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "    pm.expect(jsonData.status).to.eql(404);",
+              "});",
+              "",
+              "pm.test('Response has detail field', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('detail');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/domains/newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["domains", "newman-test.example.com"]
+        }
+      }
+    }
+  ]
+}

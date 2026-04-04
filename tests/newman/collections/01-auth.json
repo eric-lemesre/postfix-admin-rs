@@ -1,0 +1,259 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567801",
+    "name": "01 - Authentication",
+    "description": "Authentication endpoints: login, refresh, and logout for the postfix-admin-rs REST API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login success",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has access_token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('access_token');",
+              "    pm.expect(jsonData.access_token).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test('Response has refresh_token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('refresh_token');",
+              "    pm.expect(jsonData.refresh_token).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test('Response has token_type Bearer', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('token_type');",
+              "    pm.expect(jsonData.token_type).to.eql('Bearer');",
+              "});",
+              "",
+              "pm.test('Response has expires_in', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('expires_in');",
+              "    pm.expect(jsonData.expires_in).to.be.a('number');",
+              "});",
+              "",
+              "// Store tokens in environment",
+              "var jsonData = pm.response.json();",
+              "pm.environment.set('access_token', jsonData.access_token);",
+              "pm.environment.set('refresh_token', jsonData.refresh_token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"{{admin_username}}\",\"password\":\"{{admin_password}}\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/auth/login",
+          "host": ["{{api_base}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Refresh token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has new access_token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('access_token');",
+              "    pm.expect(jsonData.access_token).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test('Response has new refresh_token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('refresh_token');",
+              "    pm.expect(jsonData.refresh_token).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test('Response has token_type Bearer', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token_type).to.eql('Bearer');",
+              "});",
+              "",
+              "// Update tokens in environment",
+              "var jsonData = pm.response.json();",
+              "pm.environment.set('access_token', jsonData.access_token);",
+              "pm.environment.set('refresh_token', jsonData.refresh_token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"refresh_token\":\"{{refresh_token}}\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/auth/refresh",
+          "host": ["{{api_base}}"],
+          "path": ["auth", "refresh"]
+        }
+      }
+    },
+    {
+      "name": "Logout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has logout message', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "    pm.expect(jsonData.message).to.eql('logged out');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/auth/logout",
+          "host": ["{{api_base}}"],
+          "path": ["auth", "logout"]
+        }
+      }
+    },
+    {
+      "name": "Login with wrong password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "",
+              "pm.test('Response is RFC 7807 problem details', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('type');",
+              "    pm.expect(jsonData).to.have.property('title');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "    pm.expect(jsonData.status).to.eql(401);",
+              "});",
+              "",
+              "pm.test('Response has detail field', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('detail');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"{{admin_username}}\",\"password\":\"wrong_password_12345\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/auth/login",
+          "host": ["{{api_base}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Refresh with invalid token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "",
+              "pm.test('Response is RFC 7807 problem details', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('type');",
+              "    pm.expect(jsonData).to.have.property('title');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "    pm.expect(jsonData.status).to.eql(401);",
+              "});",
+              "",
+              "pm.test('Response has detail field', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('detail');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"refresh_token\":\"invalid.token.string\"}"
+        },
+        "url": {
+          "raw": "{{api_base}}/auth/refresh",
+          "host": ["{{api_base}}"],
+          "path": ["auth", "refresh"]
+        }
+      }
+    }
+  ]
+}
