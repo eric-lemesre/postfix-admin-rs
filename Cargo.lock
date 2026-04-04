@@ -2195,7 +2195,7 @@ checksum = "c33a9471896f1c69cecef8d20cbe2f7accd12527ce60845ff44c153bb2a21b49"
 
 [[package]]
 name = "postfix-admin-api"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "async-trait",
  "axum",
@@ -2218,7 +2218,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-auth"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "argon2",
  "bcrypt",
@@ -2241,7 +2241,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-cli"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "anyhow",
  "postfix-admin-core",
@@ -2249,7 +2249,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-core"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
@@ -2271,7 +2271,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-db"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "async-trait",
  "chrono",
@@ -2287,7 +2287,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-server"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -2309,7 +2309,7 @@ dependencies = [
 
 [[package]]
 name = "postfix-admin-web"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "askama",
  "async-trait",
