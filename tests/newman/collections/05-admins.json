@@ -1,0 +1,284 @@
+{
+  "info": {
+    "_postman_id": "a5b6c7d8-e9f0-4a1b-8c2d-3e4f5a6b7c8d",
+    "name": "05 - Admins",
+    "description": "CRUD tests for admin management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const loginRequest = {",
+          "    url: pm.environment.get(\"api_base\") + \"/auth/login\",",
+          "    method: \"POST\",",
+          "    header: {\"Content-Type\": \"application/json\"},",
+          "    body: {mode: \"raw\", raw: JSON.stringify({username: pm.environment.get(\"admin_username\"), password: pm.environment.get(\"admin_password\")})}",
+          "};",
+          "pm.sendRequest(loginRequest, function(err, res) {",
+          "    if (!err && res.code === 200) {",
+          "        const json = res.json();",
+          "        pm.environment.set(\"access_token\", json.access_token);",
+          "        pm.environment.set(\"refresh_token\", json.refresh_token);",
+          "    }",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "List admins",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/admins",
+          "host": ["{{api_base}}"],
+          "path": ["admins"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data array\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"Response has pagination meta\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"meta\");",
+              "    pm.expect(json.meta).to.have.property(\"total\");",
+              "    pm.expect(json.meta).to.have.property(\"page\");",
+              "    pm.expect(json.meta).to.have.property(\"per_page\");",
+              "    pm.expect(json.meta).to.have.property(\"total_pages\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"newadmin@newman-test.example.com\",\"password\":\"TestPass123!\",\"superadmin\":false,\"active\":true}"
+        },
+        "url": {
+          "raw": "{{api_base}}/admins",
+          "host": ["{{api_base}}"],
+          "path": ["admins"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response has data object with admin fields\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"username\", \"newadmin@newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"superadmin\", false);",
+              "    pm.expect(json.data).to.have.property(\"active\", true);",
+              "    pm.expect(json.data).to.have.property(\"totp_enabled\");",
+              "    pm.expect(json.data).to.have.property(\"created_at\");",
+              "    pm.expect(json.data).to.have.property(\"updated_at\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get admin",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/admins/newadmin@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["admins", "newadmin@newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains correct admin\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"username\", \"newadmin@newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"superadmin\", false);",
+              "    pm.expect(json.data).to.have.property(\"active\", true);",
+              "    pm.expect(json.data).to.have.property(\"totp_enabled\", false);",
+              "    pm.expect(json.data).to.have.property(\"created_at\");",
+              "    pm.expect(json.data).to.have.property(\"updated_at\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update admin (deactivate)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"active\":false}"
+        },
+        "url": {
+          "raw": "{{api_base}}/admins/newadmin@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["admins", "newadmin@newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Admin is now inactive\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"data\");",
+              "    pm.expect(json.data).to.have.property(\"username\", \"newadmin@newman-test.example.com\");",
+              "    pm.expect(json.data).to.have.property(\"active\", false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete admin",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/admins/newadmin@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["admins", "newadmin@newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test(\"Response body is empty\", function () {",
+              "    pm.expect(pm.response.text()).to.be.oneOf([\"\", undefined]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get deleted admin returns 404",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{api_base}}/admins/newadmin@newman-test.example.com",
+          "host": ["{{api_base}}"],
+          "path": ["admins", "newadmin@newman-test.example.com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test(\"Response is RFC 7807 problem details\", function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property(\"type\");",
+              "    pm.expect(json).to.have.property(\"title\");",
+              "    pm.expect(json).to.have.property(\"status\", 404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
