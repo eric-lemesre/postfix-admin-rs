@@ -9,10 +9,13 @@
 
 pub mod error;
 pub mod extractors;
+#[allow(clippy::needless_for_each)]
+pub mod openapi;
 pub mod response;
 pub mod routes;
 pub mod state;
 
+pub use openapi::ApiDoc;
 pub use routes::api_router;
 pub use state::AppState;
 

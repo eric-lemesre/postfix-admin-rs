@@ -2,13 +2,15 @@
 
 use std::sync::Arc;
 
-use postfix_admin_api::{api_router, AppState};
+use postfix_admin_api::{api_router, ApiDoc, AppState};
 use postfix_admin_auth::{JwtManager, LoginRateLimiter, MtlsVerifier};
 use postfix_admin_core::config::CliOverrides;
 use postfix_admin_core::AppConfig;
 use postfix_admin_web::{web_router, WebState};
 use tower_sessions::{Expiry, MemoryStore, SessionManagerLayer};
 use tracing_subscriber::EnvFilter;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -180,6 +182,7 @@ async fn serve(config: &AppConfig, api_state: AppState, web_state: WebState) -> 
 
     let app = axum::Router::new()
         .nest("/api/v1", api_router().with_state(api_state))
+        .merge(SwaggerUi::new("/api/docs").url("/api/v1/openapi.json", ApiDoc::openapi()))
         .merge(web_router().with_state(web_state))
         .layer(session_layer)
         .layer(tower_http::trace::TraceLayer::new_for_http());

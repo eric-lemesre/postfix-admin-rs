@@ -2,7 +2,7 @@
 
 use axum::extract::{Query, State};
 use axum::Json;
-use utoipa::IntoParams;
+use utoipa::{IntoParams, ToSchema};
 
 use crate::error::{ApiError, ProblemDetails};
 use crate::extractors::RequireSuperAdmin;
@@ -12,7 +12,7 @@ use postfix_admin_core::dto::{LogFilter, LogResponse};
 use postfix_admin_core::pagination::PageRequest;
 
 /// Query parameters combining log filter and pagination.
-#[derive(Debug, serde::Deserialize, IntoParams)]
+#[derive(Debug, serde::Deserialize, IntoParams, ToSchema)]
 pub struct LogQuery {
     #[serde(default)]
     pub domain: Option<String>,
