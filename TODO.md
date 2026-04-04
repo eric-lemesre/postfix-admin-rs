@@ -13,7 +13,7 @@
 | v0.3.0     | M2        | Foundation  | DB crate (PG + MySQL repos, migrations)           | XL     | Done           |
 | v0.4.0     | M3        | Foundation  | Configuration system (config-rs)                  | M      | Done           |
 | v0.5.0     | M4        | Auth        | Auth crate (passwords, sessions, JWT, TOTP, RBAC) | XL     | Done           |
-| v0.6.0     | M5        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     | Partial (14/30)|
+| v0.6.0     | M5        | Interfaces  | REST API (axum, OpenAPI, Newman tests)            | XL     | Done (30/30)   |
 | v0.7.0     | M6        | Interfaces  | Web interface (Askama, HTMX, Tailwind, i18n)      | XL     | Partial (5/28) |
 | v0.7.1     | M7        | Interfaces  | gRPC API (tonic, protobuf)                        | M      | Pending        |
 | v0.7.2     | M8        | Interfaces  | CLI (clap, formatters)                            | L      | Pending        |
@@ -22,7 +22,7 @@
 | v0.8.2     | M11       | Features    | DKIM management                                   | M      | Pending        |
 | v0.8.3     | M12       | Features    | Fetchmail integration                             | M      | Pending        |
 | v0.8.4     | M13       | Features    | Alias domains                                     | S      | Pending        |
-| v0.9.0     | M14       | Quality     | Newman API test suite (100% coverage)             | L      | Pending        |
+| v0.9.0     | M14       | Quality     | Newman API test suite (100% coverage)             | L      | Partial (5/6)  |
 | v0.9.1     | M15       | Quality     | Integration tests (testcontainers)                | L      | Pending        |
 | v0.9.2     | M16       | Quality     | Security audit                                    | M      | Pending        |
 | **v1.0.0** | **M17**   | **Release** | **Release, packaging, documentation**             | **M**  | **Pending**    |
@@ -167,16 +167,16 @@
 
 ## Phase 3 — Interfaces
 
-### M5: REST API `v0.6.0` [XL] — Partial (14/30)
+### M5: REST API `v0.6.0` [XL] — Done (30/30)
 > Specs: [SPEC-10.1](docs/en/features/10-api/rest-api.md)
 
 - [x] API router setup (`/api/v1/`)
 - [x] Authentication middleware (JWT Bearer + API Key)
 - [x] Error handling: RFC 7807 (Problem Details for HTTP APIs)
 - [x] Pagination: offset-based with meta headers
-- [ ] Response format: `{ "data": ..., "meta": ... }`
-- [ ] OpenAPI 3.1 generation (utoipa)
-- [ ] Swagger UI at `/api/docs`
+- [x] Response format: `{ "data": ..., "meta": ... }`
+- [x] OpenAPI 3.1 generation (utoipa)
+- [x] Swagger UI at `/api/docs`
 - [x] Auth endpoints: login, refresh, logout, totp/verify
 - [x] Domain endpoints: list, get, create, update, delete, toggle
 - [x] Alias domain endpoints: list, create, delete
@@ -187,19 +187,19 @@
 - [x] Fetchmail endpoints: list, get, create, update, delete, test
 - [x] DKIM endpoints: keys (list, create, delete), signing (list, create, delete), dns-check
 - [x] Log endpoints: list (global + per domain)
-- [ ] Rate limiting middleware (100 req/min default, X-RateLimit-* headers)
-- [ ] CORS middleware (configurable origins per config.toml)
-- [ ] Newman test collection: auth endpoints
-- [ ] Newman test collection: domain endpoints
-- [ ] Newman test collection: mailbox endpoints
-- [ ] Newman test collection: alias endpoints
-- [ ] Newman test collection: admin endpoints
-- [ ] Newman test collection: vacation endpoints
-- [ ] Newman test collection: fetchmail endpoints
-- [ ] Newman test collection: DKIM endpoints
-- [ ] Newman test collection: log endpoints
-- [ ] Newman test collection: alias domain endpoints
-- [ ] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
+- [x] Rate limiting middleware (100 req/min default, X-RateLimit-* headers)
+- [x] CORS middleware (configurable origins per config.toml)
+- [x] Newman test collection: auth endpoints
+- [x] Newman test collection: domain endpoints
+- [x] Newman test collection: mailbox endpoints
+- [x] Newman test collection: alias endpoints
+- [x] Newman test collection: admin endpoints
+- [x] Newman test collection: vacation endpoints
+- [x] Newman test collection: fetchmail endpoints
+- [x] Newman test collection: DKIM endpoints
+- [x] Newman test collection: log endpoints
+- [x] Newman test collection: alias domain endpoints
+- [x] Newman test collection: error cases (400, 401, 403, 404, 409, 422, 429)
 
 ### M6: postfix-admin-web `v0.7.0` [XL] — Partial (5/28)
 > Specs: [SPEC-12.1](docs/en/features/12-web-ui/web-interface.md)
@@ -333,12 +333,12 @@
 
 ## Phase 5 — Quality & Release
 
-### M14: Newman API test suite `v0.9.0` [L] — Pending (0/6)
-- [ ] Environment files (dev, ci) with base URL and credentials
-- [ ] Pre-request scripts for auth token management
-- [ ] Collection runner configuration for CI
-- [ ] Verify 100% route coverage (every REST endpoint tested)
-- [ ] Success cases + error cases for each endpoint
+### M14: Newman API test suite `v0.9.0` [L] — Partial (5/6)
+- [x] Environment files (dev, ci) with base URL and credentials
+- [x] Pre-request scripts for auth token management
+- [x] Collection runner configuration for CI
+- [x] Verify 100% route coverage (every REST endpoint tested)
+- [x] Success cases + error cases for each endpoint
 - [ ] CI integration: Newman runs after integration tests
 
 ### M15: Integration tests `v0.9.1` [L] — Pending (0/7)
