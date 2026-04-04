@@ -180,10 +180,13 @@ async fn serve(config: &AppConfig, api_state: AppState, web_state: WebState) -> 
             session_lifetime,
         )));
 
+    let cors_layer = build_cors_layer(&config.api.cors);
+
     let app = axum::Router::new()
         .nest("/api/v1", api_router().with_state(api_state))
         .merge(SwaggerUi::new("/api/docs").url("/api/v1/openapi.json", ApiDoc::openapi()))
         .merge(web_router().with_state(web_state))
+        .layer(cors_layer)
         .layer(session_layer)
         .layer(tower_http::trace::TraceLayer::new_for_http());
 
@@ -198,6 +201,42 @@ async fn serve(config: &AppConfig, api_state: AppState, web_state: WebState) -> 
 
     tracing::info!("server shut down");
     Ok(())
+}
+
+fn build_cors_layer(
+    cors_config: &postfix_admin_core::config::CorsConfig,
+) -> tower_http::cors::CorsLayer {
+    use tower_http::cors::{AllowHeaders, AllowMethods, AllowOrigin, CorsLayer};
+
+    let origins = if cors_config.allowed_origins.len() == 1 && cors_config.allowed_origins[0] == "*"
+    {
+        AllowOrigin::any()
+    } else {
+        let origins: Vec<axum::http::HeaderValue> = cors_config
+            .allowed_origins
+            .iter()
+            .filter_map(|o| o.parse().ok())
+            .collect();
+        AllowOrigin::list(origins)
+    };
+
+    let methods: Vec<axum::http::Method> = cors_config
+        .allowed_methods
+        .iter()
+        .filter_map(|m| m.parse().ok())
+        .collect();
+
+    let headers: Vec<axum::http::HeaderName> = cors_config
+        .allowed_headers
+        .iter()
+        .filter_map(|h| h.parse().ok())
+        .collect();
+
+    CorsLayer::new()
+        .allow_origin(origins)
+        .allow_methods(AllowMethods::list(methods))
+        .allow_headers(AllowHeaders::list(headers))
+        .max_age(std::time::Duration::from_secs(cors_config.max_age_secs))
 }
 
 async fn shutdown_signal() {

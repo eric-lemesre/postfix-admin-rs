@@ -1,3 +1,4 @@
+mod api;
 mod auth;
 mod database;
 mod dkim;
@@ -13,6 +14,7 @@ mod server;
 mod ui;
 mod vacation;
 
+pub use api::{ApiConfig, ApiRateLimitConfig, CorsConfig};
 pub use auth::{Argon2Config, AuthConfig, JwtConfig, MtlsConfig, TotpConfig};
 pub use database::DatabaseConfig;
 pub use dkim::DkimConfig;
